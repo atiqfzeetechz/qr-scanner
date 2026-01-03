@@ -1,19 +1,29 @@
 import { useState } from 'react';
 import { QrCode, Download, Copy } from 'lucide-react';
 import { theme } from '../theme';
+import { useAxios } from '../hooks/useAxios';
 import { showToast } from '../utils/sweetAlert';
 
 export default function GenerateQR() {
   const [text, setText] = useState('');
   const [qrData, setQrData] = useState('');
+  const { post } = useAxios();
 
-  const generateQR = () => {
+  const generateQR = async () => {
     if (!text.trim()) {
       showToast('error', 'Please enter text to generate QR code');
       return;
     }
-    setQrData(text);
-    showToast('success', 'QR Code generated successfully!');
+    
+    try {
+      // You can replace this with actual API call
+      // await post('/api/qr/generate', { text });
+      
+      setQrData(text);
+      showToast('success', 'QR Code generated successfully!');
+    } catch (error) {
+      showToast('error', 'Failed to generate QR code');
+    }
   };
 
   const copyToClipboard = () => {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
-import { useLoaderStore } from '../store/loaderStore';
+import { useAxios } from '../hooks/useAxios';
 import { theme } from '../theme';
 import logo from '../assets/logo.png';
 import { showToast } from '../utils/sweetAlert';
@@ -10,30 +10,31 @@ import { showToast } from '../utils/sweetAlert';
 export default function Login() {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
-  const { showLoader, hideLoader } = useLoaderStore();
+  const { post, loading } = useAxios();
   const [email, setEmail] = useState('Qrcode@example.com');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
-    showLoader('Logging you in...');
 
     try {
-      if(email!=="Qrcode@example.com"){
-        return showToast('error', 'Invalid Credenttials')
+      if(email !== "Qrcode@example.com"){
+        return showToast('error', 'Invalid Credentials')
       }
-      await login(email, password);
-      navigate('/');
+      const res = await post('/login', { email, password })
+      console.log(res)
+      
+      // Simulate API call
+      // await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // await login(email, password);
+      // navigate('/');
     } catch (err) {
+      console.log(err)
       setError(err instanceof Error ? err.message : 'Login failed');
-    } finally {
-      setLoading(false);
-      hideLoader();
     }
   };
 
