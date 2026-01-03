@@ -37,34 +37,34 @@ interface LayoutProps {
 
 const navigation: NavigationItem[] = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  {
-    name: 'Users',
-    icon: Users,
-    children: [
-      { name: 'All Users', href: '/admin/users', icon: Users },
-      { name: 'Drivers', href: '/admin/users/drivers', icon: UserCheck },
-      { name: 'Customers', href: '/admin/users/customers', icon: ShoppingBag },
-    ]
-  },
-  {
-    name: 'Orders',
-    icon: Package,
-    children: [
-      { name: 'All Orders', href: '/admin/orders', icon: Package },
-      { name: 'Pending', href: '/admin/orders/pending', icon: Package },
-      { name: 'In Progress', href: '/admin/orders/in-progress', icon: Package },
-      { name: 'Completed', href: '/admin/orders/completed', icon: Package },
-    ]
-  },
-  {
-    name: 'Vehicles',
-    icon: Truck,
-    children: [
-      { name: 'All Vehicles', href: '/admin/vehicles', icon: Truck },
-      { name: 'Trucks', href: '/admin/trucks', icon: Truck },
-      { name: 'Motorcycles', href: '/admin/motorcycles', icon: BikeIcon },
-    ]
-  },
+  // {
+  //   name: 'Users',
+  //   icon: Users,
+  //   children: [
+  //     { name: 'All Users', href: '/admin/users', icon: Users },
+  //     { name: 'Drivers', href: '/admin/users/drivers', icon: UserCheck },
+  //     { name: 'Customers', href: '/admin/users/customers', icon: ShoppingBag },
+  //   ]
+  // },
+  // {
+  //   name: 'Orders',
+  //   icon: Package,
+  //   children: [
+  //     { name: 'All Orders', href: '/admin/orders', icon: Package },
+  //     { name: 'Pending', href: '/admin/orders/pending', icon: Package },
+  //     { name: 'In Progress', href: '/admin/orders/in-progress', icon: Package },
+  //     { name: 'Completed', href: '/admin/orders/completed', icon: Package },
+  //   ]
+  // },
+  // {
+  //   name: 'Vehicles',
+  //   icon: Truck,
+  //   children: [
+  //     { name: 'All Vehicles', href: '/admin/vehicles', icon: Truck },
+  //     { name: 'Trucks', href: '/admin/trucks', icon: Truck },
+  //     { name: 'Motorcycles', href: '/admin/motorcycles', icon: BikeIcon },
+  //   ]
+  // },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
