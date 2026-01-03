@@ -3,17 +3,9 @@ import { useAuthStore } from './store/authStore';
 import Layout from './components/Layout';
 import GlobalLoader from './components/GlobalLoader';
 import Dashboard from './pages/Dashboard';
-import Users from './pages/Users';
-import Drivers from './pages/Drivers';
-import Customers from './pages/Customers';
-import Orders from './pages/Orders';
-import PendingOrders from './pages/PendingOrders';
-import InProgressOrders from './pages/InProgressOrders';
-import CompletedOrders from './pages/CompletedOrders';
-import CancelledOrders from './pages/CancelledOrders';
-import Vehicles from './pages/Vehicles';
-import Trucks from './pages/Trucks';
-import Motorcycles from './pages/Motorcycles';
+import GenerateQR from './pages/GenerateQR';
+import ScanQR from './pages/ScanQR';
+import QRHistory from './pages/QRHistory';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 
@@ -42,90 +34,26 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/admin/users"
+        path="/admin/generate"
         element={
           <ProtectedRoute>
-            <Users />
+            <GenerateQR />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/admin/users/drivers"
+        path="/admin/scan"
         element={
           <ProtectedRoute>
-            <Drivers />
+            <ScanQR />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/admin/users/customers"
+        path="/admin/history"
         element={
           <ProtectedRoute>
-            <Customers />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/orders"
-        element={
-          <ProtectedRoute>
-            <Orders />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/orders/pending"
-        element={
-          <ProtectedRoute>
-            <PendingOrders />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/orders/in-progress"
-        element={
-          <ProtectedRoute>
-            <InProgressOrders />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/orders/completed"
-        element={
-          <ProtectedRoute>
-            <CompletedOrders />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/orders/cancelled"
-        element={
-          <ProtectedRoute>
-            <CancelledOrders />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/vehicles"
-        element={
-          <ProtectedRoute>
-            <Vehicles />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/trucks"
-        element={
-          <ProtectedRoute>
-            <Trucks />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/motorcycles"
-        element={
-          <ProtectedRoute>
-            <Motorcycles />
+            <QRHistory />
           </ProtectedRoute>
         }
       />

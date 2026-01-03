@@ -50,7 +50,7 @@ export default function Login() {
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-center mb-8">
             <div className="w-46 h-46 flex items-center justify-center">
-              <img src={logo} alt="TruckNBike" />
+              <img src={logo} alt="QR Manager" />
             </div>
           </div>
 

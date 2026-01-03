@@ -3,9 +3,8 @@ import type { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
-  Users,
-  Package,
-  Truck,
+  QrCode,
+  History,
   Settings,
   LogOut,
   Menu,
@@ -14,9 +13,8 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronUp,
-  UserCheck,
-  ShoppingBag,
-  BikeIcon
+  Plus,
+  Scan
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useLoaderStore } from '../store/loaderStore';
@@ -37,34 +35,9 @@ interface LayoutProps {
 
 const navigation: NavigationItem[] = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  // {
-  //   name: 'Users',
-  //   icon: Users,
-  //   children: [
-  //     { name: 'All Users', href: '/admin/users', icon: Users },
-  //     { name: 'Drivers', href: '/admin/users/drivers', icon: UserCheck },
-  //     { name: 'Customers', href: '/admin/users/customers', icon: ShoppingBag },
-  //   ]
-  // },
-  // {
-  //   name: 'Orders',
-  //   icon: Package,
-  //   children: [
-  //     { name: 'All Orders', href: '/admin/orders', icon: Package },
-  //     { name: 'Pending', href: '/admin/orders/pending', icon: Package },
-  //     { name: 'In Progress', href: '/admin/orders/in-progress', icon: Package },
-  //     { name: 'Completed', href: '/admin/orders/completed', icon: Package },
-  //   ]
-  // },
-  // {
-  //   name: 'Vehicles',
-  //   icon: Truck,
-  //   children: [
-  //     { name: 'All Vehicles', href: '/admin/vehicles', icon: Truck },
-  //     { name: 'Trucks', href: '/admin/trucks', icon: Truck },
-  //     { name: 'Motorcycles', href: '/admin/motorcycles', icon: BikeIcon },
-  //   ]
-  // },
+  { name: 'Generate QR', href: '/admin/generate', icon: Plus },
+  { name: 'Scan QR', href: '/admin/scan', icon: Scan },
+  { name: 'QR History', href: '/admin/history', icon: History },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
@@ -159,11 +132,11 @@ export default function Layout({ children }: LayoutProps) {
         <div className="flex h-full flex-col bg-white shadow-xl">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-2">
-              {/* <img src={logo} alt="TruckNBike" className="w-8 h-8" /> */}
-              <img src={logo} alt="TruckNBike" style={{
+              {/* <img src={logo} alt="QR Manager" className="w-8 h-8" /> */}
+              <img src={logo} alt="QR Manager" style={{
                   scale:.46
                 }} />
-              {/* <span className="text-xl font-bold text-gray-900">TruckNBike</span> */}
+              {/* <span className="text-xl font-bold text-gray-900">QR Manager</span> */}
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -268,14 +241,14 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
             {!sidebarCollapsed ? (
               <div className="flex items-center gap-2">
-                <img src={logo} alt="TruckNBike" style={{
+                <img src={logo} alt="QR Manager" style={{
                   scale:.46
                 }} />
-                {/* <span className="text-xl font-bold text-gray-900">TruckNBike</span> */}
+                {/* <span className="text-xl font-bold text-gray-900">QR Manager</span> */}
               </div>
             ) : (
               <div className="flex justify-center w-full">
-                <img src={logo} alt="TruckNBike" className="w-8 h-8" />
+                <img src={logo} alt="QR Manager" className="w-8 h-8" />
               </div>
             )}
             {sidebarCollapsed && <div
@@ -438,8 +411,8 @@ export default function Layout({ children }: LayoutProps) {
             </button>
 
             <div className="lg:hidden flex items-center gap-2">
-              <img src={logo} alt="TruckNBike" className="w-8 h-8" />
-              {/* <span className="text-lg font-bold">TruckNBike</span> */}
+              <img src={logo} alt="QR Manager" className="w-8 h-8" />
+              {/* <span className="text-lg font-bold">QR Manager</span> */}
             </div>
 
             <div className="hidden lg:flex items-center gap-3">
