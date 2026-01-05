@@ -11,7 +11,7 @@ export default function Login() {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
   const { post, loading } = useAxios();
-  const [email, setEmail] = useState('Qrcode@example.com');
+  const [email, setEmail] = useState('admin@gmail.com');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -21,16 +21,20 @@ export default function Login() {
     setError('');
 
     try {
-      if(email !== "Qrcode@example.com"){
-        return showToast('error', 'Invalid Credentials')
+      // if(email !== "Qrcode@example.com"){
+      //   return showToast('error', 'Invalid Credentials')
+      // }
+      const res = await post('/admin/auth/login', { email, password })
+      if (res.success) {
+        const data = res.data
+        console.log(data)
+        showToast('success', 'Login Successfull')
+        await login(data?.admin, data?.token);
       }
-      const res = await post('/login', { email, password })
-      console.log(res)
-      
+
       // Simulate API call
       // await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // await login(email, password);
+
       // navigate('/');
     } catch (err) {
       console.log(err)
@@ -119,10 +123,10 @@ export default function Login() {
             <p className="text-center text-sm text-gray-600 mb-4">Demo Credentials:</p>
             <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
               <p className="text-sm text-gray-700">
-                <span className="font-medium">Email:</span> Qrcode@example.com
+                <span className="font-medium">Email:</span> admin@gmail.com
               </p>
               <p className="text-sm text-gray-700">
-                <span className="font-medium">Password:</span> any password
+                <span className="font-medium">Password:</span> 123456
               </p>
             </div>
           </div>

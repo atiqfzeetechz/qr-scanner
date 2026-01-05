@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useLoaderStore } from '../store/loaderStore';
 
-const API_BASE_URL = 'https://jsonplaceholder.typicode.com'; // Replace with your API URL
+const API_BASE_URL = 'http://localhost:5001/api'; // Replace with your API URL
 
 // Create axios instance
 const axiosInstance = axios.create({

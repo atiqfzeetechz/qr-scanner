@@ -10,8 +10,9 @@ interface User {
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (user: any, token: string | null | undefined) => Promise<void>;
   logout: () => void;
+  qrToken: string | null | undefined
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -19,26 +20,13 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      
-      login: async (email: string, password: string) => {
-        if (!email || !password) {
-          throw new Error('Email and password are required');
-        }
+      qrToken: "",
+      login: async (user: any, token) => {
 
-        if (!email.includes('@')) {
-          throw new Error('Invalid email format');
-        }
 
         // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
 
-        const mockUser: User = {
-          id: '1',
-          email,
-          name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
-        };
-
-        set({ user: mockUser, isAuthenticated: true });
+        set({ user: user, isAuthenticated: true, qrToken: token });
       },
 
       logout: () => {
