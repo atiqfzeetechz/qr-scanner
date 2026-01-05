@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useLoaderStore } from '../store/loaderStore';
+import { useAuthStore } from '../store/authStore';
 
 const API_BASE_URL = 'http://localhost:5001/api'; // Replace with your API URL
 
@@ -9,6 +10,7 @@ const axiosInstance = axios.create({
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
+    "Authorization": `Bearer ${useAuthStore.getState().qrToken}`
   },
 });
 

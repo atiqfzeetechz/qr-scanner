@@ -14,7 +14,8 @@ import {
   ChevronDown,
   ChevronUp,
   Plus,
-  Scan
+  Scan,
+  Slack
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useLoaderStore } from '../store/loaderStore';
@@ -38,6 +39,7 @@ const navigation: NavigationItem[] = [
   { name: 'Generate QR', href: '/admin/generate', icon: Plus },
   { name: 'Scan QR', href: '/admin/scan', icon: Scan },
   { name: 'QR History', href: '/admin/history', icon: History },
+  { name: 'Logos', href: '/admin/logos', icon: Slack },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 

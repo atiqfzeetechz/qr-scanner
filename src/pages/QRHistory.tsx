@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { History, QrCode, Scan, Download, Eye, Trash2 } from 'lucide-react';
 import { theme } from '../theme';
 import { showToast, showDeleteConfirm } from '../utils/sweetAlert';
+import { useAxios } from '../hooks/useAxios';
+import { QRModal } from '../components/QRModal';
 
 interface QRHistoryItem {
   id: string;
@@ -12,6 +14,20 @@ interface QRHistoryItem {
 }
 
 export default function QRHistory() {
+  const { get } = useAxios()
+  const [allQrCodes, setAllQrCodes] = useState([])
+console.log(allQrCodes)
+
+  useEffect(() => {
+    (async () => {
+      const res = await get('/admin/qr/getAll')
+      if (res.success) {
+        setAllQrCodes(res.data)
+      }
+      console.log(res)
+    })()
+  }, [])
+
   const [historyItems] = useState<QRHistoryItem[]>([
     {
       id: '1',
@@ -37,8 +53,10 @@ export default function QRHistory() {
   ]);
 
   const [filter, setFilter] = useState<'all' | 'generated' | 'scanned'>('all');
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  const filteredItems = historyItems.filter(item => 
+  const filteredItems = historyItems.filter(item =>
     filter === 'all' || item.type === filter
   );
 
@@ -61,11 +79,13 @@ export default function QRHistory() {
   };
 
   const handleView = (item: QRHistoryItem) => {
-    showToast('info', `Data: ${item.data}`);
+    setSelectedItem(item);
+    setShowModal(true);
   };
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formatDate = (date: Date | string) => {
+    const dateObj = new Date(date);
+    return dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   return (
@@ -80,33 +100,30 @@ export default function QRHistory() {
           <div className="flex gap-2">
             <button
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === 'all' 
-                  ? 'text-white' 
-                  : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
-              }`}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'all'
+                ? 'text-white'
+                : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
+                }`}
               style={filter === 'all' ? { background: theme.gradients.primary } : {}}
             >
               All
             </button>
             <button
               onClick={() => setFilter('generated')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === 'generated' 
-                  ? 'text-white' 
-                  : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
-              }`}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'generated'
+                ? 'text-white'
+                : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
+                }`}
               style={filter === 'generated' ? { background: theme.gradients.primary } : {}}
             >
               Generated
             </button>
             <button
               onClick={() => setFilter('scanned')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === 'scanned' 
-                  ? 'text-white' 
-                  : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
-              }`}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'scanned'
+                ? 'text-white'
+                : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
+                }`}
               style={filter === 'scanned' ? { background: theme.gradients.primary } : {}}
             >
               Scanned
@@ -115,13 +132,13 @@ export default function QRHistory() {
         </div>
 
         <div className="space-y-4">
-          {filteredItems.length === 0 ? (
+          {allQrCodes.length === 0 ? (
             <div className="text-center py-12">
               <History size={64} className="mx-auto mb-4 text-gray-400" />
               <p className="text-gray-600">No QR code history found</p>
             </div>
           ) : (
-            filteredItems.map((item) => (
+            allQrCodes.map((item) => (
               <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4 flex-1">
@@ -132,25 +149,24 @@ export default function QRHistory() {
                         <Scan size={24} style={{ color: theme.colors.primary.main }} />
                       )}
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-semibold text-gray-900">
                           {item.title || `${item.type === 'generated' ? 'Generated' : 'Scanned'} QR Code`}
                         </h3>
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          item.type === 'generated' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-blue-100 text-blue-800'
-                        }`}>
+                        <span className={`px-2 py-1 text-xs rounded-full ${item.type === 'generated'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-blue-100 text-blue-800'
+                          }`}>
                           {item.type}
                         </span>
                       </div>
                       <p className="text-gray-600 text-sm mb-2 truncate">{item.data}</p>
-                      <p className="text-gray-400 text-xs">{formatDate(item.timestamp)}</p>
+                      <p className="text-gray-400 text-xs">{formatDate(item?.updatedAt)}</p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 ml-4">
                     <button
                       onClick={() => handleView(item)}
@@ -159,7 +175,7 @@ export default function QRHistory() {
                     >
                       <Eye size={18} />
                     </button>
-                    
+
                     {item.type === 'generated' && (
                       <button
                         onClick={() => handleDownload(item)}
@@ -169,7 +185,7 @@ export default function QRHistory() {
                         <Download size={18} />
                       </button>
                     )}
-                    
+
                     <button
                       onClick={() => handleDelete(item.id)}
                       className="p-2 text-gray-400 hover:text-red-600 transition-colors"
@@ -184,6 +200,12 @@ export default function QRHistory() {
           )}
         </div>
       </div>
+
+      <QRModal 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)} 
+        item={selectedItem} 
+      />
     </div>
   );
 }
