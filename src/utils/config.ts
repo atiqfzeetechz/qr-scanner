@@ -1,2 +1,6 @@
-export const API_BASE_URL = 'https://visahaitiser.wise-hustlers.tech/backend/api'; // Replace with your API URL
-export const IMAGE_BASE_URL = 'https://visahaitiser.wise-hustlers.tech/backend'; // Replace with your API URL
+export const API_BASE_URL = 'http://localhost:5001/api';
+export const IMAGE_BASE_URL = 'http://localhost:5001';
+
+// Replace with your API URL
+// export const API_BASE_URL = 'https://visahaitiser.wise-hustlers.tech/backend/api'; 
+// export const IMAGE_BASE_URL = 'https://visahaitiser.wise-hustlers.tech/backend'; // Replace with your API URL

@@ -1,17 +1,15 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
-import { History, QrCode, Scan, Download, Eye, Trash2 } from 'lucide-react';
+import { History, QrCode, Download, Eye } from 'lucide-react';
 import { theme } from '../theme';
-import { showToast, showDeleteConfirm } from '../utils/sweetAlert';
 import { useAxios } from '../hooks/useAxios';
-import { QRModal } from '../components/QRModal';
-
-
+import { useQRCodeView } from '../hooks/useQRCodeView';
 
 export default function QRHistory() {
   const { get } = useAxios()
   const [allQrCodes, setAllQrCodes] = useState<any[]>([])
-console.log(allQrCodes)
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
@@ -19,33 +17,15 @@ console.log(allQrCodes)
       if (res.success) {
         setAllQrCodes(res.data)
       }
-      console.log(res)
     })()
   }, [])
 
-
-
-  const [filter, setFilter] = useState<'all' | 'generated' | 'scanned'>('all');
-  const [showModal, setShowModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-
-
-
-  const handleDelete = async (id: any) => {
-    const result = await showDeleteConfirm('this QR code record');
-    if (result.isConfirmed) {
-      setAllQrCodes((prev: any[]) => prev.filter((item: any) => item.id !== id));
-      showToast('success', 'QR code record deleted successfully!');
-    }
-  };
-
-  const handleDownload = (item: any) => {
-    if (item.type === 'generated') {
-      const link = document.createElement('a');
-      link.href = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(item.data)}`;
-      link.download = `qrcode-${item.id}.png`;
-      link.click();
-      showToast('success', 'QR Code downloaded!');
+  const parseQRData = (dataString: string) => {
+    try {
+      const parsed = JSON.parse(dataString);
+      return parsed.data || {};
+    } catch {
+      return { content: dataString };
     }
   };
 
@@ -67,41 +47,6 @@ console.log(allQrCodes)
       </div>
 
       <div className="bg-white rounded-xl shadow-lg p-6">
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'all'
-                ? 'text-white'
-                : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
-                }`}
-              style={filter === 'all' ? { background: theme.gradients.primary } : {}}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilter('generated')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'generated'
-                ? 'text-white'
-                : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
-                }`}
-              style={filter === 'generated' ? { background: theme.gradients.primary } : {}}
-            >
-              Generated
-            </button>
-            <button
-              onClick={() => setFilter('scanned')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'scanned'
-                ? 'text-white'
-                : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
-                }`}
-              style={filter === 'scanned' ? { background: theme.gradients.primary } : {}}
-            >
-              Scanned
-            </button>
-          </div>
-        </div>
-
         <div className="space-y-4">
           {allQrCodes.length === 0 ? (
             <div className="text-center py-12">
@@ -109,74 +54,111 @@ console.log(allQrCodes)
               <p className="text-gray-600">No QR code history found</p>
             </div>
           ) : (
-            allQrCodes.map((item: any) => (
-              <div key={item?.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4 flex-1">
-                    <div className="p-2 rounded-lg" style={{ backgroundColor: `${theme.colors.primary.main}20` }}>
-                      {item.type === 'generated' ? (
+            allQrCodes.map((item: any) => {
+              const parsedData = parseQRData(item.data);
+              return (
+                <div key={item._id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-4 flex-1">
+                      <div className="p-2 rounded-lg" style={{ backgroundColor: `${theme.colors.primary.main}20` }}>
                         <QrCode size={24} style={{ color: theme.colors.primary.main }} />
-                      ) : (
-                        <Scan size={24} style={{ color: theme.colors.primary.main }} />
-                      )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-gray-900">
-                          {item.title || `${item.type === 'generated' ? 'Generated' : 'Scanned'} QR Code`}
-                        </h3>
-                        <span className={`px-2 py-1 text-xs rounded-full ${item.type === 'generated'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-blue-100 text-blue-800'
-                          }`}>
-                          {item.type}
-                        </span>
                       </div>
-                      <p className="text-gray-600 text-sm mb-2 truncate">{item.data}</p>
-                      <p className="text-gray-400 text-xs">{formatDate(item?.updatedAt)}</p>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-gray-900">
+                            {parsedData.fullName || 'QR Code'}
+                          </h3>
+                          <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                            {item.status}
+                          </span>
+                        </div>
+                        <p className="text-gray-600 text-sm mb-2">
+                          {parsedData.visaNumber ? `Visa: ${parsedData.visaNumber}` : ''}
+                          {parsedData.nationality ? ` | ${parsedData.nationality}` : ''}
+                        </p>
+                        <div className="flex items-center gap-4 text-xs text-gray-400">
+                          <span>Downloads: {item.downloadCount}</span>
+                          <span>Scans: {item.scanCount}</span>
+                          <span>{formatDate(item.createdAt)}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex items-center gap-2 ml-4">
-                    <button
-                      onClick={() => handleView(item)}
-                      className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                      title="View details"
-                    >
-                      <Eye size={18} />
-                    </button>
-
-                    {item.type === 'generated' && (
+                    <div className="flex items-center gap-2 ml-4">
                       <button
-                        onClick={() => handleDownload(item)}
-                        className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                        title="Download QR code"
+                        onClick={() => handleView(item)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="View QR Code"
                       >
-                        <Download size={18} />
+                        <Eye size={18} />
                       </button>
-                    )}
-
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                      title="Delete record"
-                    >
-                      <Trash2 size={18} />
-                    </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              )
+            })
           )}
         </div>
       </div>
 
-      <QRModal 
-        isOpen={showModal} 
-        onClose={() => setShowModal(false)} 
-        item={selectedItem} 
-      />
+      {/* QR Modal */}
+      {selectedItem && showModal && (
+        <QRViewModal 
+          item={selectedItem} 
+          onClose={() => setShowModal(false)} 
+        />
+      )}
+    </div>
+  );
+}
+
+// QR View Modal Component
+function QRViewModal({ item, onClose }: { item: any, onClose: () => void }) {
+  const { ref, display, download } = useQRCodeView(item.options);
+
+  useEffect(() => {
+    if (item.data) {
+      display(item.data);
+    }
+  }, [item.data, display]);
+
+  return (
+    <div className="fixed inset-0  flex items-center justify-center z-50" style={{
+      backgroundColor:"rgba(0, 0, 0, 0.5)"
+    }}>
+      <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">QR Code Preview</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            ✕
+          </button>
+        </div>
+        
+        <div className="flex justify-center mb-4">
+          <div ref={ref} className="border rounded-lg p-4" />
+        </div>
+        
+        <div className="flex gap-2">
+          <button
+            onClick={() => download('png')}
+            className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 flex items-center justify-center gap-2"
+            style={{ background: theme.gradients.primary }}
+          >
+            <Download size={16} />
+            Download
+          </button>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+          >
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

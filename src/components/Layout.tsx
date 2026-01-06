@@ -37,7 +37,7 @@ interface LayoutProps {
 const navigation: NavigationItem[] = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Generate QR', href: '/admin/generate', icon: Plus },
-  { name: 'Scan QR', href: '/admin/scan', icon: Scan },
+  // { name: 'Scan QR', href: '/admin/scan', icon: Scan },
   { name: 'QR History', href: '/admin/history', icon: History },
   { name: 'Logos', href: '/admin/logos', icon: Slack },
   { name: 'Templates', href: '/admin/templates', icon: LayoutTemplate },
@@ -245,7 +245,7 @@ export default function Layout({ children }: LayoutProps) {
             {!sidebarCollapsed ? (
               <div className="flex items-center gap-2">
                 <img src={logo} alt="QR Manager" style={{
-                  scale: .46
+                  scale: .30
                 }} />
                 {/* <span className="text-xl font-bold text-gray-900">QR Manager</span> */}
               </div>

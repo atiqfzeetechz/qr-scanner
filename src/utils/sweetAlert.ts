@@ -104,6 +104,34 @@ export const showDeleteConfirm = (itemName?: string) => {
   });
 };
 
+export const showInputDialog = (
+  title: string,
+  inputLabel: string,
+  inputValue: string = '',
+  confirmText: string = 'Save',
+  cancelText: string = 'Cancel'
+) => {
+  return Swal.fire({
+    ...baseConfig,
+    title,
+    input: 'text',
+    inputLabel,
+    inputValue,
+    showCancelButton: true,
+    confirmButtonText: confirmText,
+    cancelButtonText: cancelText,
+    inputValidator: (value) => {
+      if (!value) {
+        return 'Please enter a value!'
+      }
+    },
+    customClass: {
+      ...baseConfig.customClass,
+      confirmButton: `${baseConfig.customClass.confirmButton}`,
+      cancelButton: `${baseConfig.customClass.cancelButton}`,
+    },
+  });
+};
 export const showToast = (
   icon: 'success' | 'error' | 'warning' | 'info',
   title: string
@@ -117,4 +145,4 @@ export const showToast = (
   });
 
   return Toast.fire({ icon, title });
-};
+}

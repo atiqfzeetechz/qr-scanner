@@ -1,82 +1,41 @@
 import { useState } from "react";
-import { QrCode, Download, Plus, Trash2, Upload, Image, User, Phone, MapPin, Settings } from "lucide-react";
+import { QrCode, Download } from "lucide-react";
 import { defaultQROptions } from "../utils/qrDefaults";
 import { useQRCode } from "../hooks/useQRCode";
 import { QRPreview } from "../components/QRPreview";
 import { showToast } from "../utils/sweetAlert";
-
+import TemplateList from "../components/TemplateList";
 import { theme } from "../theme";
 
-interface UserData {
-  name: string;
-  phone: string;
-  address: string;
-  email: string;
-  customFields: { key: string; value: string }[];
-  profileImage: string;
-}
-
-interface QRTemplate {
-  id: string;
-  name: string;
-  backgroundColor: string;
-  layout: string;
-  styles: {
-    fontFamily: string;
-    primaryColor: string;
-    secondaryColor: string;
-  };
-  isGlobal: boolean;
-}
-
 export default function GenerateQR() {
-  const [userData, setUserData] = useState<UserData>({
-    name: "",
-    phone: "",
-    address: "",
-    email: "",
-    customFields: [],
-    profileImage: ""
-  });
-
-  const [customField, setCustomField] = useState({ key: "", value: "" });
-  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
+  const [formData, setFormData] = useState<any>({});
   const [isActive, setIsActive] = useState(true);
-  const [templates] = useState<QRTemplate[]>([
-    { id: "1", name: "Default Template", backgroundColor: "#FFFFFF", layout: "standard", styles: { fontFamily: "Inter", primaryColor: "#000000", secondaryColor: "#666666" }, isGlobal: false },
-    { id: "2", name: "Dark Theme", backgroundColor: "#1a1a1a", layout: "compact", styles: { fontFamily: "Roboto", primaryColor: "#FFFFFF", secondaryColor: "#999999" }, isGlobal: false },
-  ]);
 
   const { ref, generate, download } = useQRCode(defaultQROptions);
-  
 
-  const handleInputChange = (field: keyof UserData, value: string) => {
-    setUserData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleAddCustomField = () => {
-    if (!customField.key.trim() || !customField.value.trim()) {
-      showToast("error", "Please enter both field name and value");
-      return;
-    }
-
-    setUserData(prev => ({
-      ...prev,
-      customFields: [...prev.customFields, { ...customField }]
-    }));
-    
-    setCustomField({ key: "", value: "" });
-    showToast("success", "Custom field added");
-  };
-
-  const handleRemoveCustomField = (index: number) => {
-    setUserData(prev => ({
-      ...prev,
-      customFields: prev.customFields.filter((_, i) => i !== index)
-    }));
+  const handleSelectTemplate = (template: any) => {
+    setSelectedTemplate(template);
+    // Initialize with empty values instead of template data
+    const emptyData = {
+      fullName: '',
+      visaNumber: '',
+      documentNumber: '',
+      nationality: '',
+      sex: '',
+      dateOfBirth: '',
+      placeOfIssuing: '',
+      issueDate: '',
+      expiryDate: '',
+      duration: '',
+      issuingAuthority: '',
+      processNumber: '',
+      phone: '',
+      address: '',
+      profileImage: '',
+      logoImage: template.dynamicData?.logoImage || ''
+    };
+    setFormData(emptyData);
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +43,7 @@ export default function GenerateQR() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setUserData(prev => ({
+        setFormData((prev: any) => ({
           ...prev,
           profileImage: reader.result as string
         }));
@@ -94,22 +53,26 @@ export default function GenerateQR() {
     }
   };
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
   const handleGenerate = async () => {
-    if (!userData.name.trim() || !userData.phone.trim() || !userData.address.trim()) {
-      showToast("error", "Please fill all required fields (Name, Phone, Address)");
+    if (!selectedTemplate) {
+      showToast("error", "Please select a template first");
       return;
     }
 
     const qrData = {
-      type: "user_profile",
-      version: "1.0",
-      timestamp: new Date().toISOString(),
-      data: userData,
-      template: selectedTemplate,
-      isActive: isActive,
-      metadata: {
-        generatedBy: "admin_panel",
-        generationDate: new Date().toISOString()
+      templateId: selectedTemplate._id,
+      data: {
+        fullName: formData.fullName,
+        visaNumber: formData.visaNumber,
+        documentNumber: formData.documentNumber,
+        nationality: formData.nationality
       }
     };
 
@@ -120,6 +83,102 @@ export default function GenerateQR() {
 
   const handleDownload = () => {
     download("png");
+  };
+
+  const renderFormFields = () => {
+    if (!selectedTemplate) return null;
+
+    const fields = [
+      { key: 'fullName', label: 'Full Name', type: 'text', required: true },
+      { key: 'visaNumber', label: 'Visa Number', type: 'text', required: true },
+      { key: 'documentNumber', label: 'Document Number', type: 'text', required: true },
+      { key: 'nationality', label: 'Nationality', type: 'text', required: true },
+      { key: 'sex', label: 'Sex', type: 'select', options: ['M', 'F'], required: true },
+      { key: 'dateOfBirth', label: 'Date of Birth', type: 'text', required: true },
+      { key: 'placeOfIssuing', label: 'Place of Issuing', type: 'text', required: true },
+      { key: 'issueDate', label: 'Issue Date', type: 'text', required: true },
+      { key: 'expiryDate', label: 'Expiry Date', type: 'text', required: true },
+      { key: 'duration', label: 'Duration', type: 'text', required: true },
+      { key: 'issuingAuthority', label: 'Issuing Authority', type: 'text', required: true },
+      { key: 'processNumber', label: 'Process Number', type: 'text', required: true },
+      { key: 'phone', label: 'Phone', type: 'text', required: false },
+      { key: 'address', label: 'Address', type: 'textarea', required: false }
+    ];
+
+    return (
+      <div className="space-y-4">
+        {/* Profile Image Upload */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Profile Image
+          </label>
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              {formData.profileImage ? (
+                <img
+                  src={formData.profileImage}
+                  alt="Profile"
+                  className="w-20 h-20 rounded-full border-2 border-gray-200 object-cover"
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center">
+                  <span className="text-xs text-gray-400">Photo</span>
+                </div>
+              )}
+            </div>
+            <label className="cursor-pointer">
+              <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                <span>Upload Image</span>
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+            </label>
+          </div>
+        </div>
+
+        {/* Form Fields */}
+        {fields.map((field) => (
+          <div key={field.key}>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {field.label} {field.required && '*'}
+            </label>
+            {field.type === 'select' ? (
+              <select
+                value={formData[field.key] || ''}
+                onChange={(e) => handleInputChange(field.key, e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none"
+                required={field.required}
+              >
+                <option value="">Select {field.label}</option>
+                {field.options?.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            ) : field.type === 'textarea' ? (
+              <textarea
+                value={formData[field.key] || ''}
+                onChange={(e) => handleInputChange(field.key, e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none resize-none"
+                rows={3}
+                required={field.required}
+              />
+            ) : (
+              <input
+                type={field.type}
+                value={formData[field.key] || ''}
+                onChange={(e) => handleInputChange(field.key, e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none"
+                required={field.required}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -151,253 +210,54 @@ export default function GenerateQR() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
-              <User size={20} style={{ color: theme.colors.primary.main }} />
-              User Information
-            </h2>
-            
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={userData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none"
-                    style={{ '--tw-ring-color': theme.colors.primary.main, borderColor: 'focus:' + theme.colors.primary.main } as any}
-                    placeholder="Enter full name"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number *
-                  </label>
-                  <div className="relative">
-                    <Phone size={16} className="absolute left-3 top-3 text-gray-400" />
-                    <input
-                      type="tel"
-                      value={userData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none"
-                      style={{ '--tw-ring-color': theme.colors.primary.main } as any}
-                      placeholder="Enter phone number"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Address *
-                  </label>
-                  <div className="relative">
-                    <MapPin size={16} className="absolute left-3 top-3 text-gray-400" />
-                    <textarea
-                      value={userData.address}
-                      onChange={(e) => handleInputChange("address", e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none resize-none"
-                      style={{ '--tw-ring-color': theme.colors.primary.main } as any}
-                      placeholder="Enter complete address"
-                      rows={3}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={userData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none"
-                    style={{ '--tw-ring-color': theme.colors.primary.main } as any}
-                    placeholder="Enter email"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Profile Image / Logo
-                </label>
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    {userData.profileImage ? (
-                      <img
-                        src={userData.profileImage}
-                        alt="Profile"
-                        className="w-20 h-20 rounded-full border-2 border-gray-200 object-cover"
-                      />
-                    ) : (
-                      <div className="w-20 h-20 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center">
-                        <Image size={24} className="text-gray-400" />
-                      </div>
-                    )}
-                  </div>
-                  <label className="cursor-pointer">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-                      <Upload size={16} />
-                      <span>Upload Image</span>
-                    </div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-              </div>
+          {!selectedTemplate ? (
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <h2 className="text-xl font-semibold text-gray-800 mb-6">Select Template</h2>
+              <TemplateList onSelectTemplate={handleSelectTemplate} />
             </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
-              <Settings size={20} style={{ color: theme.colors.primary.main }} />
-              Custom Fields
-            </h2>
-            
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Field Name
-                  </label>
-                  <input
-                    type="text"
-                    value={customField.key}
-                    onChange={(e) => setCustomField(prev => ({ ...prev, key: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none"
-                    style={{ '--tw-ring-color': theme.colors.primary.main } as any}
-                    placeholder="e.g., Department, Role, etc."
-                  />
+          ) : (
+            <>
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Template: {selectedTemplate.templateName}
+                  </h2>
+                  <button
+                    onClick={() => setSelectedTemplate(null)}
+                    className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg"
+                  >
+                    Change Template
+                  </button>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Field Value
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={customField.value}
-                      onChange={(e) => setCustomField(prev => ({ ...prev, value: e.target.value }))}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none"
-                      style={{ '--tw-ring-color': theme.colors.primary.main } as any}
-                      placeholder="Enter value"
-                    />
-                    <button
-                      onClick={handleAddCustomField}
-                      className="px-4 py-2 text-white rounded-lg hover:opacity-90 flex items-center gap-2"
-                      style={{ background: theme.gradients.primary }}
-                    >
-                      <Plus size={16} />
-                      Add
-                    </button>
-                  </div>
-                </div>
+                {renderFormFields()}
               </div>
-
-              {userData.customFields.length > 0 && (
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
-                  <table className="w-full">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Field Name</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Value</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      {userData.customFields.map((field, index) => (
-                        <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 text-sm">{field.key}</td>
-                          <td className="px-4 py-3 text-sm text-gray-600">{field.value}</td>
-                          <td className="px-4 py-3">
-                            <button
-                              onClick={() => handleRemoveCustomField(index)}
-                              className="p-1 text-red-600 hover:bg-red-50 rounded"
-                              title="Remove field"
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Select Template</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {templates.map((template) => (
-                <div
-                  key={template.id}
-                  className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                    selectedTemplate === template.id
-                      ? 'bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                  style={{
-                    borderColor: selectedTemplate === template.id ? theme.colors.primary.main : ''
-                  }}
-                  onClick={() => setSelectedTemplate(template.id)}
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-medium">{template.name}</h3>
-                      <p className="text-sm text-gray-600 mt-1">{template.layout} layout</p>
-                    </div>
-                    {template.isGlobal && (
-                      <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
-                        Global
-                      </span>
-                    )}
-                  </div>
-                  <div 
-                    className="mt-3 h-2 rounded-full"
-                    style={{ backgroundColor: template.backgroundColor }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+            </>
+          )}
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center gap-6">
+          <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center gap-6 sticky top-6">
             <div className="text-center">
               <h3 className="text-lg font-semibold text-gray-800">QR Preview</h3>
-              <p className="text-sm text-gray-600 mt-1">Scan to view profile</p>
+              <p className="text-sm text-gray-600 mt-1">Scan to view data</p>
             </div>
 
             <div className="p-4 border-2 border-gray-100 rounded-xl bg-white">
               <QRPreview qrRef={ref} />
             </div>
 
-            {userData.name && (
+            {selectedTemplate && formData.fullName && (
               <div className="text-center">
-                <p className="font-medium">{userData.name}</p>
-                <p className="text-sm text-gray-600">{userData.phone}</p>
+                <p className="font-medium">{formData.fullName}</p>
+                <p className="text-sm text-gray-600">{formData.visaNumber}</p>
               </div>
             )}
 
             <div className="flex flex-col gap-3 w-full">
               <button
                 onClick={handleGenerate}
-                className="w-full px-6 py-3 text-white rounded-lg font-medium hover:opacity-90 transition-all flex items-center justify-center gap-2"
+                disabled={!selectedTemplate}
+                className="w-full px-6 py-3 text-white rounded-lg font-medium hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ background: theme.gradients.primary }}
               >
                 <QrCode size={18} />
@@ -414,12 +274,12 @@ export default function GenerateQR() {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow-lg">
+          {/* <div className="bg-white p-4 rounded-xl shadow-lg sticky top-96">
             <h4 className="font-medium text-gray-800 mb-2">QR Status</h4>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">QR ID:</span>
-                <span className="text-sm font-mono">Generated</span>
+                <span className="text-sm text-gray-600">Template:</span>
+                <span className="text-sm font-mono">{selectedTemplate?.templateName || 'None'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Status:</span>
@@ -428,11 +288,11 @@ export default function GenerateQR() {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Fields:</span>
-                <span className="text-sm">{userData.customFields.length} custom</span>
+                <span className="text-sm text-gray-600">Type:</span>
+                <span className="text-sm">{selectedTemplate?.templateType || 'N/A'}</span>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

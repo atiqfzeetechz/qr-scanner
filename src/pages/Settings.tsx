@@ -1,11 +1,64 @@
 import { useState } from 'react';
-import { Bell, Lock,  Save } from 'lucide-react';
+import { Bell, Lock, Save } from 'lucide-react';
 import { theme } from '../theme';
+import { useAxios } from '../hooks/useAxios';
+import { showConfirm, showError, showToast } from '../utils/sweetAlert';
 
 export default function Settings() {
+
+  const { post, put } = useAxios()
   const [notifications, setNotifications] = useState(true);
   const [emailAlerts, setEmailAlerts] = useState(true);
+  const [formFields, setFormFields] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  })
 
+  const changePasword = (e: any) => {
+    const { name, value } = e.target
+    console.log(name, value)
+    setFormFields({
+      ...formFields,
+      [name]: value
+    })
+
+  }
+
+  const changePaswordfn = async () => {
+    if (formFields.confirmPassword !== formFields.newPassword) {
+      return showError('New password and confirm password must be same')
+    }
+    try {
+      const result = await showConfirm(
+        'Are you sure you want to change password?',
+        'This action cannot be undone.',
+        'Yes, change it!'
+      )
+      if (result.isConfirmed) {
+
+        const res = await put('/admin/auth/changePassword', {
+          currentPassword: formFields.currentPassword,
+          newPassword: formFields.newPassword,
+          confirmPassword: formFields.confirmPassword
+        })
+        if (res.success) {
+          showToast('success', 'Password changed successfully')
+          setFormFields({
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: ""
+          })
+        }
+        console.log(res)
+      }
+    } catch (error) {
+      showToast('error', error)
+      console.log(error)
+
+
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -15,114 +68,7 @@ export default function Settings() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div
-              className="w-10 h-10 rounded-lg flex items-center justify-center"
-              style={{ background: theme.gradients.primary }}
-            >
-              <Bell size={20} className="text-white" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-gray-900">Notifications</h2>
-              <p className="text-sm text-gray-600">Manage notification preferences</p>
-            </div>
-          </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-gray-900">Push Notifications</p>
-                <p className="text-sm text-gray-600">Receive push notifications</p>
-              </div>
-              <button
-                onClick={() => setNotifications(!notifications)}
-                className={`relative w-12 h-6 rounded-full transition-colors ${
-                  notifications ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              >
-                <span
-                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                    notifications ? 'translate-x-6' : ''
-                  }`}
-                />
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-gray-900">Email Alerts</p>
-                <p className="text-sm text-gray-600">Receive email notifications</p>
-              </div>
-              <button
-                onClick={() => setEmailAlerts(!emailAlerts)}
-                className={`relative w-12 h-6 rounded-full transition-colors ${
-                  emailAlerts ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              >
-                <span
-                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                    emailAlerts ? 'translate-x-6' : ''
-                  }`}
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div
-              className="w-10 h-10 rounded-lg flex items-center justify-center"
-              style={{ background: theme.gradients.secondary }}
-            >
-              <Palette size={20} className="text-white" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-gray-900">Appearance</h2>
-              <p className="text-sm text-gray-600">Customize the look and feel</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-gray-900">Dark Mode</p>
-                <p className="text-sm text-gray-600">Enable dark theme</p>
-              </div>
-              <button
-                onClick={() => setDarkMode(!darkMode)}
-                className={`relative w-12 h-6 rounded-full transition-colors ${
-                  darkMode ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              >
-                <span
-                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                    darkMode ? 'translate-x-6' : ''
-                  }`}
-                />
-              </button>
-            </div>
-
-            <div>
-              <p className="font-medium text-gray-900 mb-2">Theme Colors</p>
-              <div className="flex gap-3">
-                <div
-                  className="w-12 h-12 rounded-lg cursor-pointer hover:scale-110 transition-transform border-2 border-white shadow-md"
-                  style={{ background: theme.gradients.primary }}
-                />
-                <div
-                  className="w-12 h-12 rounded-lg cursor-pointer hover:scale-110 transition-transform border-2 border-white shadow-md"
-                  style={{ background: theme.gradients.secondary }}
-                />
-                <div
-                  className="w-12 h-12 rounded-lg cursor-pointer hover:scale-110 transition-transform border-2 border-white shadow-md"
-                  style={{ background: theme.gradients.dark }}
-                />
-              </div>
-            </div>
-          </div>
-        </div> */}
 
         <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center gap-3 mb-6">
@@ -144,6 +90,10 @@ export default function Settings() {
                 Current Password
               </label>
               <input
+                name='currentPassword'
+                value={formFields.currentPassword}
+                onChange={changePasword}
+
                 type="password"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-0 focus:border-transparent outline-none"
                 placeholder="Enter current password"
@@ -154,12 +104,30 @@ export default function Settings() {
                 New Password
               </label>
               <input
+                name='newPassword'
+                value={formFields.newPassword}
+                onChange={changePasword}
+
+                type="password"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-0 focus:border-transparent outline-none"
+                placeholder="Enter new password"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900 mb-2">
+                Confirm New Password
+              </label>
+              <input
+                name='confirmPassword'
+                value={formFields.confirmPassword}
+                onChange={changePasword}
                 type="password"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-0 focus:border-transparent outline-none"
                 placeholder="Enter new password"
               />
             </div>
             <button
+              onClick={changePaswordfn}
               className="w-full px-4 py-2 text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
               style={{ background: theme.gradients.dark }}
             >
@@ -208,16 +176,17 @@ export default function Settings() {
           </div>
         </div> */}
       </div>
-
+      {/* 
       <div className="flex justify-end">
         <button
+         
           className="flex items-center gap-2 px-6 py-3 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-shadow"
           style={{ background: theme.gradients.primary }}
         >
           <Save size={20} />
-          Save All Changes
+          Change Password
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

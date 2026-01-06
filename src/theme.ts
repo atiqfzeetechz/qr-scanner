@@ -1,45 +1,57 @@
 export const theme = {
   colors: {
     primary: {
-      main: '#000000',
-      light: '#666666',
-      dark: '#000000',
+      main: '#1F7A3D',     // Brazil Green
+      light: '#3FA66A',
+      dark: '#14532D',
     },
+
     secondary: {
-      main: '#333333',
-      light: '#999999',
-      dark: '#000000',
+      main: '#F2C94C',     // Emblem Yellow
+      light: '#F6D776',
+      dark: '#C9A227',
     },
+
     navy: {
-      main: '#222222',
-      light: '#555555',
-      dark: '#000000',
+      main: '#1C2A5A',     // Official Navy
+      light: '#334A8C',
+      dark: '#0F1A3A',
     },
-    purple: {
-      main: '#444444',
-      light: '#777777',
-      dark: '#111111',
-    },
+
     neutral: {
       50: '#FFFFFF',
-      100: '#F5F5F5',
-      200: '#E5E5E5',
-      300: '#D4D4D4',
-      400: '#A3A3A3',
-      500: '#737373',
-      600: '#525252',
-      700: '#404040',
-      800: '#262626',
-      900: '#171717',
+      100: '#F8FAFC',
+      200: '#E5E7EB',
+      300: '#D1D5DB',
+      400: '#9CA3AF',
+      500: '#6B7280',
+      600: '#4B5563',
+      700: '#374151',
+      800: '#1F2937',
+      900: '#0B0B0B',
     },
-    success: '#666666',
-    warning: '#888888',
-    error: '#333333',
+
+    success: '#1F7A3D',
+    warning: '#F2C94C',
+    error: '#C62828',
   },
+
   gradients: {
-    primary: 'linear-gradient(135deg, #000000 0%, #666666 100%)',
-    secondary: 'linear-gradient(135deg, #333333 0%, #000000 100%)',
-    dark: 'linear-gradient(135deg, #000000 0%, #444444 100%)',
+    /** 🌟 MAIN LOGO MIX — Green + Yellow + Navy */
+    primary:
+      'linear-gradient(135deg, #1F7A3D 0%, #F2C94C 50%, #1C2A5A 100%)',
+
+    /** 🪪 DOCUMENT / VISA HEADER */
+    secondary:
+      'linear-gradient(90deg, #0F1A3A 0%, #1F7A3D 45%, #F2C94C 100%)',
+
+    /** 🏛 AUTHORITY / FOOTER */
+    authority:
+      'linear-gradient(135deg, #1C2A5A 0%, #1F7A3D 60%, #14532D 100%)',
+
+    /** ✨ SOFT ACCENT (backgrounds, cards) */
+    soft:
+      'linear-gradient(180deg, #F2C94C 0%, #1F7A3D 100%)',
   },
 };
 

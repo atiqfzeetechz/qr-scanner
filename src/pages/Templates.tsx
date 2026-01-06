@@ -4,36 +4,38 @@ import { useState, useEffect } from "react";
 // @ts-nocheck
 import QRCode from "qrcode";
 import VisaTemplate from "../components/VisaTemplate";
+import TemplateList from "../components/TemplateList";
 import { useAxios } from "../hooks/useAxios";
 import { imageurl } from "../helper/urlChanger";
 
 const TemplateBuilder = () => {
-    const { get } = useAxios();
-    const [logos, setLogos] = useState<any[]>([]);
-    const [selectedLogo, setSelectedLogo] = useState<any>(null);
-    const [customFields, setCustomFields] = useState<any[]>([
-      { key: "Occupation", value: "Engineer" },
-      { key: "Purpose of Visit", value: "Tourism" }
-    ]);
-    const [newField, setNewField] = useState<any>({ key: "", value: "" });
-    
-    const visaData = {
-  fullName: "ANTHONY CIVIL",
-  placeOfIssuing: "PORTO PRÍNCIPE",
-  visaNumber: "251020-504973",
-  issueDate: "17 DEZ/DEC 2025",
-  expiryDate: "21 DEZ/DEC 2026",
-  duration: "365 DIAS/DAYS",
-  documentNumber: "R12707793",
-  nationality: "HAITIANO",
-  sex: "M",
-  dateOfBirth: "06 FEV/FEB 2004",
-  issuingAuthority: "PORTO PRINCIPE EMB",
-  processNumber: "08228.042643/2023-72",
-  phone: "+55 99999 8888",
-  address: "São Paulo, Brazil",
-  customFields: customFields
-};
+  const { get } = useAxios();
+  const [showTemplateList, setShowTemplateList] = useState(false);
+  const [logos, setLogos] = useState<any[]>([]);
+  const [selectedLogo, setSelectedLogo] = useState<any>(null);
+  const [customFields, setCustomFields] = useState<any[]>([
+    { key: "Occupation", value: "Engineer" },
+    { key: "Purpose of Visit", value: "Tourism" }
+  ]);
+  const [newField, setNewField] = useState<any>({ key: "", value: "" });
+
+  const visaData = {
+    fullName: "ANTHONY CIVIL",
+    placeOfIssuing: "PORTO PRÍNCIPE",
+    visaNumber: "251020-504973",
+    issueDate: "17 DEZ/DEC 2025",
+    expiryDate: "21 DEZ/DEC 2026",
+    duration: "365 DIAS/DAYS",
+    documentNumber: "R12707793",
+    nationality: "HAITIANO",
+    sex: "M",
+    dateOfBirth: "06 FEV/FEB 2004",
+    issuingAuthority: "PORTO PRINCIPE EMB",
+    processNumber: "08228.042643/2023-72",
+    phone: "+55 99999 8888",
+    address: "São Paulo, Brazil",
+    customFields: customFields
+  };
   const [data, setData] = useState<any>(visaData);
 
   // Update data when customFields change
@@ -73,13 +75,19 @@ const TemplateBuilder = () => {
   };
 
   const updateCustomField = (index: number, field: string, newValue: string) => {
-    setCustomFields((prev: any) => prev.map((item: any, i: number) => 
+    setCustomFields((prev: any) => prev.map((item: any, i: number) =>
       i === index ? { ...item, [field]: newValue } : item
     ));
   };
 
+  const handleSelectTemplate = (template: any) => {
+    setData(template.dynamicData);
+    setCustomFields(template.customFields || []);
+    setShowTemplateList(false);
+  };
+
   const generateQR = async () => {
-    const visaData = {
+    const qrVisaData = {
       fullName: data.fullName,
       documentNumber: data.documentNumber,
       nationality: data.nationality,
@@ -94,26 +102,67 @@ const TemplateBuilder = () => {
       processNumber: data.processNumber,
       logoImage: data.logoImage
     };
-    
+
     // Encode data and create URL that opens template
-    const encodedData = btoa(JSON.stringify(visaData));
+    const encodedData = btoa(JSON.stringify(qrVisaData));
     const templateUrl = `${window.location.origin}/visa-view?data=${encodedData}`;
-    
+
     const qr = await QRCode.toDataURL(templateUrl);
     setData((prev: any) => ({ ...prev, qrCode: qr }));
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div>
+      {/* Header with Template List Toggle */}
+      <div style={{
+        padding: "20px",
+        backgroundColor: "#f8f9fa",
+        borderBottom: "1px solid #ddd",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center"
+      }}>
+        <h2 style={{ margin: 0, color: "#0066CC" }}>Template Builder</h2>
+        <button
+          onClick={() => setShowTemplateList(!showTemplateList)}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: showTemplateList ? "#dc3545" : "#28a745",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: "bold"
+          }}
+        >
+          {showTemplateList ? "Hide Templates" : "Show Templates"}
+        </button>
+      </div>
+
+      {/* Template List */}
+      {showTemplateList && (
+        <div style={{
+          backgroundColor: "white",
+          borderBottom: "1px solid #ddd",
+          maxHeight: "400px",
+          overflowY: "auto"
+        }}>
+          <TemplateList onSelectTemplate={handleSelectTemplate} />
+        </div>
+      )}
+
+      {/* Main Template Builder */}
+      <div style={{ display: "flex", height: showTemplateList ? "calc(100vh - 500px)" : "calc(100vh - 100px)" }}>
 
       {/* FORM - Scrollable Left Side */}
-      <div style={{ 
-        width: "55%", 
+      <div style={{
+        width: "55%",
         // padding: "20px", 
-        backgroundColor: "#f8f9fa", 
+        backgroundColor: "#f8f9fa",
         overflowY: "auto",
         maxHeight: "100vh",
-        paddingBottom:"100px"
+        paddingBottom: "100px"
       }}>
         <h3 style={{ color: "#0066CC", marginBottom: "20px" }}>Visa Template Fields</h3>
 
@@ -123,24 +172,24 @@ const TemplateBuilder = () => {
             <h4 style={{ color: "#333", marginBottom: "10px", fontSize: "14px" }}>Select Logo</h4>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(60px, 1fr))", gap: "8px", maxHeight: "120px", overflowY: "auto" }}>
               {logos.map((logo: any) => (
-                <div 
+                <div
                   key={logo._id}
                   onClick={() => handleLogoSelect(logo)}
-                  style={{ 
-                    width: "60px", 
-                    height: "60px", 
-                    border: selectedLogo?.id === logo.id ? "2px solid #0066CC" : "1px solid #ddd", 
-                    borderRadius: "4px", 
-                    cursor: "pointer", 
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                    border: selectedLogo?.id === logo.id ? "2px solid #0066CC" : "1px solid #ddd",
+                    borderRadius: "4px",
+                    cursor: "pointer",
                     overflow: "hidden",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center"
                   }}
                 >
-                  <img 
-                    src={imageurl(logo.url || logo.data)} 
-                    alt={logo.name} 
+                  <img
+                    src={imageurl(logo.url || logo.data)}
+                    alt={logo.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </div>
@@ -261,7 +310,7 @@ const TemplateBuilder = () => {
           {/* Dynamic Fields Section */}
           <div style={{ backgroundColor: "white", padding: "15px", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
             <h4 style={{ color: "#333", marginBottom: "10px", fontSize: "14px" }}>Dynamic Fields</h4>
-            
+
             {/* Add New Field */}
             <div style={{ display: "flex", gap: "8px", marginBottom: "15px" }}>
               <input className="inputfiled"
@@ -278,12 +327,12 @@ const TemplateBuilder = () => {
               />
               <button
                 onClick={addCustomField}
-                style={{ 
-                  padding: "8px 16px", 
-                  backgroundColor: "#28a745", 
-                  color: "white", 
-                  border: "none", 
-                  borderRadius: "4px", 
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#28a745",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
                   cursor: "pointer",
                   fontSize: "14px"
                 }}
@@ -307,12 +356,12 @@ const TemplateBuilder = () => {
                 />
                 <button
                   onClick={() => removeCustomField(index)}
-                  style={{ 
-                    padding: "6px 10px", 
-                    backgroundColor: "#dc3545", 
-                    color: "white", 
-                    border: "none", 
-                    borderRadius: "4px", 
+                  style={{
+                    padding: "6px 10px",
+                    backgroundColor: "#dc3545",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
                     cursor: "pointer",
                     fontSize: "12px"
                   }}
@@ -343,16 +392,16 @@ const TemplateBuilder = () => {
             />
           </div>
 
-          <button 
+          <button
             onClick={generateQR}
-            style={{ 
-              padding: "8px 16px", 
-              backgroundColor: "#0066CC", 
-              color: "white", 
-              border: "none", 
-              borderRadius: "4px", 
-              fontSize: "12px", 
-              fontWeight: "bold", 
+            style={{
+              padding: "8px 16px",
+              backgroundColor: "#0066CC",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              fontSize: "12px",
+              fontWeight: "bold",
               cursor: "pointer"
             }}
           >
@@ -362,8 +411,8 @@ const TemplateBuilder = () => {
       </div>
 
       {/* PREVIEW - Fixed Right Side */}
-      <div style={{ 
-        width: "60%", 
+      <div style={{
+        width: "60%",
         padding: "20px",
         backgroundColor: "white",
         overflowY: "auto",
@@ -372,6 +421,7 @@ const TemplateBuilder = () => {
         <div style={{ transform: "scale(0.7)", transformOrigin: "top left", width: "142%" }}>
           <VisaTemplate data={data} />
         </div>
+      </div>
       </div>
     </div>
   );
