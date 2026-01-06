@@ -4,7 +4,7 @@ import { defaultQROptions } from "../utils/qrDefaults";
 import { useQRCode } from "../hooks/useQRCode";
 import { QRPreview } from "../components/QRPreview";
 import { showToast } from "../utils/sweetAlert";
-import { useAxios } from "../hooks/useAxios";
+
 import { theme } from "../theme";
 
 interface UserData {
@@ -48,7 +48,7 @@ export default function GenerateQR() {
   ]);
 
   const { ref, generate, download } = useQRCode(defaultQROptions);
-  const { post } = useAxios();
+  
 
   const handleInputChange = (field: keyof UserData, value: string) => {
     setUserData(prev => ({

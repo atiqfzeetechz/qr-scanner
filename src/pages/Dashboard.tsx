@@ -1,4 +1,4 @@
-import { QrCode, Scan, History, BarChart3, TrendingUp } from 'lucide-react';
+import { QrCode, Scan,BarChart3, TrendingUp } from 'lucide-react';
 import StatCard from '../components/StatCard';
 import { theme } from '../theme';
 

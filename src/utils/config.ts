@@ -1,0 +1,2 @@
+export const API_BASE_URL = 'https://visahaitiser.wise-hustlers.tech/backend/api'; // Replace with your API URL
+export const IMAGE_BASE_URL = 'https://visahaitiser.wise-hustlers.tech/backend'; // Replace with your API URL

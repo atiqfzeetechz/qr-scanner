@@ -69,12 +69,7 @@ export default function Logos() {
     if (data.success) {
       console.log(data)
       showToast('success', 'Logo uploaded successfully!');
-      const newLogoData: Logo = {
-        _id: data.data._id,
-        name: data.data.name,
-        url: imageurl(data.data.url),
-        dimensions: { width: 80, height: 80 }
-      };
+
       getlogos()
 
       setSelectedFile(null);

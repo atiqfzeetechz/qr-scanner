@@ -9,6 +9,7 @@ import QRHistory from './pages/QRHistory';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Logos from './pages/Logos';
+import Templates from './pages/Templates';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -63,6 +64,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Logos />
+          </ProtectedRoute>
+        }
+      /> 
+      <Route
+        path="/admin/templates"
+        element={
+          <ProtectedRoute>
+            <Templates />
           </ProtectedRoute>
         }
       />

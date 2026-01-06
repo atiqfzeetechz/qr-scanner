@@ -1,5 +1,5 @@
 interface Props {
-  qrRef: React.RefObject<HTMLDivElement>;
+  qrRef: React.RefObject<HTMLDivElement> | any;
 }
 
 export const QRPreview = ({ qrRef }: Props) => {

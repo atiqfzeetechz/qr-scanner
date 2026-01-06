@@ -1,3 +1,5 @@
+import { IMAGE_BASE_URL } from "../utils/config"
+
 export const imageurl = (img: string) => {
-    return `http://localhost:5001${img}`
+    return `${IMAGE_BASE_URL}${img}`
 }

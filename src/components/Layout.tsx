@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
-  QrCode,
   History,
   Settings,
   LogOut,
@@ -15,7 +14,8 @@ import {
   ChevronUp,
   Plus,
   Scan,
-  Slack
+  Slack,
+  LayoutTemplate
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useLoaderStore } from '../store/loaderStore';
@@ -40,6 +40,7 @@ const navigation: NavigationItem[] = [
   { name: 'Scan QR', href: '/admin/scan', icon: Scan },
   { name: 'QR History', href: '/admin/history', icon: History },
   { name: 'Logos', href: '/admin/logos', icon: Slack },
+  { name: 'Templates', href: '/admin/templates', icon: LayoutTemplate },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
@@ -136,8 +137,8 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center gap-2">
               {/* <img src={logo} alt="QR Manager" className="w-8 h-8" /> */}
               <img src={logo} alt="QR Manager" style={{
-                  scale:.46
-                }} />
+                scale: .46
+              }} />
               {/* <span className="text-xl font-bold text-gray-900">QR Manager</span> */}
             </div>
             <button
@@ -244,7 +245,7 @@ export default function Layout({ children }: LayoutProps) {
             {!sidebarCollapsed ? (
               <div className="flex items-center gap-2">
                 <img src={logo} alt="QR Manager" style={{
-                  scale:.46
+                  scale: .46
                 }} />
                 {/* <span className="text-xl font-bold text-gray-900">QR Manager</span> */}
               </div>

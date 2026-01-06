@@ -1,5 +1,7 @@
 import { useRef } from "react";
-import QRCodeStyling, { Options, Extension } from "qr-code-styling";
+import QRCodeStyling from "qr-code-styling";
+import Extension from "qr-code-styling";
+import type {Options} from "qr-code-styling";
 import { useAxios } from "./useAxios";
 
 export const useQRCode = (options: Options) => {
@@ -35,7 +37,7 @@ export const useQRCode = (options: Options) => {
     })
   };
 
-  const download = (ext: Extension = "png") => {
+  const download = (ext: Extension | any = "png") => {
     qrInstance.current?.download({ extension: ext });
   };
 

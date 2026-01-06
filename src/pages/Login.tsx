@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useAxios } from '../hooks/useAxios';
@@ -8,7 +8,7 @@ import logo from '../assets/logo.png';
 import { showToast } from '../utils/sweetAlert';
 
 export default function Login() {
-  const navigate = useNavigate();
+  
   const login = useAuthStore((state) => state.login);
   const { post, loading } = useAxios();
   const [email, setEmail] = useState('admin@gmail.com');

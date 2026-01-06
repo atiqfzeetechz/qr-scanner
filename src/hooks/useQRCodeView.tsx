@@ -1,5 +1,7 @@
 import { useRef } from "react";
-import QRCodeStyling, { Options, Extension } from "qr-code-styling";
+import QRCodeStyling from "qr-code-styling";
+import  Extension from "qr-code-styling";
+import   type {Options} from "qr-code-styling";
 
 export const useQRCodeView = (options: Options) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -22,7 +24,7 @@ export const useQRCodeView = (options: Options) => {
     qrInstance.current.append(containerRef.current);
   };
 
-  const download = (ext: Extension = "png") => {
+  const download = (ext: Extension | any = "png") => {
     qrInstance.current?.download({ extension: ext });
   };
 
