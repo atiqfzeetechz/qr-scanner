@@ -13,7 +13,6 @@ import {
   ChevronDown,
   ChevronUp,
   Plus,
-  Scan,
   Slack,
   LayoutTemplate
 } from 'lucide-react';

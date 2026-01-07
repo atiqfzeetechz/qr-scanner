@@ -1,4 +1,4 @@
-import { QrCode, Scan, BarChart3, TrendingUp, FileText, Image, Activity, Download } from 'lucide-react';
+import { QrCode,  FileText, Image, Activity } from 'lucide-react';
 import StatCard from '../components/StatCard';
 import { theme } from '../theme';
 import { useAxios } from '../hooks/useAxios';

@@ -52,6 +52,8 @@ export const theme = {
     /** ✨ SOFT ACCENT (backgrounds, cards) */
     soft:
       'linear-gradient(180deg, #F2C94C 0%, #1F7A3D 100%)',
+   dark:
+      'linear-gradient(180deg, #F2C94C 0%, #1F7A3D 100%)',
   },
 };
 

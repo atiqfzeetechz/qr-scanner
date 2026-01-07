@@ -6,11 +6,16 @@ import { QRPreview } from "../components/QRPreview";
 import { showToast } from "../utils/sweetAlert";
 import TemplateList from "../components/TemplateList";
 import { theme } from "../theme";
+import { encodeData } from "../helper/encodeDecode";
+import { useAxios } from "../hooks/useAxios";
+import { imageurl } from "../helper/urlChanger";
 
 export default function GenerateQR() {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [formData, setFormData] = useState<any>({});
   const [isActive, setIsActive] = useState(true);
+  const { post } = useAxios()
+
 
   const { ref, generate, download } = useQRCode(defaultQROptions);
 
@@ -38,9 +43,25 @@ export default function GenerateQR() {
     setFormData(emptyData);
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      const imagePayload = new FormData()
+      imagePayload.append('image', file)
+      const userImages = await post('/image/uploaduserImage', imagePayload, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      if (userImages.success) {
+        setFormData((prev: any) => ({
+          ...prev,
+          profileImage: imageurl(userImages.file.path),
+          imageHalfurl: userImages.file.path
+        }));
+      }
+      console.log(userImages)
+      return
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prev: any) => ({
@@ -61,24 +82,90 @@ export default function GenerateQR() {
   };
 
   const handleGenerate = async () => {
+    // const res = encodeData({
+    //   "_id": {
+    //     "$oid": "695d123cdc8b9b9d6628ee38"
+    //   },
+    //   "data": "{\"templateId\":\"695d11f6dc8b9b9d6628ee32\",\"data\":{\"fullName\":\"test\",\"visaNumber\":\"tetsing \",\"documentNumber\":\"123456\",\"nationality\":\"india\"}}",
+    //   "options": {
+    //     "width": 300,
+    //     "height": 300,
+    //     "type": "svg",
+    //     "data": "",
+    //     "margin": 10,
+    //     "qrOptions": {
+    //       "mode": "Byte",
+    //       "errorCorrectionLevel": "Q"
+    //     },
+    //     "imageOptions": {
+    //       "hideBackgroundDots": true,
+    //       "imageSize": 0.4,
+    //       "margin": 20,
+    //       "crossOrigin": "anonymous"
+    //     },
+    //     "dotsOptions": {
+    //       "color": "#222",
+    //       "type": "rounded"
+    //     },
+    //     "backgroundOptions": {
+    //       "color": "#ffffff"
+    //     },
+    //     "cornersSquareOptions": {
+    //       "type": "extra-rounded",
+    //       "color": "#222"
+    //     },
+    //     "cornersDotOptions": {
+    //       "type": "dot",
+    //       "color": "#222"
+    //     }
+    //   },
+    //   "createdBy": {
+    //     "$oid": "695d047a33893f981bdf3f65"
+    //   },
+    //   "downloadCount": 0,
+    //   "scanCount": 0,
+    //   "status": "active",
+    //   "createdAt": {
+    //     "$date": "2026-01-06T13:46:36.301Z"
+    //   },
+    //   "updatedAt": {
+    //     "$date": "2026-01-06T13:46:36.301Z"
+    //   },
+    //   "__v": 0
+    // })
+    // console.log(res)
+    // return
     if (!selectedTemplate) {
       showToast("error", "Please select a template first");
       return;
     }
-
-    const qrData = {
+    const payload = {
+      ...formData,
       templateId: selectedTemplate._id,
-      data: {
-        fullName: formData.fullName,
-        visaNumber: formData.visaNumber,
-        documentNumber: formData.documentNumber,
-        nationality: formData.nationality
-      }
-    };
+      userImage: formData.imageHalfurl
 
-    const qrString = JSON.stringify(qrData);
-    generate(qrString);
-    showToast("success", "QR Code generated successfully!");
+    }
+   
+    const res = await post('/admin/qr/create', {
+      data: payload,
+      options: defaultQROptions
+
+    })
+    if (res.success) {
+      const optiondata = {
+        _id: res.qr._id,
+        tempalateId: res.qr.data.templateId,
+        status: res.qr.status,
+       
+      }
+      const url = encodeData(optiondata)
+      const fullurl = `http://192.168.1.40:5173/admin/qrData/${url}`
+      generate(fullurl)
+      showToast("success", "QR Code generated successfully!");
+    }
+    console.log(res)
+    
+
   };
 
   const handleDownload = () => {
@@ -197,7 +284,7 @@ export default function GenerateQR() {
               checked={isActive}
               onChange={(e) => setIsActive(e.target.checked)}
             />
-            <div 
+            <div
               className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
               style={{ backgroundColor: isActive ? theme.colors.primary.main : '' }}
             />

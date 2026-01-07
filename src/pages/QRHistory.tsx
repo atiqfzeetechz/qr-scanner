@@ -4,6 +4,7 @@ import { History, QrCode, Download, Eye } from 'lucide-react';
 import { theme } from '../theme';
 import { useAxios } from '../hooks/useAxios';
 import { useQRCodeView } from '../hooks/useQRCodeView';
+import { encodeData } from '../helper/encodeDecode';
 
 export default function QRHistory() {
   const { get } = useAxios()
@@ -104,9 +105,9 @@ export default function QRHistory() {
 
       {/* QR Modal */}
       {selectedItem && showModal && (
-        <QRViewModal 
-          item={selectedItem} 
-          onClose={() => setShowModal(false)} 
+        <QRViewModal
+          item={selectedItem}
+          onClose={() => setShowModal(false)}
         />
       )}
     </div>
@@ -119,13 +120,22 @@ function QRViewModal({ item, onClose }: { item: any, onClose: () => void }) {
 
   useEffect(() => {
     if (item.data) {
-      display(item.data);
+      const optiondata = {
+        _id: item._id,
+        tempalateId: item.data.templateId,
+        status: item.status,
+
+      }
+      const url = encodeData(optiondata)
+      const fullurl = `http://192.168.1.40:5173/admin/qrData/${url}`
+
+      display(fullurl);
     }
   }, [item.data, display]);
 
   return (
     <div className="fixed inset-0  flex items-center justify-center z-50" style={{
-      backgroundColor:"rgba(0, 0, 0, 0.5)"
+      backgroundColor: "rgba(0, 0, 0, 0.5)"
     }}>
       <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
         <div className="flex items-center justify-between mb-4">
@@ -137,11 +147,11 @@ function QRViewModal({ item, onClose }: { item: any, onClose: () => void }) {
             ✕
           </button>
         </div>
-        
+
         <div className="flex justify-center mb-4">
           <div ref={ref} className="border rounded-lg p-4" />
         </div>
-        
+
         <div className="flex gap-2">
           <button
             onClick={() => download('png')}

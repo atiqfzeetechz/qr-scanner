@@ -134,7 +134,7 @@ export const showInputDialog = (
 };
 export const showToast = (
   icon: 'success' | 'error' | 'warning' | 'info',
-  title: string
+  title: string |any
 ) => {
   const Toast = Swal.mixin({
     toast: true,

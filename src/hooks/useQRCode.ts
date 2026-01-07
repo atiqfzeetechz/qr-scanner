@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import QRCodeStyling from "qr-code-styling";
 import Extension from "qr-code-styling";
-import type {Options} from "qr-code-styling";
+import type { Options } from "qr-code-styling";
 import { useAxios } from "./useAxios";
 
 export const useQRCode = (options: Options) => {
@@ -13,7 +13,7 @@ export const useQRCode = (options: Options) => {
     qrInstance.current = new QRCodeStyling(options);
   }
 
-  const generate = (data: string) => {
+  const generate = async (data: string, isApiCall = false) => {
     // console.log(options)
     // console.log(data)
     // return
@@ -30,11 +30,16 @@ export const useQRCode = (options: Options) => {
 
     // 🔥 THIS IS REQUIRED
     qrInstance.current.append(containerRef.current);
-    post('/admin/qr/create', {
-      data: data,
-      options: options
+    if (isApiCall) {
 
-    })
+      const res = await post('/admin/qr/create', {
+        data: data,
+        options: options
+
+      })
+      return res
+    }
+    return true
   };
 
   const download = (ext: Extension | any = "png") => {

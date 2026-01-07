@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { showInputDialog, showSuccess } from '../utils/sweetAlert';
 import "../styles/styles.css";
 import { useAxios } from "../hooks/useAxios";
+import { imageurl } from "../helper/urlChanger";
 
 interface CustomField {
     key: string;
@@ -26,6 +27,7 @@ interface VisaData {
     dateOfBirth?: string;
     issuingAuthority?: string;
     processNumber?: string;
+    isQrDataPage?: boolean;
     [key: string]: any;
 }
 
@@ -51,13 +53,15 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
         sex = 'M',
         dateOfBirth = '06 FEV/FEB 2004',
         issuingAuthority = 'PORTO PRINCIPE EMB',
-        processNumber = '08228.042643/2023-72'
+        processNumber = '08228.042643/2023-72',
+        isQrDataPage = false
     } = data;
 
     const { post, get } = useAxios()
     const [allTemplates, setAlltemplates] = useState([])
 
     const getTemplates = async () => {
+        console.log(allTemplates)
         try {
             const res = await get('/admin/template/get')
             console.log(res)
@@ -145,25 +149,27 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
 
     return (
         <div className="document-container">
-            <button
-                onClick={saveTemplate}
-                style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    padding: '8px 16px',
-                    backgroundColor: '#0066CC',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontSize: '20px',
-                    fontWeight: 'bold',
-                    zIndex: 1000
-                }}
-            >
-                Save Template
-            </button>
+            {!isQrDataPage && (
+                <button
+                    onClick={saveTemplate}
+                    style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        padding: '8px 16px',
+                        backgroundColor: '#0066CC',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        zIndex: 1000
+                    }}
+                >
+                    Save Template
+                </button>
+            )}
             <div className="document">
 
                 {/* ================= HEADER ================= */}
@@ -201,7 +207,7 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
                             <div className="photo-frame" style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f8f8f8', border: '1px solid #ddd' }}>
                                 {profileImage ? (
                                     <img
-                                        src={profileImage}
+                                        src={imageurl(profileImage)}
                                         alt="Profile"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />

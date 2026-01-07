@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { Bell, Lock, Save } from 'lucide-react';
+import {  Lock } from 'lucide-react';
 import { theme } from '../theme';
 import { useAxios } from '../hooks/useAxios';
 import { showConfirm, showError, showToast } from '../utils/sweetAlert';
 
 export default function Settings() {
 
-  const { post, put } = useAxios()
-  const [notifications, setNotifications] = useState(true);
-  const [emailAlerts, setEmailAlerts] = useState(true);
+  const {  put } = useAxios()
+
   const [formFields, setFormFields] = useState({
     currentPassword: "",
     newPassword: "",
@@ -53,7 +52,8 @@ export default function Settings() {
         console.log(res)
       }
     } catch (error) {
-      showToast('error', error)
+      const err = error || ""
+      showToast('error', err )
       console.log(error)
 
 
