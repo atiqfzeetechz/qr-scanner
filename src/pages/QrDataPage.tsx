@@ -1,20 +1,15 @@
 import React, { useEffect } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { decodeData } from '../helper/encodeDecode'
 import VisaTemplate from '../components/VisaTemplate'
 import { useAxios } from '../hooks/useAxios'
 
 const QrDataPage = () => {
     const { data } = useParams()
-    const location = useLocation()
     const { get } = useAxios()
     const [dec, setDec] = React.useState<any>(null)
-    const [template, setTemplate] = React.useState<any>(null)
     const [qrData, setQrData] = React.useState<any>(null)
     const [loading, setLoading] = React.useState(true)
-
-    // Check if current path is QrDataPage (not admin templates)
-    const isQrDataPage = location.pathname.includes('/qr-data/')
 
     useEffect(() => {
         if (data) {
@@ -34,9 +29,7 @@ const QrDataPage = () => {
                     }
                 })
                 .then((templateRes: any) => {
-                    if (templateRes && templateRes.success) {
-                        setTemplate(templateRes.data)
-                    }
+                    console.log({templateRes})
                     setLoading(false)
                 })
                 .catch((err: any) => {

@@ -5,6 +5,7 @@ import { theme } from '../theme';
 import { useAxios } from '../hooks/useAxios';
 import { useQRCodeView } from '../hooks/useQRCodeView';
 import { encodeData } from '../helper/encodeDecode';
+import { APPURL } from '../utils/config';
 
 export default function QRHistory() {
   const { get } = useAxios()
@@ -127,7 +128,7 @@ function QRViewModal({ item, onClose }: { item: any, onClose: () => void }) {
 
       }
       const url = encodeData(optiondata)
-      const fullurl = `http://192.168.1.40:5173/admin/qrData/${url}`
+      const fullurl = `${APPURL}/admin/qrData/${url}`
 
       display(fullurl);
     }

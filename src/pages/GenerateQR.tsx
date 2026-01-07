@@ -9,6 +9,7 @@ import { theme } from "../theme";
 import { encodeData } from "../helper/encodeDecode";
 import { useAxios } from "../hooks/useAxios";
 import { imageurl } from "../helper/urlChanger";
+import { APPURL } from "../utils/config";
 
 export default function GenerateQR() {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
@@ -45,33 +46,33 @@ export default function GenerateQR() {
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const imagePayload = new FormData()
-      imagePayload.append('image', file)
-      const userImages = await post('/image/uploaduserImage', imagePayload, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      if (userImages.success) {
-        setFormData((prev: any) => ({
-          ...prev,
-          profileImage: imageurl(userImages.file.path),
-          imageHalfurl: userImages.file.path
-        }));
+    if (!file) return;
+    
+    const imagePayload = new FormData()
+    imagePayload.append('image', file)
+    const userImages = await post('/image/uploaduserImage', imagePayload, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
       }
-      console.log(userImages)
-      return
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev: any) => ({
-          ...prev,
-          profileImage: reader.result as string
-        }));
-        showToast("success", "Profile image uploaded");
-      };
-      reader.readAsDataURL(file);
+    })
+    if (userImages.success) {
+      setFormData((prev: any) => ({
+        ...prev,
+        profileImage: imageurl(userImages.file.path),
+        imageHalfurl: userImages.file.path
+      }));
     }
+    console.log(userImages)
+    return
+    // const reader = new FileReader();
+    // reader.onloadend = () => {
+    //   setFormData((prev: any) => ({
+    //     ...prev,
+    //     profileImage: reader.result as string
+    //   }));
+    //   showToast("success", "Profile image uploaded");
+    // };
+    // reader.readAsDataURL(file);
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -159,7 +160,7 @@ export default function GenerateQR() {
        
       }
       const url = encodeData(optiondata)
-      const fullurl = `http://192.168.1.40:5173/admin/qrData/${url}`
+      const fullurl = `${APPURL}/admin/qrData/${url}`
       generate(fullurl)
       showToast("success", "QR Code generated successfully!");
     }

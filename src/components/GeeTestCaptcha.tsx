@@ -1,15 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAxios } from '../hooks/useAxios';
 
-export default function GeetestPuzzleCaptcha({ onSuccess, onError }) {
+// Extend Window interface for Geetest
+declare global {
+  interface Window {
+    initGeetest?: (config: any, callback: (captchaObj: any) => void) => void;
+  }
+}
+
+interface CaptchaProps {
+  onSuccess?: (data: any) => void;
+  onError?: (error: string) => void;
+}
+
+export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProps) {
   const { get } = useAxios();
-  const captchaInstance = useRef(null);
+  const captchaInstance = useRef<any>(null);
   const [status, setStatus] = useState('Loading captcha...');
 
   // Load Geetest script
   const loadGeetestScript = () => {
     return new Promise((resolve, reject) => {
-      if (window.initGeetest) {
+      if (window?.initGeetest) {
         console.log('✅ Geetest script already loaded');
         resolve(true);
         return;
@@ -35,7 +47,7 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }) {
   };
 
   // Initialize puzzle captcha
-  const initializePuzzleCaptcha = async (config) => {
+  const initializePuzzleCaptcha = async (config: any) => {
     try {
       console.log('🔄 Initializing Geetest with config:', config);
 
@@ -87,7 +99,7 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }) {
           // For slide puzzle difficulty
           riskType: 'slide'
         },
-        (captchaObj) => {
+        (captchaObj: any) => {
           console.log('✅ Geetest captcha object created');
           captchaInstance.current = captchaObj;
 
@@ -128,7 +140,7 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }) {
             onSuccess?.(captchaData);
           });
 
-          captchaObj.onError((error) => {
+          captchaObj.onError((error: any) => {
             console.error('❌ Captcha error:', error);
             setStatus('Captcha error. Please refresh.');
             onError?.('Captcha verification failed');
@@ -145,10 +157,10 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }) {
           });
         }
       );
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Failed to initialize Geetest:', error);
       setStatus('Failed to load captcha. Please refresh page.');
-      onError?.(error.message);
+      onError?.(error?.message || 'Unknown error');
     }
   };
 
@@ -205,7 +217,9 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }) {
       captchaInstance.current.destroy();
     }
     
-    window.initGeetest = undefined;
+    if (window.initGeetest) {
+      delete window.initGeetest;
+    }
     captchaInstance.current = null;
     
     // Reinitialize

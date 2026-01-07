@@ -6,7 +6,6 @@ import { useAxios } from '../hooks/useAxios';
 import { theme } from '../theme';
 import logo from '../assets/logo.png';
 import { showToast } from '../utils/sweetAlert';
-import GeeTestCaptcha from '../components/GeeTestCaptcha';
 
 export default function Login() {
   
@@ -45,13 +44,6 @@ export default function Login() {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  };
-
-   const handleCaptchaSuccess = (captchaResult:any) => {
-    console.log('Captcha passed:', captchaResult);
-
-    // yahin se login API call hogi
-    // captchaResult = { geetest_challenge, geetest_validate, geetest_seccode }
   };
   return (
     <div
