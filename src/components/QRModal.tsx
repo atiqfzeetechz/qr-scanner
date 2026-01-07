@@ -3,6 +3,8 @@ import { X } from 'lucide-react';
 import { useQRCodeView } from '../hooks/useQRCodeView';
 import { QRPreview } from './QRPreview';
 import { theme } from '../theme';
+import { encodeData } from '../helper/encodeDecode';
+import { APPURL } from '../utils/config';
 
 
 interface Props {
@@ -20,8 +22,19 @@ export const QRModal = ({ isOpen, onClose, item }: Props) => {
 
   useEffect(() => {
     if (isOpen && item) {
-      setTimeout(() => {
-        display(item.data);
+      console.log(item)
+           const optiondata = {
+              _id: item?._id,
+              tempalateId: item?.data.templateId,
+              status: item?.status,
+             
+            }
+            const url = encodeData(optiondata)
+            const fullurl = `${APPURL}/admin/qrData/${url}`
+            console.log(fullurl)
+            setTimeout(() => {
+        display(fullurl)
+      
       }, 100);
     }
   }, [isOpen, item, display]);
@@ -50,7 +63,7 @@ export const QRModal = ({ isOpen, onClose, item }: Props) => {
             <h3 className="text-xl font-bold">QR Code Details</h3>
             <p 
               className="text-sm mt-1"
-              style={{ color: theme.colors.neutral[400] }}
+              style={{ color: 'white' }}
             >
               Scan to view data
             </p>
@@ -71,33 +84,11 @@ export const QRModal = ({ isOpen, onClose, item }: Props) => {
         {/* Content */}
         <div className="p-6 space-y-6">
           {/* Data Section */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div 
-                className="w-1.5 h-4 rounded-full"
-                style={{ backgroundColor: theme.colors.secondary.main }}
-              ></div>
-              <p className="font-medium">Encoded Data</p>
-            </div>
-            <div 
-              className="rounded-lg p-4 border"
-              style={{ 
-                backgroundColor: theme.colors.neutral[800],
-                borderColor: theme.colors.neutral[700]
-              }}
-            >
-              <p 
-                className="break-all font-mono text-sm"
-                style={{ color: theme.colors.neutral[300] }}
-              >
-                {item?.data}
-              </p>
-            </div>
-          </div>
+         
 
           {/* QR Code Section */}
           <div 
-            className="pt-6 border-t"
+         
             style={{ borderColor: theme.colors.neutral[800] }}
           >
             <div className="flex flex-col items-center justify-center space-y-4">
@@ -105,7 +96,7 @@ export const QRModal = ({ isOpen, onClose, item }: Props) => {
                 <p className="text-center font-medium mb-1">Scan this QR Code</p>
                 <p 
                   className="text-center text-sm"
-                  style={{ color: theme.colors.neutral[400] }}
+                 
                 >
                   Use any QR scanner app
                 </p>

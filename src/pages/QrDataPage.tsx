@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { decodeData } from '../helper/encodeDecode'
 import VisaTemplate from '../components/VisaTemplate'
 import { useAxios } from '../hooks/useAxios'
+import GeetestPuzzleCaptcha from '../components/GeeTestCaptcha'
 
 const QrDataPage = () => {
     const { data } = useParams()
@@ -10,6 +11,12 @@ const QrDataPage = () => {
     const [dec, setDec] = React.useState<any>(null)
     const [qrData, setQrData] = React.useState<any>(null)
     const [loading, setLoading] = React.useState(true)
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
+
+    // useEffect(() => {
+    //     get('/geetest/register').then((res) => console.log(res)).catch(error => console.log(error))
+    // },[])
+
 
     useEffect(() => {
         if (data) {
@@ -29,7 +36,7 @@ const QrDataPage = () => {
                     }
                 })
                 .then((templateRes: any) => {
-                    console.log({templateRes})
+                    console.log({ templateRes })
                     setLoading(false)
                 })
                 .catch((err: any) => {
@@ -66,7 +73,7 @@ const QrDataPage = () => {
         return (
             <div className="min-h-screen bg-gray-100 flex items-center justify-center">
                 <div className="text-center">
-                    <h2 className="text-xl font-bold text-red-600 mb-2">QR Code Inactive</h2>
+                    <h2 className="text-xl font-bold text-red-600 mb-2">Invalid Qr Code</h2>
                     <p className="text-gray-600">This QR code is no longer active</p>
                 </div>
             </div>
@@ -96,15 +103,39 @@ const QrDataPage = () => {
         isQrDataPage: true
     }
 
+    const handleCaptchaSuccess = () => {
+        setIsCaptchaVerified(true)
+    }
+
     return (
-        <div className="min-h-screen bg-gray-100 p-4">
-            <div className="max-w-4xl mx-auto">
-                {/* Template Display */}
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <VisaTemplate data={templateProps} />
+        <>
+            {isCaptchaVerified ? <div className="min-h-screen bg-gray-100 p-2">
+
+                <div className="max-w-4xl mx-auto">
+                    {/* Template Display */}
+                    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <VisaTemplate data={templateProps} />
+                    </div>
                 </div>
-            </div>
-        </div>
+            </div> :
+
+                <div style={{
+                    display: "grid",
+                    placeItems: "center",
+                    height: "100vh",
+                    width: "100vw",
+                    background: "rgba(0,0,0,0.5)"
+                }}>
+                    <GeetestPuzzleCaptcha onSuccess={handleCaptchaSuccess} onError={(error) => {
+                        console.log(error)
+                    }} />
+
+                </div>
+            }
+
+
+
+        </>
     )
 }
 

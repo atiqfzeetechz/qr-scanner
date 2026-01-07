@@ -216,6 +216,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 3%;
+  border: none;
 }
 
 .visa-verification-code {
@@ -223,7 +224,7 @@
   font-weight: bold;
   letter-spacing: 0.2%;
   padding: 1.5%;
-  border: 2px solid #000;
+  /* border: 2px solid #000; */
   background: #ffffff;
 }
 
@@ -267,7 +268,7 @@
 @media screen and (max-width:700px) {
 
   .visa-document-container {
-    font-size: 60%;
+    font-size: 56%;
     height: 90vh;
 
   }

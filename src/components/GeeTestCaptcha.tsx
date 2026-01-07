@@ -17,6 +17,7 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProp
   const { get } = useAxios();
   const captchaInstance = useRef<any>(null);
   const [status, setStatus] = useState('Loading captcha...');
+  console.log(status)
 
   // Load Geetest script
   const loadGeetestScript = () => {
@@ -66,38 +67,45 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProp
           challenge: config.challenge,
           offline: config.offline,
           new_captcha: config.new_captcha,
-          
-          // ✅ PUZZLE MODE CONFIGURATION
-          product: 'float', // 'float' shows puzzle, 'bind' is embedded
-          
-          // Slide/Puzzle specific settings
+
+          // ✅ PUZZLE MODE - Show puzzle with track
+          product: 'bind', // 'bind' shows puzzle immediately in container
+
+          // Puzzle specific settings
           width: '100%',
           lang: 'en',
           https: true,
-          
-          // Optional: Specify captcha type
-          // 'slide' for sliding puzzle, 'icon' for icon selection
-          type: 'slide', // or 'icon' for icon selection mode
-          
-          // UI Customization for puzzle
-          slideStyle: {
-            float: 'left',
-            marginTop: '20px'
-          },
-          
-          // Advanced options
+
+          // Puzzle type configuration
+          type: 'slide', // slide puzzle type
+
+          // Advanced puzzle options
           apiServers: ['api.geetest.com'],
           timeout: 30000,
-          hideBar: ['close'],
-          hideSuccess: false,
+
+          // Show necessary UI elements
+          hideBar: ['close'], // Only hide close button
+          hideSuccess: false, // Show success animation
+
+          // Puzzle interaction modes
           userInfo: '',
           rem: false,
-          
-          // For mobile responsiveness
+
+          // Mobile responsiveness
           nextWidth: '100%',
-          
-          // For slide puzzle difficulty
-          riskType: 'slide'
+
+          // Puzzle difficulty
+          riskType: 'slide',
+
+          // Auto show puzzle on load
+          autoShow: true,
+
+          // Puzzle piece animation from top-right
+          slideStyle: {
+            position: 'absolute',
+            top: '10px',
+            right: '10px'
+          }
         },
         (captchaObj: any) => {
           console.log('✅ Geetest captcha object created');
@@ -109,26 +117,85 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProp
           // Event Listeners
           captchaObj.onReady(() => {
             console.log('✅ Geetest puzzle captcha is ready');
-            setStatus('Slide the puzzle to verify');
-            
-            // Show the container
+            setStatus('Drag the puzzle piece to complete the image');
+
+            // Show the container with puzzle-specific styling
             const container = document.getElementById('geetest-puzzle-container');
             if (container) {
-              container.style.minHeight = '250px'; // Puzzle needs more space
-              container.style.padding = '10px';
-              container.style.border = '1px solid #e0e0e0';
-              container.style.borderRadius = '8px';
-              container.style.backgroundColor = '#f9f9f9';
+              container.style.minHeight = '320px';
+              container.style.padding = '15px';
+              container.style.border = 'none';
+              container.style.borderRadius = '12px';
+              container.style.backgroundColor = '#ffffff';
+              container.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+              
+              // Responsive sizing for desktop
+              if (window.innerWidth > 768) {
+                container.style.maxWidth = '400px';
+                container.style.margin = '0 auto';
+              }
             }
+
+            // Add CSS for puzzle piece animation from top-right
+            const style = document.createElement('style');
+            style.textContent = `
+              .gt_cut_bg {
+                animation: slideFromTopRight 0.5s ease-out;
+              }
+              @keyframes slideFromTopRight {
+                0% {
+                  transform: translate(100px, -50px);
+                  opacity: 0;
+                }
+                100% {
+                  transform: translate(0, 0);
+                  opacity: 1;
+                }
+              }
+              .gt_box {
+                border-radius: 8px;
+                overflow: visible;
+                max-width: 350px;
+                margin: 0 auto;
+              }
+              .gt_slider {
+                margin-top: 15px !important;
+              }
+              @media (max-width: 768px) {
+                .gt_box {
+                  max-width: 100%;
+                }
+                .gt_slider {
+                  margin-top: 10px !important;
+                }
+              }
+            `;
+            document.head.appendChild(style);
+
+            // Force show puzzle immediately
+            setTimeout(() => {
+              const puzzleImg = container?.querySelector('.gt_cut_fullbg') as HTMLElement;
+              if (puzzleImg) {
+                puzzleImg.style.visibility = 'visible';
+                puzzleImg.style.opacity = '1';
+              }
+            }, 100);
           });
 
           captchaObj.onSuccess(() => {
             console.log('🎉 Puzzle completed successfully!');
-            setStatus('Verified successfully!');
-            
+            setStatus('✅ Puzzle solved! Verification complete.');
+
             const result = captchaObj.getValidate();
             console.log('Validation result:', result);
-            
+
+            // Add success styling
+            const container = document.getElementById('geetest-puzzle-container');
+            if (container) {
+              container.style.border = 'none';
+              container.style.backgroundColor = '#f8fff8';
+            }
+
             // Prepare data for backend
             const captchaData = {
               geetest_challenge: result.geetest_challenge,
@@ -136,7 +203,7 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProp
               geetest_seccode: result.geetest_seccode,
               captcha_type: 'puzzle'
             };
-            
+
             onSuccess?.(captchaData);
           });
 
@@ -171,13 +238,13 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProp
         setStatus('Loading configuration...');
         const config = await get('/geetest/register');
         console.log('Received config:', config);
-        
+
         // Check if offline mode (no puzzle)
         if (config.offline) {
           console.warn('⚠️ Offline mode - puzzle will not work');
           setStatus('Captcha in offline mode. Refresh page.');
         }
-        
+
         await initializePuzzleCaptcha(config);
       } catch (error) {
         console.error('❌ Failed to fetch config:', error);
@@ -203,7 +270,7 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProp
   const resetCaptcha = () => {
     if (captchaInstance.current) {
       captchaInstance.current.reset();
-      setStatus('Slide the puzzle to verify');
+      setStatus('Drag the puzzle piece to complete the image');
       console.log('🔄 Captcha reset');
     }
   };
@@ -212,16 +279,16 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProp
   const refreshCaptcha = () => {
     const script = document.getElementById('geetest-script');
     if (script) script.remove();
-    
+
     if (captchaInstance.current) {
       captchaInstance.current.destroy();
     }
-    
+
     if (window.initGeetest) {
       delete window.initGeetest;
     }
     captchaInstance.current = null;
-    
+
     // Reinitialize
     setStatus('Reloading captcha...');
     setTimeout(() => {
@@ -230,84 +297,120 @@ export default function GeetestPuzzleCaptcha({ onSuccess, onError }: CaptchaProp
   };
 
   return (
-    <div style={{ width: '100%', margin: '20px 0' }}>
+    <div style={{ width: '100%', margin: '20px 0', maxWidth: window.innerWidth > 768 ? '500px' : '100%', marginLeft: 'auto', marginRight: 'auto' }}>
       <div style={{ marginBottom: '15px' }}>
-        <label style={{ 
-          fontWeight: 'bold', 
-          marginBottom: '10px', 
+        <label style={{
+          fontWeight: 'bold',
+          marginBottom: '10px',
           display: 'block',
           color: '#333'
         }}>
-          Complete the Puzzle:
+          🧩 Complete the Puzzle:
         </label>
-        <div 
+        <p style={{
+          fontSize: '14px',
+          color: '#666',
+          marginBottom: '15px',
+          lineHeight: '1.4'
+        }}>
+          Drag the slider or puzzle piece to complete the verification.
+        </p>
+        <div
           id="geetest-puzzle-container"
           style={{
-            minHeight: '180px',
+            minHeight: '250px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#f9f9f9',
-            borderRadius: '8px',
+            backgroundColor: '#ffffff',
+            borderRadius: '12px',
             padding: '15px',
-            border: '1px solid #e0e0e0'
+            border: 'none',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
           }}
         >
-          <div style={{ color: '#666', textAlign: 'center' }}>
+          {/* <div style={{ color: '#666', textAlign: 'center' }}>
             {status}
-          </div>
+          </div> */}
         </div>
       </div>
 
-      <div style={{ 
-        display: 'flex', 
-        gap: '10px', 
-        marginTop: '15px' 
+      <div style={{
+        display: 'flex',
+        gap: '10px',
+        marginTop: '15px',
+        marginLeft:"10px"
       }}>
         <button
           type="button"
           onClick={resetCaptcha}
           style={{
-            padding: '10px 20px',
-            backgroundColor: '#4CAF50',
+            padding: '8px 10px',
+            background: 'linear-gradient(135deg, #1F7A3D 0%, #F2C94C 50%, #1C2A5A 100%)',
             color: 'white',
             border: 'none',
-            borderRadius: '4px',
+            borderRadius: '10px',
             cursor: 'pointer',
-            fontSize: '14px',
-            fontWeight: 'bold'
+            fontSize: '10px',
+            fontWeight: 'bold',
+            boxShadow: '0 2px 8px rgba(31, 122, 61, 0.3)',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(31, 122, 61, 0.4)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(31, 122, 61, 0.3)';
           }}
         >
           ↻ Try Again
         </button>
-        
+
         <button
           type="button"
           onClick={refreshCaptcha}
           style={{
-            padding: '10px 20px',
-            backgroundColor: '#2196F3',
+            padding: '8px 10px',
+            background: 'linear-gradient(135deg, #1F7A3D 0%, #F2C94C 50%, #1C2A5A 100%)',
             color: 'white',
             border: 'none',
-            borderRadius: '4px',
+            borderRadius: '10px',
             cursor: 'pointer',
-            fontSize: '14px'
+            fontSize: '10px',
+            fontWeight: 'bold',
+            boxShadow: '0 2px 8px rgba(31, 122, 61, 0.3)',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(28, 42, 90, 0.4)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(28, 42, 90, 0.3)';
           }}
         >
           ↻ Refresh Captcha
         </button>
       </div>
 
-      <div style={{ 
-        marginTop: '10px', 
-        fontSize: '12px', 
+      <div style={{
+        marginTop: '10px',
+        fontSize: '12px',
         color: '#666',
-        padding: '10px',
-        backgroundColor: '#f5f5f5',
-        borderRadius: '4px',
-        borderLeft: '3px solid #4CAF50'
+        padding: '12px',
+        backgroundColor: '#f0f8ff',
+        borderRadius: '8px',
+        borderLeft: '4px solid #4CAF50'
       }}>
-        <strong>Note:</strong> Slide the puzzle piece to match the image.
+        <strong>🎯 Instructions:</strong>
+        <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px' }}>
+          <li>Drag the slider to move the puzzle piece</li>
+          <li>Position it to complete the missing part</li>
+          <li>The verification will complete automatically</li>
+        </ul>
       </div>
     </div>
   );

@@ -164,9 +164,8 @@ export default function GenerateQR() {
       generate(fullurl)
       showToast("success", "QR Code generated successfully!");
     }
-    console.log(res)
-    
 
+    
   };
 
   const handleDownload = () => {

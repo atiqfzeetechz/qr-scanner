@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { showInputDialog, showSuccess } from '../utils/sweetAlert';
-import "../styles/VisaTemplate.css";
+import "../styles/styles.css";
 import { useAxios } from "../hooks/useAxios";
 import { imageurl } from "../helper/urlChanger";
 
@@ -53,8 +53,7 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
         sex = 'M',
         dateOfBirth = '06 FEV/FEB 2004',
         issuingAuthority = 'PORTO PRINCIPE EMB',
-        processNumber = '08228.042643/2023-72',
-        isQrDataPage = false
+        processNumber = '08228.042643/2023-72'
     } = data;
 
     const { post, get } = useAxios()
@@ -148,20 +147,31 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
 
 
     return (
-        <div className="visa-document-container">
-            {!isQrDataPage && (
-                <button
-                    onClick={saveTemplate}
-                    className="visa-save-template-btn"
-                >
-                    Save Template
-                </button>
-            )}
-            <div className="visa-document">
+        <div className="document-container">
+            <button
+                onClick={saveTemplate}
+                style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    padding: '8px 16px',
+                    backgroundColor: '#0066CC',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    zIndex: 1000
+                }}
+            >
+                Save Template
+            </button>
+            <div className="document">
 
                 {/* ================= HEADER ================= */}
-                <header className="visa-document-header">
-                    <div className="visa-coat-of-arms">
+                <header className="document-header">
+                    <div className="coat-of-arms">
                         {logoImage ? (
                             <img
                                 src={logoImage}
@@ -179,31 +189,32 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
                         )}
                     </div>
 
-                    <div className="visa-header-text">
-                        <h1>FEDERATIVE REPUBLIC OF BRAZIL</h1>
-                        <h2>ELECTRONIC VISA</h2>
+                    <div className="header-text">
+                        <h1 style={{ color: '#0066CC' }}>FEDERATIVE REPUBLIC OF BRAZIL</h1>
+                        <h2 style={{ color: '#0066CC' }}>ELECTRONIC VISA</h2>
                     </div>
                 </header>
 
                 {/* ================= MAIN CONTENT ================= */}
-                <main className="visa-document-content">
+                <main className="document-content" style={{ display: 'flex', margin: '10px 0' }}>
 
                     {/* LEFT COLUMN - Photo Section */}
-                    <div className="visa-left-column">
-                        <div className="visa-photo-placeholder">
-                            <div className="visa-photo-frame">
+                    <div className="left-column" style={{ width: '35%', padding: '10px' }}>
+                        <div className="photo-placeholder" style={{ height: '200px', marginBottom: '0px', width: "200px" }}>
+                            <div className="photo-frame" style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f8f8f8', border: '1px solid #ddd' }}>
                                 {profileImage ? (
                                     <img
                                         src={imageurl(profileImage)}
                                         alt="Profile"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
                                 ) : (
-                                    <span>PHOTO</span>
+                                    <span style={{ color: '#999', fontSize: '14px', fontWeight: 'bold' }}>PHOTO</span>
                                 )}
                             </div>
                         </div>
 
-                        <div className="visa-coat-of-arms-small">
+                        <div className="coat-of-arms-small" style={{ alignSelf: 'center', }}>
                             {logoImage ? (
                                 <img
                                     src={logoImage}
@@ -222,114 +233,114 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
                     </div>
 
                     {/* RIGHT COLUMN - Visa Details */}
-                    <div className="visa-right-column">
+                    <div className="right-column" style={{ width: '75%', padding: '10px', fontSize: '11px', lineHeight: '1.2' }}>
                         <div className="visa-info">
                             {/* First Row */}
-                            <div className="visa-info-row">
-                                <div className="visa-info-field-half">
-                                    <span className="visa-field-label">BRASIL/BRAZIL</span>
-                                    <span className="visa-field-sublabel">LOCAL DE EMISSÃO/PLACE OF ISSUING</span>
-                                    <span className="visa-field-value">{placeOfIssuing}</span>
+                            <div style={{ display: 'flex', marginBottom: '8px' }}>
+                                <div style={{ width: '50%' }}>
+                                    <div style={{ color: '#0066CC', fontWeight: 'bold', fontSize: '10px' }}>BRASIL/BRAZIL</div>
+                                    <div style={{ color: '#0066CC', fontSize: '9px' }}>LOCAL DE EMISSÃO/PLACE OF ISSUING</div>
+                                    <div style={{ fontWeight: 'bold', fontSize: '10px' }}>{placeOfIssuing}</div>
                                 </div>
-                                <div className="visa-info-field-half">
-                                    <span className="visa-field-label">VISTO/VISA</span>
-                                    <span className="visa-field-sublabel">Nº DO VISTO/VISA No</span>
-                                    <span className="visa-field-value">{visaNumber}</span>
+                                <div style={{ width: '50%' }}>
+                                    <div style={{ color: '#0066CC', fontWeight: 'bold', fontSize: '10px' }}>VISTO/VISA</div>
+                                    <div style={{ color: '#0066CC', fontSize: '9px' }}>Nº DO VISTO/VISA No</div>
+                                    <div style={{ fontWeight: 'bold', fontSize: '10px' }}>{visaNumber}</div>
                                 </div>
                             </div>
 
                             {/* Second Row */}
-                            <div className="visa-info-row">
-                                <div className="visa-info-field-half">
-                                    <span className="visa-field-sublabel">No DE ENTRADAS/No. OF ENTRIES</span>
-                                    <span className="visa-field-value">ÚNICA/SINGLE</span>
+                            <div style={{ display: 'flex', marginBottom: '8px' }}>
+                                <div style={{ width: '50%' }}>
+                                    <div style={{ color: '#0066CC', fontSize: '9px' }}>No DE ENTRADAS/No. OF ENTRIES</div>
+                                    <div style={{ fontWeight: 'bold', fontSize: '10px' }}>ÚNICA/SINGLE</div>
                                 </div>
-                                <div className="visa-info-field-half">
-                                    <span className="visa-field-sublabel">DATA DE EMISSÃO/DATE OF ISSUE</span>
-                                    <span className="visa-field-value">{issueDate}</span>
+                                <div style={{ width: '50%' }}>
+                                    <div style={{ color: '#0066CC', fontSize: '9px' }}>DATA DE EMISSÃO/DATE OF ISSUE</div>
+                                    <div style={{ fontWeight: 'bold', fontSize: '10px' }}>{issueDate}</div>
                                 </div>
                             </div>
 
                             {/* Third Row */}
-                            <div className="visa-info-row">
-                                <div className="visa-info-field-half">
-                                    <span className="visa-field-sublabel">TIPO DO VISTO/TYPE OF VISA</span>
-                                    <span className="visa-field-value">VITEM XI</span>
+                            <div style={{ display: 'flex', marginBottom: '8px' }}>
+                                <div style={{ width: '50%' }}>
+                                    <div style={{ color: '#0066CC', fontSize: '9px' }}>TIPO DO VISTO/TYPE OF VISA</div>
+                                    <div style={{ fontWeight: 'bold', fontSize: '10px' }}>VITEM XI</div>
                                 </div>
-                                <div className="visa-info-field-half">
-                                    <span className="visa-field-sublabel">DATA DE VALIDADE/DATE OF EXPIRY</span>
-                                    <span className="visa-field-value">{expiryDate}</span>
+                                <div style={{ width: '50%' }}>
+                                    <div style={{ color: '#0066CC', fontSize: '9px' }}>DATA DE VALIDADE/DATE OF EXPIRY</div>
+                                    <div style={{ fontWeight: 'bold', fontSize: '10px' }}>{expiryDate}</div>
                                 </div>
                             </div>
 
                             {/* Duration */}
-                            <div className="visa-info-field-full">
-                                <span className="visa-field-sublabel">PRAZO DE ESTADA/DURATION OF STAY</span>
-                                <span className="visa-field-value">{duration}</span>
+                            <div style={{ marginBottom: '8px' }}>
+                                <span style={{ color: '#0066CC', fontSize: '9px' }}>PRAZO DE ESTADA/DURATION OF STAY</span>
+                                <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{duration}</span>
                             </div>
 
                             {/* Full Name */}
-                            <div className="visa-info-field-full">
-                                <span className="visa-field-sublabel">NOME COMPLETO/FULL NAME</span>
-                                <span className="visa-field-value">{fullName}</span>
+                            <div style={{ marginBottom: '8px' }}>
+                                <span style={{ color: '#0066CC', fontSize: '9px' }}>NOME COMPLETO/FULL NAME</span>
+                                <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{fullName}</span>
                             </div>
 
                             {/* Document and Nationality */}
-                            <div className="visa-info-row">
-                                <div className="visa-info-field-half">
-                                    <span className="visa-field-sublabel">DOCUMENTO Nº/TRAVEL DOC. No</span>
-                                    <span className="visa-field-value">{documentNumber}</span>
+                            <div style={{ display: 'flex', marginBottom: '8px' }}>
+                                <div style={{ width: '50%' }}>
+                                    <span style={{ color: '#0066CC', fontSize: '9px' }}>DOCUMENTO Nº/TRAVEL DOC. No</span>
+                                    <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{documentNumber}</span>
                                 </div>
-                                <div className="visa-info-field-half">
-                                    <span className="visa-field-sublabel">NACIONALIDADE/NATIONALITY</span>
-                                    <span className="visa-field-value">{nationality}</span>
+                                <div style={{ width: '60%' }}>
+                                    <span style={{ color: '#0066CC', fontSize: '9px' }}>NACIONALIDADE/NATIONALITY</span>
+                                    <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{nationality}</span>
                                 </div>
                             </div>
 
                             {/* Sex and DOB */}
-                            <div className="visa-info-row">
-                                <div className="visa-info-field" style={{ width: '20%' }}>
-                                    <span className="visa-field-sublabel">SEXO/SEX</span>
-                                    <span className="visa-field-value">{sex}</span>
+                            <div style={{ display: 'flex', marginBottom: '8px' }}>
+                                <div style={{ width: '20%' }}>
+                                    <span style={{ color: '#0066CC', fontSize: '9px' }}>SEXO/SEX</span>
+                                    <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{sex}</span>
                                 </div>
-                                <div className="visa-info-field" style={{ width: '80%' }}>
-                                    <span className="visa-field-sublabel">DATA DE NASCIMENTO/DATE OF BIRTH</span>
-                                    <span className="visa-field-value">{dateOfBirth}</span>
+                                <div style={{ width: '80%' }}>
+                                    <span style={{ color: '#0066CC', fontSize: '9px' }}>DATA DE NASCIMENTO/DATE OF BIRTH</span>
+                                    <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{dateOfBirth}</span>
                                 </div>
                             </div>
 
                             {/* Issuing Authority */}
-                            <div className="visa-info-field-full">
-                                <span className="visa-field-sublabel">AUTORIDADE EMISSORA/ISSUING AUTHORITY</span>
-                                <span className="visa-field-value">{issuingAuthority}</span>
+                            <div style={{ marginBottom: '8px' }}>
+                                <span style={{ color: '#0066CC', fontSize: '9px' }}>AUTORIDADE EMISSORA/ISSUING AUTHORITY</span>
+                                <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{issuingAuthority}</span>
                             </div>
 
                             {/* Process Number */}
-                            <div className="visa-info-field-full">
-                                <span className="visa-field-sublabel">PROCESSO Nº</span>
-                                <span className="visa-field-value">{processNumber}</span>
+                            <div style={{ marginBottom: '8px' }}>
+                                <span style={{ color: '#0066CC', fontSize: '9px' }}>PROCESSO Nº</span>
+                                <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{processNumber}</span>
                             </div>
 
                             {/* Custom Fields */}
                             {customFields && customFields.length > 0 && customFields.map((field, index) => (
-                                <div key={index} className="visa-custom-field">
-                                    <span className="visa-field-label">{field.key}</span>
-                                    <span className="visa-field-value">{field.value}</span>
+                                <div key={index} style={{ marginBottom: '6px' }}>
+                                    <span style={{ color: '#0066CC', fontSize: '9px' }}>{field.key.toUpperCase()}</span>
+                                    <span style={{ fontWeight: 'bold', fontSize: '10px', marginLeft: '5px' }}>{field.value}</span>
                                 </div>
                             ))}
 
                             {/* Federal Police */}
-                            <div className="visa-federal-police">
-                                <span>POLÍCIA FEDERAL</span>
+                            <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                                <span style={{ fontSize: '10px', fontWeight: 'bold' }}>POLÍCIA FEDERAL</span>
                             </div>
                         </div>
                     </div>
                 </main>
 
                 {/* ================= INSTRUCTIONS ================= */}
-                <section className="visa-instructions">
+                <section className="instructions">
 
-                    <div className="visa-instruction-block">
+                    <div className="instruction-block">
                         <h3>VISA HOLDER:</h3>
                         <p>
                             It is advisable to print a copy of your e Visa and carry it with you during your trip. You will not be allowed to
@@ -338,7 +349,7 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
                         </p>
                     </div>
 
-                    <div className="visa-instruction-block">
+                    <div className="instruction-block">
                         <h3>AIRLINES AGENTS:</h3>
                         <p>
                             Airlines must carefully verify that the personal data on this electronic visa exactly matches the information
@@ -348,33 +359,34 @@ const VisaTemplate: React.FC<VisaTemplateProps> = ({ data }) => {
                         </p>
                     </div>
 
-                    <div className="visa-verification-text">
+                    <div className="verification-text">
                         <p>
                             To verify the authenticity of this visa, scan the QR Code or visit https://visa-haiti.serpro.gov.br/verify and
                             enter the following code:
                         </p>
                     </div>
 
-                    <div className="visa-verification-section">
-                        <div className="visa-verification-code">
+                    <div className="verification-section">
+                        <div className="verification-code">
                             GWZG.FQHL.6TCW.3PLF
                         </div>
                     </div>
 
-                    <div className="visa-qr-code-section">
-                        <div className="visa-qr-code-placeholder">
+                    <div className="qr-code-section">
+                        <div className="qr-code-placeholder" style={{ width: '150px', height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #ddd' }}>
                             {data.qrCode ? (
                                 <img
                                     src={data.qrCode}
                                     alt="QR Code"
+                                    style={{ width: '140px', height: '140px' }}
                                 />
                             ) : (
-                                <span>QR CODE</span>
+                                <span style={{ fontSize: '12px', color: '#999' }}>QR CODE</span>
                             )}
                         </div>
                     </div>
 
-                    <div className="visa-contact-info">
+                    <div className="contact-info">
                         <p>Should you have any questions, please contact us at consular.principal@itamaraty.gov.br.</p>
                     </div>
 

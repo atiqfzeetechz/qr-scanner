@@ -1,17 +1,22 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
-import { History, QrCode, Download, Eye } from 'lucide-react';
+import { History, QrCode, Download, Eye, ToggleLeft, ToggleRight, Scan } from 'lucide-react';
 import { theme } from '../theme';
 import { useAxios } from '../hooks/useAxios';
-import { useQRCodeView } from '../hooks/useQRCodeView';
+import { QRModal } from '../components/QRModal';
 import { encodeData } from '../helper/encodeDecode';
 import { APPURL } from '../utils/config';
+import VisaTemplate from '../components/VisaTemplate';
+import { showToast } from '../utils/sweetAlert';
+import { imageurl } from '../helper/urlChanger';
 
 export default function QRHistory() {
-  const { get } = useAxios()
+  const { get, put } = useAxios()
   const [allQrCodes, setAllQrCodes] = useState<any[]>([])
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [selectedQRItem, setSelectedQRItem] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
@@ -21,19 +26,49 @@ export default function QRHistory() {
       }
     })()
   }, [])
+  console.log(selectedQRItem)
 
   const parseQRData = (dataString: string) => {
     try {
       const parsed = JSON.parse(dataString);
-      return parsed.data || {};
+      return parsed.data || parsed;
     } catch {
       return { content: dataString };
     }
   };
 
-  const handleView = (item: any) => {
+  const handleViewTemplate = (item: any) => {
+    console.log(item)
     setSelectedItem(item);
     setShowModal(true);
+  };
+
+  const handleViewQR = (item: any) => {
+    // Convert data to string format for QR modal
+    const qrItem = {
+      ...item,
+      data: typeof item.data === 'string' ? item.data : item.data
+    };
+    setSelectedQRItem(qrItem);
+    setShowQRModal(true);
+  };
+
+  const handleToggleStatus = async (item: any) => {
+    try {
+      const newStatus = item.status === 'active' ? 'inactive' : 'active';
+      const res = await put(`/admin/qr/updateStatus/${item._id}`, { status: newStatus });
+      
+      if (res.success) {
+        setAllQrCodes(prev => 
+          prev.map(qr => 
+            qr._id === item._id ? { ...qr, status: newStatus } : qr
+          )
+        );
+        showToast('success', `QR Code ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully`);
+      }
+    } catch (error) {
+      showToast('error', 'Failed to update status');
+    }
   };
 
   const formatDate = (date: Date | string) => {
@@ -71,27 +106,39 @@ export default function QRHistory() {
                           <h3 className="font-semibold text-gray-900">
                             {parsedData.fullName || 'QR Code'}
                           </h3>
-                          <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                            {item.status}
-                          </span>
+                         
                         </div>
                         <p className="text-gray-600 text-sm mb-2">
                           {parsedData.visaNumber ? `Visa: ${parsedData.visaNumber}` : ''}
                           {parsedData.nationality ? ` | ${parsedData.nationality}` : ''}
                         </p>
-                        <div className="flex items-center gap-4 text-xs text-gray-400">
-                          <span>Downloads: {item.downloadCount}</span>
-                          <span>Scans: {item.scanCount}</span>
-                          <span>{formatDate(item.createdAt)}</span>
-                        </div>
+                        
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 ml-4">
                       <button
-                        onClick={() => handleView(item)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        onClick={() => handleToggleStatus(item)}
+                        className={`p-2 rounded-lg transition-colors ${
+                          item.status === 'active'
+                            ? 'text-white bg-green-600 hover:bg-green-700'
+                            : 'text-white bg-red-600 hover:bg-red-700'
+                        }`}
+                        title={`${item.status === 'active' ? 'Deactivate' : 'Activate'} QR Code`}
+                      >
+                        {item.status === 'active' ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
+                      </button>
+                      <button
+                        onClick={() => handleViewQR(item)}
+                        className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                         title="View QR Code"
+                      >
+                        <Scan size={18} />
+                      </button>
+                      <button
+                        onClick={() => handleViewTemplate(item)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="View Template"
                       >
                         <Eye size={18} />
                       </button>
@@ -105,8 +152,15 @@ export default function QRHistory() {
       </div>
 
       {/* QR Modal */}
+      <QRModal
+        isOpen={showQRModal}
+        onClose={() => setShowQRModal(false)}
+        item={selectedQRItem}
+      />
+
+      {/* Template Modal */}
       {selectedItem && showModal && (
-        <QRViewModal
+        <TemplateViewModal
           item={selectedItem}
           onClose={() => setShowModal(false)}
         />
@@ -115,56 +169,55 @@ export default function QRHistory() {
   );
 }
 
-// QR View Modal Component
-function QRViewModal({ item, onClose }: { item: any, onClose: () => void }) {
-  const { ref, display, download } = useQRCodeView(item.options);
+// Template View Modal Component
+function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }) {
+  const [visaData, setVisaData] = useState<any>({});
 
   useEffect(() => {
     if (item.data) {
-      const optiondata = {
-        _id: item._id,
-        tempalateId: item.data.templateId,
-        status: item.status,
-
+      try {
+        let parsedData;
+        if (typeof item.data === 'string') {
+          parsedData = JSON.parse(item.data);
+        } else {
+          parsedData = item.data;
+        }
+        console.log(parsedData)
+        parsedData ={...parsedData, profileImage:item.data.userImage}
+        console.log(parsedData)
+        setVisaData(parsedData.data || parsedData);
+      } catch (error) {
+        console.error('Error parsing data:', error);
+        setVisaData({});
       }
-      const url = encodeData(optiondata)
-      const fullurl = `${APPURL}/admin/qrData/${url}`
-
-      display(fullurl);
     }
-  }, [item.data, display]);
+  }, [item.data]);
 
   return (
-    <div className="fixed inset-0  flex items-center justify-center z-50" style={{
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{
       backgroundColor: "rgba(0, 0, 0, 0.5)"
     }}>
-      <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">QR Code Preview</h3>
+      <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold">Template Preview</h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 hover:text-gray-600 text-xl"
           >
             ✕
           </button>
         </div>
 
-        <div className="flex justify-center mb-4">
-          <div ref={ref} className="border rounded-lg p-4" />
+        <div className="p-6">
+          <div className="transform scale-90 origin-top">
+            <VisaTemplate data={{ ...visaData, isQrDataPage: true }} />
+          </div>
         </div>
 
-        <div className="flex gap-2">
-          <button
-            onClick={() => download('png')}
-            className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 flex items-center justify-center gap-2"
-            style={{ background: theme.gradients.primary }}
-          >
-            <Download size={16} />
-            Download
-          </button>
+        <div className="sticky bottom-0 bg-white border-t p-4 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+            className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
           >
             Close
           </button>
