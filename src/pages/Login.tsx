@@ -24,14 +24,14 @@ export default function Login() {
       if(email !== "Qrcode@example.com"){
         return showToast('error', 'Invalid Credentials')
       }
-      const res = await post('/login', { email, password })
-      console.log(res)
+      // const res = await post('/login', { email, password })
+      // console.log(res)
       
       // Simulate API call
-      // await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // await login(email, password);
-      // navigate('/');
+      await login(email, password);
+      navigate('/');
     } catch (err) {
       console.log(err)
       setError(err instanceof Error ? err.message : 'Login failed');
@@ -115,7 +115,7 @@ export default function Login() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
+          {/* <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-center text-sm text-gray-600 mb-4">Demo Credentials:</p>
             <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
               <p className="text-sm text-gray-700">
@@ -125,8 +125,8 @@ export default function Login() {
                 <span className="font-medium">Password:</span> any password
               </p>
             </div>
-          </div>
-        </div>
+          </div> */}
+        </div>   
       </div>
     </div>
   );
