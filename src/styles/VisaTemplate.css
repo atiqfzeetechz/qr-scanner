@@ -1,5 +1,12 @@
 /* VisaTemplate.css - Percentage Based Responsive Template */
 
+:root {
+
+  --templateHead:#1E2A5F;
+  --textMainHead: #6BA1D3;
+  --textHead: ##415C96
+}
+
 .visa-document-container {
   position: relative;
   width: 100%;

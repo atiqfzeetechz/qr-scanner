@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { decodeData } from '../helper/encodeDecode'
-import VisaTemplate from '../components/VisaTemplate'
+import TemplateAsImage from '../components/TemplateAsImage'
 import { useAxios } from '../hooks/useAxios'
 import GeetestPuzzleCaptcha from '../components/GeeTestCaptcha'
 
@@ -107,6 +107,7 @@ const QrDataPage = () => {
         setIsCaptchaVerified(true)
     }
 
+    
     return (
         <>
             {isCaptchaVerified ? <div className="min-h-screen bg-gray-100 p-2">
@@ -114,7 +115,7 @@ const QrDataPage = () => {
                 <div className="max-w-4xl mx-auto">
                     {/* Template Display */}
                     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <VisaTemplate data={templateProps} />
+                        <TemplateAsImage data={templateProps} />
                     </div>
                 </div>
             </div> :

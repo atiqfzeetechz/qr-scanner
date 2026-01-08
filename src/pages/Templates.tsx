@@ -7,6 +7,7 @@ import VisaTemplate from "../components/VisaTemplate";
 import TemplateList from "../components/TemplateList";
 import { useAxios } from "../hooks/useAxios";
 import { imageurl } from "../helper/urlChanger";
+import TemplateAsImage from "../components/TemplateAsImage";
 
 const TemplateBuilder = () => {
   const { get } = useAxios();
@@ -418,8 +419,8 @@ const TemplateBuilder = () => {
         overflowY: "auto",
         maxHeight: "100vh"
       }}>
-        <div style={{ transform: "scale(0.7)", transformOrigin: "top left", width: "142%" }}>
-          <VisaTemplate data={data} />
+        <div style={{ width: "100%" }}>
+          <TemplateAsImage data={data} showSaveButton={true} />
         </div>
       </div>
       </div>

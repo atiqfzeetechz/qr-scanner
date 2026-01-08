@@ -9,6 +9,7 @@ import { APPURL } from '../utils/config';
 import VisaTemplate from '../components/VisaTemplate';
 import { showToast } from '../utils/sweetAlert';
 import { imageurl } from '../helper/urlChanger';
+import TemplateAsImage from '../components/TemplateAsImage';
 
 export default function QRHistory() {
   const { get, put } = useAxios()
@@ -193,6 +194,7 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
     }
   }, [item.data]);
 
+  console.log(visaData)
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{
       backgroundColor: "rgba(0, 0, 0, 0.5)"
@@ -210,7 +212,7 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
 
         <div className="p-6">
           <div className="transform scale-90 origin-top">
-            <VisaTemplate data={{ ...visaData, isQrDataPage: true }} />
+            <TemplateAsImage data={{ ...visaData, isQrDataPage: true }} />
           </div>
         </div>
 

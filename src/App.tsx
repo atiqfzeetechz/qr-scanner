@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Logos from './pages/Logos';
 import Templates from './pages/Templates';
 import QrDataPage from './pages/QrDataPage';
+import TemplateP from './pages/TemplateP';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -28,6 +29,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/admin/qrData/:data" element={<QrDataPage/>} />
+      <Route path="/admin/viewtemplate" element={<TemplateP/>} />
       <Route path="/admin/login" element={isAuthenticated ? <Navigate to="/admin" replace /> : <Login />} />
       <Route
         path="/admin"
