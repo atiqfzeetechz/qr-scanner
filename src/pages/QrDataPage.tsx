@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { decodeData } from '../helper/encodeDecode'
 import TemplateAsImage from '../components/TemplateAsImage'
 import { useAxios } from '../hooks/useAxios'
@@ -8,6 +8,8 @@ import { useQRCodeView } from '../hooks/useQRCodeView'
 
 const QrDataPage = () => {
     const { data } = useParams()
+    const fullUrl = window.location.href;
+    console.log(fullUrl)
     const { get } = useAxios()
     const [dec, setDec] = React.useState<any>(null)
     const [qrData, setQrData] = React.useState<any>(null)
@@ -97,13 +99,27 @@ const QrDataPage = () => {
             visaData = parsed.data || parsed
         } else if (typeof qrData.data === 'object') {
             visaData = qrData.data.data || qrData.data
-            visaData = { ...visaData, profileImage: qrData.data.userImage }
+            visaData = { ...visaData, profileImage: qrData.data.userImage,qrCode:fullUrl }
         }
     } catch (error) {
         console.error('Error parsing QR data:', error)
         visaData = qrData.data || {}
     }
 
+    const getUrl = ()=>{
+      
+        
+        //  const optiondata = {
+        //           _id: item?._id,
+        //           tempalateId: item?.data.templateId,
+        //           status: item?.status,
+        
+        //         }
+        //         const url = encodeData(optiondata)
+        //         const fullurl = `${APPURL}/admin/qrData/${url}`
+        //         parsedData.qrCode = fullurl
+    }
+    console.log(getUrl())
     // Add isQrDataPage prop to hide save template button
     const templateProps = {
         ...visaData,

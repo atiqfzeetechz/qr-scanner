@@ -26,7 +26,7 @@ interface VisaTemplateProps {
     profileImage?: string
     customFields?: Array<{ key: string, value: string }>
     processNumber?: string
-    qrCode?: string
+    qrCode?: string | null
   }
 }
 
@@ -52,6 +52,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
     profileImage,
     customFields = [],
     processNumber = '08228.030381/2024-67',
+    qrCode=null
    
   } = data
   return (
@@ -251,7 +252,10 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
 
           <div className="qr-code-section">
             <div className="qr-code-placeholder">
-              <QRCode value={verificationCode}  size={128} />
+              {
+                qrCode && 
+              <QRCode value={qrCode}  size={128} />
+              }
             </div>
           </div>
 

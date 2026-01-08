@@ -121,8 +121,8 @@ export default function QRHistory() {
                       <button
                         onClick={() => handleToggleStatus(item)}
                         className={`p-2 rounded-lg transition-colors ${item.status === 'active'
-                            ? 'text-white bg-green-600 hover:bg-green-700'
-                            : 'text-white bg-red-600 hover:bg-red-700'
+                          ? 'text-white bg-green-600 hover:bg-green-700'
+                          : 'text-white bg-red-600 hover:bg-red-700'
                           }`}
                         title={`${item.status === 'active' ? 'Deactivate' : 'Activate'} QR Code`}
                       >
@@ -172,9 +172,11 @@ export default function QRHistory() {
 // Template View Modal Component
 function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }) {
   const [visaData, setVisaData] = useState<any>({});
+  const [qrUrl, setQrUrl] = useState("")
 
   useEffect(() => {
     if (item.data) {
+      console.log(item)
       try {
         let parsedData;
         if (typeof item.data === 'string') {
@@ -185,6 +187,16 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
         console.log(parsedData)
         parsedData = { ...parsedData, profileImage: item.data.userImage }
         console.log(parsedData)
+        const optiondata = {
+          _id: item?._id,
+          tempalateId: item?.data.templateId,
+          status: item?.status,
+
+        }
+        const url = encodeData(optiondata)
+        const fullurl = `${APPURL}/admin/qrData/${url}`
+        parsedData.qrCode = fullurl
+        setQrUrl(fullurl)
         setVisaData(parsedData.data || parsedData);
       } catch (error) {
         console.error('Error parsing data:', error);
