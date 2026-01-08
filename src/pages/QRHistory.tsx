@@ -58,10 +58,10 @@ export default function QRHistory() {
     try {
       const newStatus = item.status === 'active' ? 'inactive' : 'active';
       const res = await put(`/admin/qr/updateStatus/${item._id}`, { status: newStatus });
-      
+
       if (res.success) {
-        setAllQrCodes(prev => 
-          prev.map(qr => 
+        setAllQrCodes(prev =>
+          prev.map(qr =>
             qr._id === item._id ? { ...qr, status: newStatus } : qr
           )
         );
@@ -105,26 +105,25 @@ export default function QRHistory() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="font-semibold text-gray-900">
-                            {parsedData.fullName || 'QR Code'}
+                            {item.data.fullName || 'QR Code'}
                           </h3>
-                         
+
                         </div>
                         <p className="text-gray-600 text-sm mb-2">
                           {parsedData.visaNumber ? `Visa: ${parsedData.visaNumber}` : ''}
                           {parsedData.nationality ? ` | ${parsedData.nationality}` : ''}
                         </p>
-                        
+
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 ml-4">
                       <button
                         onClick={() => handleToggleStatus(item)}
-                        className={`p-2 rounded-lg transition-colors ${
-                          item.status === 'active'
+                        className={`p-2 rounded-lg transition-colors ${item.status === 'active'
                             ? 'text-white bg-green-600 hover:bg-green-700'
                             : 'text-white bg-red-600 hover:bg-red-700'
-                        }`}
+                          }`}
                         title={`${item.status === 'active' ? 'Deactivate' : 'Activate'} QR Code`}
                       >
                         {item.status === 'active' ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
@@ -184,7 +183,7 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
           parsedData = item.data;
         }
         console.log(parsedData)
-        parsedData ={...parsedData, profileImage:item.data.userImage}
+        parsedData = { ...parsedData, profileImage: item.data.userImage }
         console.log(parsedData)
         setVisaData(parsedData.data || parsedData);
       } catch (error) {

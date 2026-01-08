@@ -15,8 +15,6 @@ const TemplateBuilder = () => {
   const [logos, setLogos] = useState<any[]>([]);
   const [selectedLogo, setSelectedLogo] = useState<any>(null);
   const [customFields, setCustomFields] = useState<any[]>([
-    { key: "Occupation", value: "Engineer" },
-    { key: "Purpose of Visit", value: "Tourism" }
   ]);
   const [newField, setNewField] = useState<any>({ key: "", value: "" });
 

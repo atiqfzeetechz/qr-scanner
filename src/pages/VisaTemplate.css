@@ -91,7 +91,7 @@
 
     .photo-frame {
       width: 100%;
-      aspect-ratio: 1/1.25;
+      aspect-ratio: 1/1.30;
       object-fit: cover;
     }
 
@@ -127,15 +127,20 @@
       font-size: 13px;
       color: var(--infoheadcolor);
       line-height: 15px;
+   
     }
 
     .eachrow .infosmallheader {
       font-size: 7px;
       color: var(--samllheadercolor);
+      margin-top: 3.5px;
+      /* border: 1px solid blue; */
     }
 
     .eachrow .infosmallabel {
+      margin-top: -6px;
       font-size: 13px;
+      /* border-bottom: 1px solid red ; */
     }
 
     .stay-info {
@@ -191,7 +196,8 @@
     }
 
     .qr-code-placeholder {
-      border: 1px solid #000;
+     
+      /* max-height: 100px; */
     }
 
     .contact-info {

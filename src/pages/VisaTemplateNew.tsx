@@ -2,14 +2,18 @@ import React from 'react'
 import './VisaTemplate.css'
 import { imageurl } from '../helper/urlChanger'
 
+import QRCode from 'react-qr-code';
+
+
+
 interface VisaTemplateProps {
   data: {
     placeOfIssuing?: string
     visaNumber?: string
     entries?: string
-    dateOfIssue?: string
+    issueDate?: string
     visaType?: string
-    dateOfExpiry?: string
+    expiryDate?: string
     durationOfStay?: string
     fullName?: string
     documentNumber?: string
@@ -20,19 +24,22 @@ interface VisaTemplateProps {
     verificationCode?: string
     logoImage?: string
     profileImage?: string
+    customFields?: Array<{ key: string, value: string }>
+    processNumber?: string
+    qrCode?: string
   }
 }
 
 
 const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
-  console.log(data)
+
   const {
     placeOfIssuing = 'PORTO PRÍNCIPE',
     visaNumber = '251127-510835',
     entries = 'ÚNICA/SINGLE',
-    dateOfIssue = '09 DEZ/DEC 2025',
+    issueDate = '09 DEZ/DEC 2025',
     visaType = 'VITEM XI',
-    dateOfExpiry = '08 DEZ/DEC 2026',
+    expiryDate = '08 DEZ/DEC 2026',
     durationOfStay = '365 DIAS/DAYS',
     fullName = 'GREGOIRE NORMIL',
     documentNumber = 'R12732532',
@@ -42,7 +49,10 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
     issuingAuthority = 'PORTO PRÍNCIPE EMB',
     verificationCode = 'GWZG.FQHL.6TCW.3PLF',
     logoImage,
-    profileImage
+    profileImage,
+    customFields = [],
+    processNumber = '08228.030381/2024-67',
+   
   } = data
   return (
     <div className="document-container">
@@ -129,7 +139,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
                     </div>
                     <div className="child2">
                       <p className="infosmallheader">DATA DE EMISSÃO/DATE OF ISSUE</p>
-                      <p className="infosmallabel">{dateOfIssue}</p>
+                      <p className="infosmallabel">{issueDate}</p>
                     </div>
                   </div>
 
@@ -141,7 +151,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
                     </div>
                     <div className="child2">
                       <p className="infosmallheader">DATA DE VALIDADE/DATE OF EXPIRY</p>
-                      <p className="infosmallabel">{dateOfExpiry}</p>
+                      <p className="infosmallabel">{expiryDate}</p>
                     </div>
                   </div>
 
@@ -197,9 +207,20 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
 
               <div className="stay-info">
                 <p>RESIDÊNCIA PRÉVIA - PORTARIAS INTERMINISTERIAIS MJSP/MRE Nº
-                  38/2023 E 55/2025. PROCESSO Nº: 08228.030381/2024-67.
+                  38/2023 E 55/2025. PROCESSO Nº: {processNumber}.
                   CHAMANTE: MARC NORMIL. REGISTRO JUNTO À POLÍCIA FEDERAL
                   DENTRO DE 90 (NOVENTA) DIAS DA PRIMEIRA ENTRADA NO PAÍS.</p>
+
+                {/* Dynamic Custom Fields */}
+                {customFields && customFields.length > 0 && (
+                  <div style={{ marginTop: '10px' }}>
+                    {customFields.map((field, index) => (
+                      <p key={index} style={{ fontSize: '11px', marginBottom: '5px' }}>
+                        <strong>{field.key}:</strong> {field.value}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -230,24 +251,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
 
           <div className="qr-code-section">
             <div className="qr-code-placeholder">
-              <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="100" height="100" fill="white" stroke="black" strokeWidth="2" />
-                <rect x="10" y="10" width="15" height="15" fill="black" />
-                <rect x="75" y="10" width="15" height="15" fill="black" />
-                <rect x="10" y="75" width="15" height="15" fill="black" />
-                <rect x="30" y="30" width="5" height="5" fill="black" />
-                <rect x="40" y="30" width="5" height="5" fill="black" />
-                <rect x="50" y="30" width="5" height="5" fill="black" />
-                <rect x="60" y="30" width="5" height="5" fill="black" />
-                <rect x="30" y="40" width="5" height="5" fill="black" />
-                <rect x="60" y="40" width="5" height="5" fill="black" />
-                <rect x="30" y="50" width="5" height="5" fill="black" />
-                <rect x="40" y="50" width="5" height="5" fill="black" />
-                <rect x="50" y="50" width="5" height="5" fill="black" />
-                <rect x="60" y="50" width="5" height="5" fill="black" />
-                <rect x="30" y="60" width="5" height="5" fill="black" />
-                <rect x="60" y="60" width="5" height="5" fill="black" />
-              </svg>
+              <QRCode value={verificationCode}  size={128} />
             </div>
           </div>
 

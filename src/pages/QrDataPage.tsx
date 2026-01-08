@@ -4,6 +4,7 @@ import { decodeData } from '../helper/encodeDecode'
 import TemplateAsImage from '../components/TemplateAsImage'
 import { useAxios } from '../hooks/useAxios'
 import GeetestPuzzleCaptcha from '../components/GeeTestCaptcha'
+import { useQRCodeView } from '../hooks/useQRCodeView'
 
 const QrDataPage = () => {
     const { data } = useParams()
@@ -13,6 +14,11 @@ const QrDataPage = () => {
     const [loading, setLoading] = React.useState(true)
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
 
+     const {  display } = useQRCodeView({
+       width: 200,
+       height: 200,
+       margin: 10,
+     });
     // useEffect(() => {
     //     get('/geetest/register').then((res) => console.log(res)).catch(error => console.log(error))
     // },[])
@@ -21,6 +27,7 @@ const QrDataPage = () => {
     useEffect(() => {
         if (data) {
             const decoded = decodeData(data)
+            display(decoded._id)
             setDec(decoded)
 
             // Fetch QR data
@@ -114,7 +121,9 @@ const QrDataPage = () => {
 
                 <div className="max-w-4xl mx-auto">
                     {/* Template Display */}
-                    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div className="bg-white rounded-lg shadow-lg overflow-hidden  maintempl" style={{
+                      
+                    }}>
                         <TemplateAsImage data={templateProps} />
                     </div>
                 </div>
