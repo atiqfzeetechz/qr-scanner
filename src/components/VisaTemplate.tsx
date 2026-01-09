@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { showInputDialog, showSuccess } from '../utils/sweetAlert';
-import "../styles/VisaTemplate.css";
+// import "../styles/VisaTemplate.css";
 import { useAxios } from "../hooks/useAxios";
 import { imageurl } from "../helper/urlChanger";
 

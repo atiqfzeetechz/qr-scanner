@@ -27,6 +27,7 @@ export const useAuthStore = create<AuthState>()(
         // Simulate API call delay
 
         set({ user: user, isAuthenticated: true, qrToken: token });
+        window.location.href='/admin'
       },
 
       logout: () => {
