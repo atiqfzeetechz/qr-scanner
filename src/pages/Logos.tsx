@@ -247,7 +247,7 @@ export default function Logos() {
                 <div className="text-center">
                   <h3 className="font-medium text-gray-900 text-sm truncate">{logo.name}</h3>
                   <p className="text-xs text-gray-500 mt-1">
-                    {logo.dimensions.width}×{logo.dimensions.height}
+                    {logo?.dimensions?.width}×{logo?.dimensions?.height}
                   </p>
                 </div>
 
