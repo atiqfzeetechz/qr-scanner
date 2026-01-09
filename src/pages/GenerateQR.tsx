@@ -49,7 +49,7 @@ export default function GenerateQR() {
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    
+
     const imagePayload = new FormData()
     imagePayload.append('image', file)
     const userImages = await post('/image/uploaduserImage', imagePayload, {
@@ -85,7 +85,7 @@ export default function GenerateQR() {
   };
 
   const handleGenerate = async () => {
- 
+
     if (!selectedTemplate) {
       showToast("error", "Please select a template first");
       return;
@@ -107,7 +107,7 @@ export default function GenerateQR() {
         _id: res.qr._id,
         tempalateId: res.qr.data.templateId,
         status: res.qr.status,
-       
+
       }
       const url = encodeData(optiondata)
       const fullurl = `${APPURL}/admin/qrData/${url}`
@@ -115,7 +115,7 @@ export default function GenerateQR() {
       showToast("success", "QR Code generated successfully!");
     }
 
-    
+
   };
 
   const handleDownload = () => {
@@ -135,12 +135,14 @@ export default function GenerateQR() {
       { key: 'duration', label: 'Duration', type: 'text', required: true },
       { key: 'fullName', label: 'Full Name', type: 'text', required: true },
       { key: 'documentNumber', label: 'Document Number', type: 'text', required: true },
-      { key: 'sex', label: 'Sex', type: 'select', options: ['M', 'F','Others'], required: true },
+      { key: 'sex', label: 'Sex', type: 'select', options: ['M', 'F', 'Others'], required: true },
       { key: 'dateOfBirth', label: 'Date of Birth', type: 'text', required: true },
       { key: 'nationality', label: 'Nationality', type: 'text', required: true },
       { key: 'issuingAuthority', label: 'Issuing Authority', type: 'text', required: true },
       // { key: 'processNumber', label: 'Process Number', type: 'text', required: true },
-      { key: 'info', label: 'Info', type: 'textarea', required: true }
+      { key: 'info', label: 'Info', type: 'textarea', required: true },
+      { key: 'verificationCode', label: 'Code', type: 'test', required: true },
+
     ];
 
     return (

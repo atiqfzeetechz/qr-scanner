@@ -33,6 +33,7 @@ const TemplateBuilder = () => {
     processNumber: "08228.042643/2023-72",
     entries: "ÚNICA/SINGLE",
     visaType: "VITEM XI",
+    verificationCode: "GWZG.FQHL.6TCW.3PLF",
     info: "RESIDÊNCIA PRÉVIA - PORTARIAS INTERMINISTERIAIS MJSP/MRE Nº 38/2023 E 55/2025. PROCESSO Nº: 08228.030381/2024-67. CHAMANTE: MARC NORMIL. REGISTRO JUNTO À POLÍCIA FEDERAL DENTRO DE 90 (NOVENTA) DIAS DA PRIMEIRA ENTRADA NO PAÍS.",
     customFields: customFields
   };
@@ -337,6 +338,15 @@ const TemplateBuilder = () => {
                 rows={5}
                 placeholder="Info"
                 value={data.info || ''}
+                onChange={handleChange}
+                style={{ width: "100%", padding: "8px 12px", marginBottom: "10px", border: "1px solid #ddd", borderRadius: "4px", fontSize: "14px" }}
+              />
+
+              <label htmlFor="verificationCode" className="formlabel">Code</label>
+              <input className="inputfiled"
+                name="verificationCode"
+                placeholder="Code"
+                value={data.verificationCode || ''}
                 onChange={handleChange}
                 style={{ width: "100%", padding: "8px 12px", marginBottom: "10px", border: "1px solid #ddd", borderRadius: "4px", fontSize: "14px" }}
               />
