@@ -191,8 +191,8 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
           _id: item?._id,
           tempalateId: item?.data.templateId,
           status: item?.status,
-
         }
+        
         const url = encodeData(optiondata)
         const fullurl = `${APPURL}/admin/qrData/${url}`
         parsedData.qrCode = fullurl

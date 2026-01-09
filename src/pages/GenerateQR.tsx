@@ -21,23 +21,25 @@ export default function GenerateQR() {
   const { ref, generate, download } = useQRCode(defaultQROptions);
 
   const handleSelectTemplate = (template: any) => {
+    console.log(template)
     setSelectedTemplate(template);
-    // Initialize with empty values instead of template data
+    // Initialize with empty values based on the object structure
     const emptyData = {
-      fullName: '',
-      visaNumber: '',
-      documentNumber: '',
-      nationality: '',
-      sex: '',
-      dateOfBirth: '',
       placeOfIssuing: '',
+      visaNumber: '',
+      entries: '',
       issueDate: '',
       expiryDate: '',
+      visaType: '',
       duration: '',
+      fullName: '',
+      documentNumber: '',
+      sex: '',
+      dateOfBirth: '',
+      nationality: '',
       issuingAuthority: '',
+      info: template?.dynamicData?.info,
       processNumber: '',
-      phone: '',
-      address: '',
       profileImage: '',
       logoImage: template.dynamicData?.logoImage || ''
     };
@@ -83,59 +85,7 @@ export default function GenerateQR() {
   };
 
   const handleGenerate = async () => {
-    // const res = encodeData({
-    //   "_id": {
-    //     "$oid": "695d123cdc8b9b9d6628ee38"
-    //   },
-    //   "data": "{\"templateId\":\"695d11f6dc8b9b9d6628ee32\",\"data\":{\"fullName\":\"test\",\"visaNumber\":\"tetsing \",\"documentNumber\":\"123456\",\"nationality\":\"india\"}}",
-    //   "options": {
-    //     "width": 300,
-    //     "height": 300,
-    //     "type": "svg",
-    //     "data": "",
-    //     "margin": 10,
-    //     "qrOptions": {
-    //       "mode": "Byte",
-    //       "errorCorrectionLevel": "Q"
-    //     },
-    //     "imageOptions": {
-    //       "hideBackgroundDots": true,
-    //       "imageSize": 0.4,
-    //       "margin": 20,
-    //       "crossOrigin": "anonymous"
-    //     },
-    //     "dotsOptions": {
-    //       "color": "#222",
-    //       "type": "rounded"
-    //     },
-    //     "backgroundOptions": {
-    //       "color": "#ffffff"
-    //     },
-    //     "cornersSquareOptions": {
-    //       "type": "extra-rounded",
-    //       "color": "#222"
-    //     },
-    //     "cornersDotOptions": {
-    //       "type": "dot",
-    //       "color": "#222"
-    //     }
-    //   },
-    //   "createdBy": {
-    //     "$oid": "695d047a33893f981bdf3f65"
-    //   },
-    //   "downloadCount": 0,
-    //   "scanCount": 0,
-    //   "status": "active",
-    //   "createdAt": {
-    //     "$date": "2026-01-06T13:46:36.301Z"
-    //   },
-    //   "updatedAt": {
-    //     "$date": "2026-01-06T13:46:36.301Z"
-    //   },
-    //   "__v": 0
-    // })
-    // console.log(res)
-    // return
+ 
     if (!selectedTemplate) {
       showToast("error", "Please select a template first");
       return;
@@ -146,7 +96,7 @@ export default function GenerateQR() {
       userImage: formData.imageHalfurl
 
     }
-   
+
     const res = await post('/admin/qr/create', {
       data: payload,
       options: defaultQROptions
@@ -176,20 +126,21 @@ export default function GenerateQR() {
     if (!selectedTemplate) return null;
 
     const fields = [
-      { key: 'fullName', label: 'Full Name', type: 'text', required: true },
-      { key: 'visaNumber', label: 'Visa Number', type: 'text', required: true },
-      { key: 'documentNumber', label: 'Document Number', type: 'text', required: true },
-      { key: 'nationality', label: 'Nationality', type: 'text', required: true },
-      { key: 'sex', label: 'Sex', type: 'select', options: ['M', 'F'], required: true },
-      { key: 'dateOfBirth', label: 'Date of Birth', type: 'text', required: true },
       { key: 'placeOfIssuing', label: 'Place of Issuing', type: 'text', required: true },
+      { key: 'visaNumber', label: 'Visa Number', type: 'text', required: true },
+      { key: 'entries', label: 'Entries', type: 'text', required: true },
       { key: 'issueDate', label: 'Issue Date', type: 'text', required: true },
       { key: 'expiryDate', label: 'Expiry Date', type: 'text', required: true },
+      { key: 'visaType', label: 'Visa Type', type: 'text', required: true },
       { key: 'duration', label: 'Duration', type: 'text', required: true },
+      { key: 'fullName', label: 'Full Name', type: 'text', required: true },
+      { key: 'documentNumber', label: 'Document Number', type: 'text', required: true },
+      { key: 'sex', label: 'Sex', type: 'select', options: ['M', 'F','Others'], required: true },
+      { key: 'dateOfBirth', label: 'Date of Birth', type: 'text', required: true },
+      { key: 'nationality', label: 'Nationality', type: 'text', required: true },
       { key: 'issuingAuthority', label: 'Issuing Authority', type: 'text', required: true },
-      { key: 'processNumber', label: 'Process Number', type: 'text', required: true },
-      { key: 'phone', label: 'Phone', type: 'text', required: false },
-      { key: 'address', label: 'Address', type: 'textarea', required: false }
+      // { key: 'processNumber', label: 'Process Number', type: 'text', required: true },
+      { key: 'info', label: 'Info', type: 'textarea', required: true }
     ];
 
     return (
@@ -250,7 +201,7 @@ export default function GenerateQR() {
                 value={formData[field.key] || ''}
                 onChange={(e) => handleInputChange(field.key, e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none resize-none"
-                rows={3}
+                rows={field.key === 'info' ? 4 : 3}
                 required={field.required}
               />
             ) : (

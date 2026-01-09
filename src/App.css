@@ -5,6 +5,11 @@
     /* border: 1px solid red !important;
     max-width: 80%; */
 }
+.formlabel{
+    /* border: 1px solid red; */
+    margin-bottom: 3px;
+    font-size: 10px;
+}
 
 @media only screen and (max-width: 600px) {
  .maintempl{

@@ -26,7 +26,8 @@ interface VisaTemplateProps {
     profileImage?: string
     customFields?: Array<{ key: string, value: string }>
     processNumber?: string
-    qrCode?: string | null
+    qrCode?: string | null,
+    info: string
   }
 }
 
@@ -52,8 +53,9 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
     profileImage,
     customFields = [],
     processNumber = '08228.030381/2024-67',
-    qrCode=null
-   
+    qrCode = null,
+    info = "ESIDÊNCIA PRÉVIA - PORTARIAS INTERMINISTERIAIS MJSP/MRE Nº 38/2023 E 55/2025. PROCESSO Nº: 08228.030381/2024-67.CHAMANTE: MARC NORMIL. REGISTRO JUNTO À POLÍCIA FEDERAL DENTRO DE 90 (NOVENTA) DIAS DA PRIMEIRA ENTRADA NO PAÍS."
+
   } = data
   return (
     <div className="document-container">
@@ -113,7 +115,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
                   {/* Row 1 */}
                   <div className="eachrow">
                     <div className="child1">
-                      <p className="infoheader">BRASIL/BRAZI</p>
+                      <p className="infoheader">BRASIL/BRAZIL</p>
                     </div>
                     <div className="child2">
                       <p className="infoheader">VISTO/VISA</p>
@@ -207,11 +209,14 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
               </div>
 
               <div className="stay-info">
-                <p>RESIDÊNCIA PRÉVIA - PORTARIAS INTERMINISTERIAIS MJSP/MRE Nº
-                  38/2023 E 55/2025. PROCESSO Nº: {processNumber}.
-                  CHAMANTE: MARC NORMIL. REGISTRO JUNTO À POLÍCIA FEDERAL
-                  DENTRO DE 90 (NOVENTA) DIAS DA PRIMEIRA ENTRADA NO PAÍS.</p>
-
+                {info ? <p style={{
+                  wordSpacing: "11.5px"
+                }}>{info}</p> :
+                  <p>RESIDÊNCIA &nbsp; PRÉVIA &nbsp;-&nbsp; PORTARIAS&nbsp; INTERMINISTERIAIS &nbsp;  MJSP/MRE &nbsp; Nº <br />
+                    38/2023 E &nbsp; 55/2025. &nbsp; PROCESSO Nº: &nbsp;{processNumber}. <br />
+                    CHAMANTE: &nbsp; MARC NORMIL. &nbsp;REGISTRO &nbsp; JUNTO &nbsp; À &nbsp; POLÍCIA &nbsp; FEDERAL
+                    DENTRO &nbsp;DE &nbsp; 90 (NOVENTA)&nbsp; DIAS  &nbsp; DA&nbsp; PRIMEIRA&nbsp; ENTRADA &nbsp;NO &nbsp;PAÍS.</p>
+                }
                 {/* Dynamic Custom Fields */}
                 {customFields && customFields.length > 0 && (
                   <div style={{ marginTop: '10px' }}>
@@ -253,8 +258,8 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
           <div className="qr-code-section">
             <div className="qr-code-placeholder">
               {
-                qrCode && 
-              <QRCode value={qrCode}  size={128} />
+                qrCode &&
+                <QRCode value={qrCode} size={128} />
               }
             </div>
           </div>
