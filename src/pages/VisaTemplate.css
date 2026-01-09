@@ -7,9 +7,57 @@
   --underimagelogo: 50px
 }
 
+/* =========================
+   GLOBAL TEXT NORMALIZATION
+========================= */
+.document-container {
+  letter-spacing: 0.01em;
+  word-spacing: 0.02em;
+}
+
+/* =========================
+   HEADERS / LABELS
+========================= */
+.header-text h1,
+.header-text h2,
+.eachrow .infoheader {
+  letter-spacing: 0.03em;
+  word-spacing: 0.04em;
+}
+
+/* =========================
+   SMALL TEXT (7–11px RANGE)
+========================= */
+.belowimagetext,
+.eachrow .infosmallheader,
+.visa-info,
+.contact-info p {
+  letter-spacing: 0.02em;
+  word-spacing: 0.03em;
+}
+
+/* =========================
+   NORMAL VALUES / CONTENT
+========================= */
+.eachrow .infosmallabel,
+.stay-info p,
+.instruction-block p,
+.verification-section p {
+  letter-spacing: 0.015em;
+  word-spacing: 0.025em;
+}
+
+/* =========================
+   VERIFICATION CODE
+========================= */
+.verification-code {
+  letter-spacing: 0.15em; /* px se em me shift */
+  word-spacing: 0.2em;
+}
 
 
 .document-container {
+  /* border: 1px solid red; */
   max-width: 100%;
   margin: 0;
   background-color: white;
@@ -53,12 +101,12 @@
 
 .document-content {
   display: flex;
-  gap: 2%;
+  gap: 3%;
   margin-bottom: 30px;
 }
 
 .left-column {
-  width: 23%;
+  width: 25%;
   padding-top: 2%;
 }
 
@@ -83,7 +131,7 @@
 }
 
 .right-column {
-  width: 62%;
+  width: 66%;
 
 }
 

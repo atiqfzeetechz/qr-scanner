@@ -235,7 +235,7 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
 
   console.log(visaData)
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-2" style={{
       backgroundColor: "rgba(0, 0, 0, 0.5)"
     }}>
       <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">

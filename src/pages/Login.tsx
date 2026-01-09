@@ -8,10 +8,10 @@ import logo from '../assets/logo.png';
 import { showToast } from '../utils/sweetAlert';
 
 export default function Login() {
-  
+
   const login = useAuthStore((state) => state.login);
   const { post, loading } = useAxios();
-  const [email, setEmail] = useState('admin@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -45,6 +45,7 @@ export default function Login() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center px-4"
@@ -118,7 +119,7 @@ export default function Login() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
+          {/* <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-center text-sm text-gray-600 mb-4">Demo Credentials:</p>
             <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
               <p className="text-sm text-gray-700">
@@ -128,7 +129,7 @@ export default function Login() {
                 <span className="font-medium">Password:</span> 123456
               </p>
             </div>
-          </div>
+          </div> */}
           {/* <GeeTestCaptcha onSuccess={handleCaptchaSuccess} onError={(error)=>{
             console.log(error)
           }} /> */}
