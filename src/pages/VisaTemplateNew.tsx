@@ -1,6 +1,8 @@
 import React from 'react'
 import './VisaTemplate.css'
 import { imageurl } from '../helper/urlChanger'
+import Image1 from '../assets/hand-icon.png'
+import Image2 from '../assets/icon128x128.jpg'
 
 import QRCode from 'react-qr-code';
 
@@ -54,7 +56,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
     customFields = [],
     processNumber = '08228.030381/2024-67',
     qrCode = null,
-    info = "ESIDÊNCIA PRÉVIA - PORTARIAS INTERMINISTERIAIS MJSP/MRE Nº 38/2023 E 55/2025. PROCESSO Nº: 08228.030381/2024-67.CHAMANTE: MARC NORMIL. REGISTRO JUNTO À POLÍCIA FEDERAL DENTRO DE 90 (NOVENTA) DIAS DA PRIMEIRA ENTRADA NO PAÍS."
+    info = "ESIDÊNCIA PRÉVIA - PORTARIAS INTERMINISTERIAIS MJSP/MRE Nº 38/2023 E 55/2025. PROCESSO Nº: 08228.030381/2024-67. CHAMANTE: MARC NORMIL. REGISTRO JUNTO À POLÍCIA FEDERAL DENTRO DE 90 (NOVENTA) DIAS DA PRIMEIRA ENTRADA NO PAÍS."
 
   } = data
   return (
@@ -181,8 +183,8 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
                       <p className="infosmallabel">{documentNumber}</p>
                     </div>
                     <div className="child2 mt-2" style={{ marginRight: '25px' }}>
-                      <p className="infosmallheader">EXO/SEX</p>
-                      <p className="infosmallabel">{sex}</p>
+                      <p className="infosmallheader">EXO / SEX</p>
+                      <p className="infosmallabel" >{sex}</p>
                     </div>
                     <div className="child3 mt-2">
                       <p className="infosmallheader">DATA DE NASCIMENTO/DATE OF BIRTH</p>
@@ -209,9 +211,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
               </div>
 
               <div className="stay-info">
-                {info ? <p style={{
-                  wordSpacing: "11.5px"
-                }}>{info}</p> :
+                {info ? <p className='dynamic-info'>{info}</p> :
                   <p>RESIDÊNCIA &nbsp; PRÉVIA &nbsp;-&nbsp; PORTARIAS&nbsp; INTERMINISTERIAIS &nbsp;  MJSP/MRE &nbsp; Nº <br />
                     38/2023 E &nbsp; 55/2025. &nbsp; PROCESSO Nº: &nbsp;{processNumber}. <br />
                     CHAMANTE: &nbsp; MARC NORMIL. &nbsp;REGISTRO &nbsp; JUNTO &nbsp; À &nbsp; POLÍCIA &nbsp; FEDERAL
@@ -229,6 +229,10 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
                 )}
               </div>
             </div>
+          </div>
+          <div className='imagescontainersright'>
+            <img src={Image1} alt=""  className='imgesrightside'/>
+            <img src={Image2} alt=""  className='imgesrightside'/>
           </div>
         </main>
 

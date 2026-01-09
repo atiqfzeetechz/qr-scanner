@@ -1,18 +1,18 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
-import { History, QrCode, Download, Eye, ToggleLeft, ToggleRight, Scan } from 'lucide-react';
+import { History, QrCode, Download, Eye, ToggleLeft, ToggleRight, Scan, Trash2 } from 'lucide-react';
 import { theme } from '../theme';
 import { useAxios } from '../hooks/useAxios';
 import { QRModal } from '../components/QRModal';
 import { encodeData } from '../helper/encodeDecode';
 import { APPURL } from '../utils/config';
 import VisaTemplate from '../components/VisaTemplate';
-import { showToast } from '../utils/sweetAlert';
+import { showToast, showConfirm } from '../utils/sweetAlert';
 import { imageurl } from '../helper/urlChanger';
 import TemplateAsImage from '../components/TemplateAsImage';
 
 export default function QRHistory() {
-  const { get, put } = useAxios()
+  const { get, put, delete: deleteRequest } = useAxios()
   const [allQrCodes, setAllQrCodes] = useState<any[]>([])
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -69,6 +69,27 @@ export default function QRHistory() {
       }
     } catch (error) {
       showToast('error', 'Failed to update status');
+    }
+  };
+
+  const handleDeleteQR = async (item: any) => {
+    const confirmed = await showConfirm(
+      'Delete QR Code',
+      'Are you sure you want to delete this QR code? This action cannot be undone.',
+      'Delete',
+      'Cancel'
+    );
+    
+    if (!confirmed) return;
+    
+    try {
+      const res = await deleteRequest(`/admin/qr/delete/${item._id}`);
+      if (res.success) {
+        setAllQrCodes(prev => prev.filter(qr => qr._id !== item._id));
+        showToast('success', 'QR Code deleted successfully');
+      }
+    } catch (error) {
+      showToast('error', 'Failed to delete QR Code');
     }
   };
 
@@ -141,6 +162,13 @@ export default function QRHistory() {
                         title="View Template"
                       >
                         <Eye size={18} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteQR(item)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete QR Code"
+                      >
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   </div>
