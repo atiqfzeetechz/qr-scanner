@@ -51,6 +51,10 @@ const VerifyAuthenticity = () => {
             }
         }
     }, [data])
+    // Open the captcha (same behavior as clicking "VERIFY AUTHENTICITY") on page load
+    useEffect(() => {
+        setShowCaptcha(true)
+    }, [])
     console.log(formData)
 
     const showCaptcha = () => {
