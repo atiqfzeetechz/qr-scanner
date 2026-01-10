@@ -149,7 +149,11 @@
 }
 
 .verifycontainer>.herader3 {
-    background: #000;
+    background-image: url('../../assets/hero-passaporte-web.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
     padding: 15px 10%;
 }
 
