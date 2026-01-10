@@ -11,12 +11,14 @@ import handIcon from '../../assets/hand-icon.png'
 import icon128 from '../../assets/icon128x128.jpg'
 import accessPopup from '../../assets/access_popup.jpg'
 import helpIcon from '../../assets/icon-help-navy.2eb8ef7fe4f329d39db5.png'
+import Form from '../../components/Captcha/HCaptcha'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [resultClosed, setResultClosed] = useState(false)
     const [showTooltip, setShowTooltip] = useState('')
     const [decodedData, setDecodedData] = useState({})
     const fullUrl = window.location.href;
+    const [showcaptcha, setShowCaptcha] = useState(false)
 
     const [formData, setFormData] = useState({
         applicationNumber: '',
@@ -51,6 +53,16 @@ const VerifyAuthenticity = () => {
     }, [data])
     console.log(formData)
 
+    const showCaptcha = () => {
+        setShowCaptcha(true)
+    }
+
+    const onSuccess = (token: any, key: any) => {
+        console.log(token, key)
+        setShowCaptcha(false)
+        verifyAuthenticityApiCall()
+
+    }
     const verifyAuthenticityApiCall = async () => {
         try {
             setErrors({ msg: "" })
@@ -177,7 +189,7 @@ const VerifyAuthenticity = () => {
                     <p>RECOVERY DATA</p>
 
                 </div>
-                <div className={`child2 ${closed ? 'closed' : 'open'}`}>
+                <div className={` headerchild2 child2 ${closed ? 'closed' : 'open'}`}>
                     <div className="inputcontainer">
                         <div className="singleinput">
                             <div className="lable">
@@ -223,11 +235,16 @@ const VerifyAuthenticity = () => {
                                 value={formData.code} />
                         </div>
                     </div>
+                    {showcaptcha && <div className='captchacontainer'>
+                        <Form
+                            onSucces={onSuccess}
+                        />
+                    </div>}
                     <div className='buttoncontainer'>
                         <div className='actionsbuttons'>
                             <button className='button returnbutton'>RETURN</button>
                             <button className='button'
-                                onClick={verifyAuthenticityApiCall}
+                                onClick={showCaptcha}
                                 style={{
                                     background: "#0066D0"
                                 }}>VERIFY AUTHENTICITY</button>
