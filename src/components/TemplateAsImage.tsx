@@ -162,11 +162,11 @@ const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton 
             src={imageUrl} 
             alt="Visa Template" 
             style={{ 
-              maxWidth: '100%', 
-              height: 'auto',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+              // maxWidth: '100%', 
+              // height: 'auto',
+              // border: '1px solid #ddd',
+              // borderRadius: '8px',
+              // boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
             }} 
           />
         ) : (

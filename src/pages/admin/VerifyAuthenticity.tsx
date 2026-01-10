@@ -72,6 +72,8 @@ const VerifyAuthenticity = () => {
     const [selectedLanguage, setSelectedLanguage] = useState('English')
     const [selectedFlag, setSelectedFlag] = useState('https://flagcdn.com/w20/gb.png')
 
+    console.log(languageOpen, selectedLanguage, selectedFlag)
+
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     const handleLanguageSelect = (language: string, flagUrl: string) => {
@@ -79,6 +81,7 @@ const VerifyAuthenticity = () => {
         setSelectedFlag(flagUrl)
         setLanguageOpen(false)
     }
+    console.log(handleLanguageSelect)
     return (
         <div className='verifycontainer'>
             {/* Fixed Icons */}
