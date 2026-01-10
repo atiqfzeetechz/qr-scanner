@@ -6,6 +6,7 @@ import applicanNumber from '../../assets/applicationNumber.png'
 import handIcon from '../../assets/hand-icon.png'
 import icon128 from '../../assets/icon128x128.jpg'
 import accessPopup from '../../assets/access_popup.jpg'
+import helpIcon from '../../assets/icon-help-navy.2eb8ef7fe4f329d39db5.png'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [showTooltip, setShowTooltip] = useState('')
@@ -118,7 +119,7 @@ const VerifyAuthenticity = () => {
                                     onMouseEnter={() => setShowTooltip('application')}
                                     onMouseLeave={() => setShowTooltip('')}
                                 >
-                                    <p>?</p>
+                                    <img src={helpIcon} alt="Help" className="help-icon" />
                                     {showTooltip === 'application' && (
                                         <div className="tooltip">
 
@@ -138,7 +139,7 @@ const VerifyAuthenticity = () => {
                                     onMouseEnter={() => setShowTooltip('code')}
                                     onMouseLeave={() => setShowTooltip('')}
                                 >
-                                    <p>?</p>
+                                    <img src={helpIcon} alt="Help" className="help-icon" />
                                     {showTooltip === 'code' && (
                                         <div className="tooltip">
 

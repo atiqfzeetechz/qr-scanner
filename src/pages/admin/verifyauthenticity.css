@@ -241,11 +241,38 @@
   > .questioncontainer {
   height: 22.375px;
   width: 22.375px;
-  border: 1px solid blue;
+  border: 1px solid #0066D0;
   display: grid;
   place-items: center;
   cursor: pointer;
   position: relative;
+  transition: background-color 0.2s;
+}
+
+.verifycontainer
+  > .header4
+  > .child2
+  > .inputcontainer
+  > .singleinput
+  > .lable
+  > .questioncontainer:hover {
+  background-color: #0066D0;
+}
+
+.verifycontainer
+  > .header4
+  > .child2
+  > .inputcontainer
+  > .singleinput
+  > .lable
+  > .questioncontainer:hover .help-icon {
+  filter: brightness(0) invert(1);
+}
+
+.help-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 .verifycontainer
@@ -314,7 +341,7 @@
   > .lable
   > .questioncontainer
   > p {
-  color: blue;
+  color: #0066D0;
 }
 
 .verifycontainer
@@ -327,6 +354,19 @@
   border: 1px solid #666666;
   width: 361px;
   height: 34px;
+  padding-left: 10px;
+  outline: none;
+  color: #666666;
+}
+
+.verifycontainer
+  > .header4
+  > .child2
+  > .inputcontainer
+  > .singleinput
+  > .input:focus {
+  border: 1px solid #0093FA;
+  box-shadow: 0 0 5px rgba(0, 147, 250, 0.3);
 }
 
 .verifycontainer > .header4 > .child2 > .buttoncontainer {
