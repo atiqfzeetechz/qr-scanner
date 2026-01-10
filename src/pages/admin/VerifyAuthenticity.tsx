@@ -1,25 +1,88 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './verifyauthenticity.css'
 import { Check, ChevronDown, ChevronUp, ClipboardList, Search, Menu } from 'lucide-react'
 import codeImage from '../../assets/code.png'
 import applicanNumber from '../../assets/applicationNumber.png'
+import { useParams } from 'react-router-dom'
+import { decodeData } from '../../helper/encodeDecode'
+import { useAxios } from '../../hooks/useAxios'
+import TemplateAsImage from '../../components/TemplateAsImage'
 import handIcon from '../../assets/hand-icon.png'
 import icon128 from '../../assets/icon128x128.jpg'
 import accessPopup from '../../assets/access_popup.jpg'
 import helpIcon from '../../assets/icon-help-navy.2eb8ef7fe4f329d39db5.png'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
+    const [resultClosed, setResultClosed] = useState(false)
     const [showTooltip, setShowTooltip] = useState('')
+    const [decodedData, setDecodedData] = useState({})
+    const fullUrl = window.location.href;
+
+    const [formData, setFormData] = useState({
+        applicationNumber: '',
+        code: ''
+    })
+    console.log(decodedData)
+    const [resultData, setResultData] = useState(null)
+    const [errors, setErrors] = useState({
+        msg: ""
+    })
+
+    const { post } = useAxios()
+
+    const { data } = useParams()
+    useEffect(() => {
+        if (data) {
+            const _data = decodeData(data)
+            setDecodedData(_data)
+            console.log(_data)
+            if (_data) {
+                const newFormData = { ...formData }
+                if (_data.applicationNumber) {
+                    console.log('here')
+                    newFormData.applicationNumber = _data.applicationNumber
+                }
+                if (_data.code) {
+                    newFormData.code = _data.code
+                }
+                setFormData(newFormData)
+            }
+        }
+    }, [data])
+    console.log(formData)
+
+    const verifyAuthenticityApiCall = async () => {
+        try {
+            setErrors({ msg: "" })
+            const res = await post('/admin/qr/verifyAuthenticity', formData)
+            if (res.success) {
+                const data = res.data.data
+                data.qrCode = fullUrl
+                setResultData(data)
+            }
+            console.log(res)
+        } catch (error: any) {
+            setErrors({
+                msg: error.response?.data?.message || error.message || "Document not found"
+            })
+            console.log(error)
+        }
+    }
+
     const [languageOpen, setLanguageOpen] = useState(false)
     const [selectedLanguage, setSelectedLanguage] = useState('English')
     const [selectedFlag, setSelectedFlag] = useState('https://flagcdn.com/w20/gb.png')
+
+    console.log(languageOpen, selectedLanguage, selectedFlag)
+
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    
+
     const handleLanguageSelect = (language: string, flagUrl: string) => {
         setSelectedLanguage(language)
         setSelectedFlag(flagUrl)
         setLanguageOpen(false)
     }
+    console.log(handleLanguageSelect)
     return (
         <div className='verifycontainer'>
             {/* Fixed Icons */}
@@ -102,6 +165,11 @@ const VerifyAuthenticity = () => {
             <div className="herader3">
                 <p>Authenticity Verification</p>
             </div>
+            {errors.msg &&
+                <p className='verifyerror'>
+                    {errors.msg}
+                </p>
+            }
             <div className="header4">
                 <div className="child1" onClick={() => setClosed(!closed)}>
                     <div className='icon-container'>  {
@@ -128,7 +196,9 @@ const VerifyAuthenticity = () => {
                                     )}
                                 </div>
                             </div>
-                            <input className='input' type="text" name='ApplicationNumber' />
+                            <input className='input' type="text" name='ApplicationNumber'
+                                onChange={(e) => setFormData({ ...formData, applicationNumber: e.target.value })}
+                                value={formData.applicationNumber} />
                         </div>
 
                         <div className="singleinput">
@@ -148,20 +218,47 @@ const VerifyAuthenticity = () => {
                                     )}
                                 </div>
                             </div>
-                            <input className='input' name='code' type="text" />
+                            <input className='input' name='code' type="text"
+                                onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                                value={formData.code} />
                         </div>
                     </div>
                     <div className='buttoncontainer'>
                         <div className='actionsbuttons'>
                             <button className='button returnbutton'>RETURN</button>
-                            <button className='button' style={{
-                                background: "#0066D0"
-                            }}>VERIFY AUTHENTICITY</button>
+                            <button className='button'
+                                onClick={verifyAuthenticityApiCall}
+                                style={{
+                                    background: "#0066D0"
+                                }}>VERIFY AUTHENTICITY</button>
                         </div>
                     </div>
                 </div>
 
             </div>
+            {resultData && Object.keys(resultData).length > 0 && (
+                <div className="header4">
+                    <div className="child1" onClick={() => setResultClosed(!resultClosed)}>
+                        <div className='icon-container'>{
+                            resultClosed ? <ChevronDown color='white' /> : <ChevronUp color='white' />}</div>
+                        <p>Search Result</p>
+                    </div>
+                    <div className={`child2 ${resultClosed ? 'closed' : 'open'}`}>
+                        <div className='searchResult'>
+                            <p className="resulth1">Situation</p>
+                            <p className="resulth2">Válido</p>
+                        </div>
+                    </div>
+                    <div className='actual-data' style={{
+                        maxWidth: "80vw",
+                        margin: 'auto',
+                        marginTop: "30px"
+                    }}>
+                        <TemplateAsImage data={resultData} />
+                    </div>
+                </div>
+            )}
+
         </div>
     )
 }

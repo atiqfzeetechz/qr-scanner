@@ -31,6 +31,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/admin/qrData/:data" element={<QrDataPage/>} />
       <Route path="/admin/verify-authenticity" element={<VerifyAuthenticity/>} />
+      <Route path="/admin/verify-authenticity/:data" element={<VerifyAuthenticity/>} />
       <Route path="/admin/viewtemplate" element={<TemplateP/>} />
       <Route path="/admin/login" element={isAuthenticated ? <Navigate to="/admin" replace /> : <Login />} />
       <Route

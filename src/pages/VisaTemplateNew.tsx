@@ -50,7 +50,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
     dateOfBirth = '16 SET/SET 2005',
     nationality = 'HAITIANO',
     issuingAuthority = 'PORTO PRÍNCIPE EMB',
-    verificationCode = 'GWZG.FQHL.6TCW.3PLF',
+    verificationCode = '',
     logoImage,
     profileImage,
     customFields = [],
