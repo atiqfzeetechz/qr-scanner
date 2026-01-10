@@ -1,0 +1,215 @@
+:root {
+    --header2Bg: #0066D0;
+    --header3h3color: #A1C93D
+}
+
+.verifycontainer {}
+
+.verifycontainer>.header {
+    display: flex;
+    gap: 60%;
+    padding: 15px 10%;
+
+
+}
+
+.verifycontainer>.header>.leftchild {
+    display: flex;
+}
+
+.verifycontainer>.header>.leftchild>img {
+    width: 40px;
+}
+
+.verifycontainer>.header>.leftchild>h3 {
+    font-size: 16px;
+    margin-left: 10px;
+    color: #0051B0;
+    font-weight: 700;
+}
+
+.verifycontainer>.herader2 {
+    padding: 0px 7%;
+    background: var(--header2Bg);
+}
+
+.verifycontainer>.herader2>.buttons {
+    display: flex;
+
+    justify-content: space-around;
+}
+
+.verifycontainer>.herader2>.buttons>.button {
+    font-size: 12.8px;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    line-height: 48px;
+    font-weight: 400;
+    color: white;
+    padding: 2px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.verifycontainer>.herader2>.buttons>.button:hover {
+
+    box-shadow: inset 0 1px rgba(255, 255, 255, .1);
+    cursor: pointer;
+    background: rgba(255, 255, 255, .1);
+
+}
+
+.verifycontainer>.herader3 {
+    background: #000;
+    padding: 15px 10%;
+}
+
+.verifycontainer>.herader3>p {
+    color: var(--header3h3color);
+    font-size: 24px;
+    line-height: 26.4px;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.verifycontainer>.header4>.child1 {
+    display: flex;
+    padding: 15px 10%;
+    width: 100%;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.verifycontainer>.header4>.child1>.icon-container {
+    background: #0051B0;
+}
+
+.verifycontainer>.header4>.child1>p {
+    font-size: 16px;
+    width: 100%;
+    border-bottom: 1px solid #0051B0;
+}
+
+.verifycontainer>.header4>.child2 {
+    max-height: 300px;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    opacity: 1;
+}
+
+.verifycontainer>.header4>.child2.closed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.verifycontainer>.header4>.child2.open {
+    max-height: 300px;
+    opacity: 1;
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer {
+    display: flex;
+    padding: 2px 10%;
+    gap: 50px;
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer {
+    display: flex;
+
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput {}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput>.lable {
+    display: flex;
+    gap: 4px;
+    color: #666666;
+    font-size: 16px;
+    line-height: 17.92px;
+    letter-spacing: normal;
+
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput>.lable>.questioncontainer {
+    height: 22.375px;
+    width: 22.375px;
+    border: 1px solid blue;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput>.lable>.questioncontainer>.tooltip {
+    position: absolute;
+    top: -10px;
+    left: 30px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    width: 400px;
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput>.lable>.questioncontainer>.tooltip p {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 12px;
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput>.lable>.questioncontainer>.tooltip img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput>.lable>.astrict {
+    color: red;
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput>.lable>.questioncontainer>p {
+    color: blue;
+}
+
+.verifycontainer>.header4>.child2>.inputcontainer>.singleinput>.input {
+    margin-top: 2px;
+    border: 1px solid #666666;
+    width: 361px;
+    height: 34px;
+}
+
+.verifycontainer>.header4>.child2>.buttoncontainer {
+    /* border: 1px solid red; */
+    margin-top: 130px;
+
+
+}
+
+.verifycontainer>.header4>.child2>.buttoncontainer>.actionsbuttons {
+
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 50px;
+    gap: 15px;
+}
+
+.verifycontainer>.header4>.child2>.buttoncontainer>.actionsbuttons>.button {
+
+    padding: 5px 8px;
+    font-size: 14.4px;
+    line-height: 20.8px;
+    color: white;
+    border: 1px solid #0066D0;
+}
+
+.verifycontainer>.header4>.child2>.buttoncontainer>.actionsbuttons>.returnbutton {
+    color: blue;
+}
+
+.verifycontainer>.header4>.child2>.buttoncontainer>.actionsbuttons>.returnbutton:hover {
+    background-color: #0066D0;
+    color: white;
+}
