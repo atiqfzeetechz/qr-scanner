@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
-export default function Form() {
-    const [token, setToken] = useState<string | null>(null);
+export default function Form({onSucces}: any) {
+    const [token] = useState<string | null>(null);
     const captchaRef = useRef<any>(null);
 
     useEffect(() => {
@@ -12,13 +12,7 @@ export default function Form() {
     }, [token]);
 
 
-    const challengeExpired = async () => {
-
-    }
-    const handleVerificationSuccess = (token: any, ekey: any) => {
-        console.log(token)
-        console.log(ekey)
-    }
+ 
     return (
         <form>
             <HCaptcha
@@ -26,7 +20,7 @@ export default function Form() {
                 size="normal"
 
                 ref={captchaRef}
-                onVerify={(token, ekey) => handleVerificationSuccess(token, ekey)}
+                onVerify={(token, ekey) => onSucces(token, ekey)}
             // callback: onSolve,
             // 'error-callback': onError,
             // 'expired-callback': onExpired

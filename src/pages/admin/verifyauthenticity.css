@@ -696,4 +696,17 @@
     text-transform: uppercase;
     font-size: 11.2px;
 }
+.headerchild2{
+  /* border: 1px solid green; */
+  position: relative;
+}
+.captchacontainer{
+  /* border: 1px solid red; */
+  margin: auto;
+  position: absolute;
+    bottom: 20%;
+  right: 5%;
+  max-height: 100px;
+  
+}
 
