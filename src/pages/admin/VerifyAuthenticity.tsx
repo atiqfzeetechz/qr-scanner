@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './verifyauthenticity.css'
 import { Check, ChevronDown, ChevronUp, ClipboardList, Search, Menu } from 'lucide-react'
 import codeImage from '../../assets/code.png'
 import applicanNumber from '../../assets/applicationNumber.png'
 import { useParams } from 'react-router-dom'
-import { decodeData, VerificationCodeToCode, VisaNumberToApplicationNumber } from '../../helper/encodeDecode'
+import { decodeData } from '../../helper/encodeDecode'
 import { useAxios } from '../../hooks/useAxios'
 import TemplateAsImage from '../../components/TemplateAsImage'
 import handIcon from '../../assets/hand-icon.png'
@@ -15,16 +15,19 @@ const VerifyAuthenticity = () => {
     const [resultClosed, setResultClosed] = useState(false)
     const [showTooltip, setShowTooltip] = useState('')
     const [decodedData, setDecodedData] = useState({})
+    const fullUrl = window.location.href;
+
     const [formData, setFormData] = useState({
         applicationNumber: '',
         code: ''
     })
-    const [resultData, setResultData] = useState({})
+    console.log(decodedData)
+    const [resultData, setResultData] = useState(null)
     const [errors, setErrors] = useState({
         msg: ""
     })
 
-    const { fetch, post } = useAxios()
+    const { post } = useAxios()
 
     const { data } = useParams()
     useEffect(() => {
@@ -52,7 +55,9 @@ const VerifyAuthenticity = () => {
             setErrors({ msg: "" })
             const res = await post('/admin/qr/verifyAuthenticity', formData)
             if (res.success) {
-                setResultData(res.data.data)
+                const data = res.data.data
+                data.qrCode = fullUrl
+                setResultData(data)
             }
             console.log(res)
         } catch (error: any) {
@@ -68,7 +73,7 @@ const VerifyAuthenticity = () => {
     const [selectedFlag, setSelectedFlag] = useState('https://flagcdn.com/w20/gb.png')
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    
+
     const handleLanguageSelect = (language: string, flagUrl: string) => {
         setSelectedLanguage(language)
         setSelectedFlag(flagUrl)
@@ -227,7 +232,7 @@ const VerifyAuthenticity = () => {
                 </div>
 
             </div>
-            {resultData && (
+            {resultData && Object.keys(resultData).length > 0 && (
                 <div className="header4">
                     <div className="child1" onClick={() => setResultClosed(!resultClosed)}>
                         <div className='icon-container'>{
