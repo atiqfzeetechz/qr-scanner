@@ -6,6 +6,15 @@ import applicanNumber from '../../assets/applicationNumber.png'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [showTooltip, setShowTooltip] = useState('')
+    const [languageOpen, setLanguageOpen] = useState(false)
+    const [selectedLanguage, setSelectedLanguage] = useState('English')
+    const [selectedFlag, setSelectedFlag] = useState('https://flagcdn.com/w20/gb.png')
+    
+    const handleLanguageSelect = (language: string, flagUrl: string) => {
+        setSelectedLanguage(language)
+        setSelectedFlag(flagUrl)
+        setLanguageOpen(false)
+    }
     return (
         <div className='verifycontainer'>
             <div className="header">
@@ -13,8 +22,41 @@ const VerifyAuthenticity = () => {
                     <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/brasao-republica.jpg" alt="" />
                     <h3> Ministry of Foreign Affairs</h3>
                 </div>
-                <div className="leftchild">
-                    <h3>refce</h3>
+                <div className="rightchild">
+                    <div className="language-selector" onClick={() => setLanguageOpen(!languageOpen)}>
+                        <img src={selectedFlag} alt={selectedLanguage} className="flag-icon" />
+                        <span>{selectedLanguage}</span>
+                        <ChevronDown size={16} className={`dropdown-arrow ${languageOpen ? 'open' : ''}`} />
+                        {languageOpen && (
+                            <div className="language-dropdown">
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('English', 'https://flagcdn.com/w20/gb.png'); }}>
+                                    <img src="https://flagcdn.com/w20/gb.png" alt="English" className="flag-icon" />
+                                    <span>English</span>
+                                </div>
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Português (Brasil)', 'https://flagcdn.com/w20/br.png'); }}>
+                                    <img src="https://flagcdn.com/w20/br.png" alt="Portuguese" className="flag-icon" />
+                                    <span>Português (Brasil)</span>
+                                </div>
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Français', 'https://flagcdn.com/w20/fr.png'); }}>
+                                    <img src="https://flagcdn.com/w20/fr.png" alt="French" className="flag-icon" />
+                                    <span>Français</span>
+                                </div>
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Deutsch', 'https://flagcdn.com/w20/de.png'); }}>
+                                    <img src="https://flagcdn.com/w20/de.png" alt="German" className="flag-icon" />
+                                    <span>Deutsch</span>
+                                </div>
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Español', 'https://flagcdn.com/w20/es.png'); }}>
+                                    <img src="https://flagcdn.com/w20/es.png" alt="Spanish" className="flag-icon" />
+                                    <span>Español</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div className="accessibility-controls">
+                        <button className="accessibility-btn">A+</button>
+                        <button className="accessibility-btn">A-</button>
+                        <button className="accessibility-btn">C</button>
+                    </div>
                 </div>
             </div>
             <div className="herader2">
