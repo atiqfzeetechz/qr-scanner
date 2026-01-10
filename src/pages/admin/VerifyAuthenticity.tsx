@@ -1,11 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './verifyauthenticity.css'
 import { Check, ChevronDown, ChevronUp, ClipboardList, Search } from 'lucide-react'
 import codeImage from '../../assets/code.png'
 import applicanNumber from '../../assets/applicationNumber.png'
+import { useParams } from 'react-router-dom'
+import { decodeData } from '../../helper/encodeDecode'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [showTooltip, setShowTooltip] = useState('')
+    const [decodedData,setDecodedData] = useState({})
+
+    const {data}=useParams()
+    useEffect(()=>{
+        if(data){
+            const _data = decodeData(data)
+            setDecodedData(_data)
+        }
+    },[data])
+    console.log(data)
     return (
         <div className='verifycontainer'>
             <div className="header">
@@ -98,7 +110,7 @@ const VerifyAuthenticity = () => {
                         </div>
                     </div>
                 </div>
-
+  {decodedData  && JSON.stringify(decodedData)}
             </div>
         </div>
     )

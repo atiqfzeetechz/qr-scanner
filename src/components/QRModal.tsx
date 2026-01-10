@@ -30,7 +30,7 @@ export const QRModal = ({ isOpen, onClose, item }: Props) => {
              
             }
             const url = encodeData(optiondata)
-            const fullurl = `${APPURL}/admin/qrData/${url}`
+            const fullurl = `${APPURL}/${url}`
             console.log(fullurl)
             setTimeout(() => {
         display(fullurl)

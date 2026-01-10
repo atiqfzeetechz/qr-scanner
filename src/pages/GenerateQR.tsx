@@ -85,37 +85,59 @@ export default function GenerateQR() {
   };
 
   const handleGenerate = async () => {
-
     if (!selectedTemplate) {
       showToast("error", "Please select a template first");
       return;
     }
+
+    // Check required fields
+    const fields = [
+      { key: 'placeOfIssuing', label: 'Place of Issuing', required: true },
+      { key: 'visaNumber', label: 'Visa Number', required: true },
+      { key: 'entries', label: 'Entries', required: true },
+      { key: 'issueDate', label: 'Issue Date', required: true },
+      { key: 'expiryDate', label: 'Expiry Date', required: true },
+      { key: 'visaType', label: 'Visa Type', required: true },
+      { key: 'duration', label: 'Duration', required: true },
+      { key: 'fullName', label: 'Full Name', required: true },
+      { key: 'documentNumber', label: 'Document Number', required: true },
+      { key: 'sex', label: 'Sex', required: true },
+      { key: 'dateOfBirth', label: 'Date of Birth', required: true },
+      { key: 'nationality', label: 'Nationality', required: true },
+      { key: 'issuingAuthority', label: 'Issuing Authority', required: true },
+      { key: 'info', label: 'Info', required: true },
+      { key: 'verificationCode', label: 'Code', required: true }
+    ];
+
+    for (const field of fields) {
+      if (field.required && (!formData[field.key] || formData[field.key].trim() === '')) {
+        showToast("error", `${field.label} is required`);
+        return;
+      }
+    }
+
     const payload = {
       ...formData,
       templateId: selectedTemplate._id,
       userImage: formData.imageHalfurl
-
     }
 
     const res = await post('/admin/qr/create', {
       data: payload,
       options: defaultQROptions
-
     })
+    
     if (res.success) {
       const optiondata = {
         _id: res.qr._id,
         tempalateId: res.qr.data.templateId,
         status: res.qr.status,
-
       }
       const url = encodeData(optiondata)
-      const fullurl = `${APPURL}/admin/qrData/${url}`
+      const fullurl = `${APPURL}/${url}`
       generate(fullurl)
       showToast("success", "QR Code generated successfully!");
     }
-
-
   };
 
   const handleDownload = () => {

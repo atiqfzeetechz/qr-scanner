@@ -222,7 +222,7 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
         }
         
         const url = encodeData(optiondata)
-        const fullurl = `${APPURL}/admin/qrData/${url}`
+        const fullurl = `${APPURL}/${url}`
         parsedData.qrCode = fullurl
         setQrUrl(fullurl)
         setVisaData(parsedData.data || parsedData);
