@@ -98,7 +98,7 @@ const VerifyAuthenticity = () => {
                     <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/brasao-republica.jpg" alt="" />
                     <h3> Ministry of Foreign Affairs</h3>
                 </div>
-                <div className="rightchild">
+                {/* <div className="rightchild">
                     <div className="language-selector" onClick={() => setLanguageOpen(!languageOpen)}>
                         <img src={selectedFlag} alt={selectedLanguage} className="flag-icon" />
                         <span>{selectedLanguage}</span>
@@ -133,7 +133,7 @@ const VerifyAuthenticity = () => {
                         <button className="accessibility-btn">A-</button>
                         <button className="accessibility-btn">C</button>
                     </div>
-                </div>
+                </div> */}
             </div>
             <div className="herader2">
                 <div className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
