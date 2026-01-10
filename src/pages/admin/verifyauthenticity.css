@@ -399,23 +399,26 @@
   position: absolute;
   right: 100%;
   top: 0;
-  transform: translateX(100%);
+  transform: translateX(20px);
   opacity: 0;
+  visibility: hidden;
   transition: all 0.3s ease-in-out;
-  z-index: 999;
+  z-index: 1001;
   pointer-events: none;
 }
 
 .fixed-icon.hand-icon:hover .popup-image {
-  transform: translateX(0);
+  transform: translateX(-10px);
   opacity: 1;
+  visibility: visible;
 }
 
 .popup-image img {
-  width: 200px;
+  width: 150px;
   height: auto;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  display: block;
 }
 
 
