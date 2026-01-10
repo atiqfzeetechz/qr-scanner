@@ -13,6 +13,7 @@ import Templates from './pages/Templates';
 import QrDataPage from './pages/QrDataPage';
 import TemplateP from './pages/TemplateP';
 import VerifyAuthenticity from './pages/admin/VerifyAuthenticity';
+import Form from './components/Captcha/HCaptcha';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -30,6 +31,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/admin/qrData/:data" element={<QrDataPage/>} />
+      <Route path="/admin/captchatest" element={<Form/>} />
       <Route path="/admin/verify-authenticity" element={<VerifyAuthenticity/>} />
       <Route path="/admin/verify-authenticity/:data" element={<VerifyAuthenticity/>} />
       <Route path="/admin/viewtemplate" element={<TemplateP/>} />

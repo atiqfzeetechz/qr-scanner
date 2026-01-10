@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
+    "@hcaptcha/react-hcaptcha": "^1.17.4",
     "@supabase/supabase-js": "^2.57.4",
     "@tailwindcss/vite": "^4.1.18",
     "@tiptap/react": "^3.15.0",
