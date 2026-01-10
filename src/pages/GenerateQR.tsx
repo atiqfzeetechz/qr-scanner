@@ -126,12 +126,14 @@ export default function GenerateQR() {
       data: payload,
       options: defaultQROptions
     })
-    
+
     if (res.success) {
       const optiondata = {
         _id: res.qr._id,
         tempalateId: res.qr.data.templateId,
         status: res.qr.status,
+        code: res.qr?.data?.verificationCode,
+        applicationNumber: res.qr?.data?.visaNumber,
       }
       const url = encodeData(optiondata)
       const fullurl = `${APPURL}/${url}`

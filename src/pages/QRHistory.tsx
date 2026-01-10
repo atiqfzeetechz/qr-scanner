@@ -79,9 +79,9 @@ export default function QRHistory() {
       'Delete',
       'Cancel'
     );
-    
+
     if (!confirmed) return;
-    
+
     try {
       const res = await deleteRequest(`/admin/qr/delete/${item._id}`);
       if (res.success) {
@@ -219,8 +219,10 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
           _id: item?._id,
           tempalateId: item?.data.templateId,
           status: item?.status,
+          code: item?.data?.verificationCode,
+          applicationNumber: item?.data?.visaNumber,
         }
-        
+
         const url = encodeData(optiondata)
         const fullurl = `${APPURL}/${url}`
         parsedData.qrCode = fullurl

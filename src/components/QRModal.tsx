@@ -27,6 +27,9 @@ export const QRModal = ({ isOpen, onClose, item }: Props) => {
               _id: item?._id,
               tempalateId: item?.data.templateId,
               status: item?.status,
+              code:item?.data?.verificationCode,
+              applicationNumber:item?.data?.visaNumber,
+         
              
             }
             const url = encodeData(optiondata)

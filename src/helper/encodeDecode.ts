@@ -24,3 +24,15 @@ export function decodeData(encodedToken:string) {
 
   return JSON.parse(decrypted);
 }
+
+export function VisaNumberToApplicationNumber(value: any) {
+  if (!value) return "";
+
+  return value.toString().replace(/[^a-zA-Z0-9]/g, "");
+}
+
+export function VerificationCodeToCode(value: any) {
+  if (!value) return "";
+
+  return value.toString().replace(/[^a-zA-Z0-9]/g, "");
+}
