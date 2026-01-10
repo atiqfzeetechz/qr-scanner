@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import './verifyauthenticity.css'
-import { Check, ChevronDown, ChevronUp, ClipboardList, Search } from 'lucide-react'
+import { Check, ChevronDown, ChevronUp, ClipboardList, Search, Menu } from 'lucide-react'
 import codeImage from '../../assets/code.png'
 import applicanNumber from '../../assets/applicationNumber.png'
 import { useParams } from 'react-router-dom'
 import { decodeData, VerificationCodeToCode, VisaNumberToApplicationNumber } from '../../helper/encodeDecode'
 import { useAxios } from '../../hooks/useAxios'
 import TemplateAsImage from '../../components/TemplateAsImage'
+import handIcon from '../../assets/hand-icon.png'
+import icon128 from '../../assets/icon128x128.jpg'
+import accessPopup from '../../assets/access_popup.jpg'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [resultClosed, setResultClosed] = useState(false)
@@ -64,6 +67,8 @@ const VerifyAuthenticity = () => {
     const [selectedLanguage, setSelectedLanguage] = useState('English')
     const [selectedFlag, setSelectedFlag] = useState('https://flagcdn.com/w20/gb.png')
 
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    
     const handleLanguageSelect = (language: string, flagUrl: string) => {
         setSelectedLanguage(language)
         setSelectedFlag(flagUrl)
@@ -71,6 +76,18 @@ const VerifyAuthenticity = () => {
     }
     return (
         <div className='verifycontainer'>
+            {/* Fixed Icons */}
+            <div className="fixed-icons">
+                <div className="fixed-icon hand-icon">
+                    <img src={handIcon} alt="Hand Icon" />
+                    <div className="popup-image">
+                        <img src={accessPopup} alt="Access Popup" />
+                    </div>
+                </div>
+                <div className="fixed-icon bottom-icon">
+                    <img src={icon128} alt="Icon" />
+                </div>
+            </div>
             <div className="header">
                 <div className="leftchild">
                     <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/brasao-republica.jpg" alt="" />
@@ -114,22 +131,28 @@ const VerifyAuthenticity = () => {
                 </div>
             </div>
             <div className="herader2">
-                <div className="buttons">
+                <div className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                    <Menu size={20} color="white" />
+                </div>
+                <div className={`buttons ${mobileMenuOpen ? 'mobile-open' : ''}`}>
                     <div className="button">
-                        <Check size={12.8} />
-                        <p>Visa</p>
+                        <Check size={16} />
+                        <p>VISA</p>
                     </div>
                     <div className="button"  >
                         <Check size={12.8} />
                         <p> Verify Authenticity</p>
+                    <div className="button">
+                        <Check size={16} />
+                        <p>VERIFY AUTHENTICITY</p>
                     </div>
                     <div className="button">
-                        <Search size={12.8} />
-                        <p>Check Status</p>
+                        <Search size={16} />
+                        <p>CHECK STATUS</p>
                     </div>
                     <div className="button">
-                        <ClipboardList size={12.8} />
-                        <p> Update Visa Request Form</p>
+                        <ClipboardList size={16} />
+                        <p>UPDATE VISA REQUEST FORM</p>
                     </div>
                 </div>
             </div>
