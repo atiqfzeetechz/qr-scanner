@@ -174,7 +174,7 @@ const VerifyAuthenticity = () => {
                 <div className="child1" onClick={() => setClosed(!closed)}>
                     <div className='icon-container'>  {
                         closed ? <ChevronDown color='white' /> : <ChevronUp color='white' />}</div>
-                    <p>Recovery Data</p>
+                    <p>RECOVERY DATA</p>
 
                 </div>
                 <div className={`child2 ${closed ? 'closed' : 'open'}`}>
