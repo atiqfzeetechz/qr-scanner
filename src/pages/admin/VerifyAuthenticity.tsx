@@ -5,40 +5,51 @@ import codeImage from '../../assets/code.png'
 import applicanNumber from '../../assets/applicationNumber.png'
 import { useParams } from 'react-router-dom'
 import { decodeData, VerificationCodeToCode, VisaNumberToApplicationNumber } from '../../helper/encodeDecode'
+import { useAxios } from '../../hooks/useAxios'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [showTooltip, setShowTooltip] = useState('')
-    const [decodedData,setDecodedData] = useState({})
-    const [formData,setFormData]=useState({
-        applicationNumber:'',
-        code:''
+    const [decodedData, setDecodedData] = useState({})
+    const [formData, setFormData] = useState({
+        applicationNumber: '',
+        code: ''
     })
 
-    const {data}=useParams()
-    useEffect(()=>{
-        if(data){
+    const { fetch, post } = useAxios()
+
+    const { data } = useParams()
+    useEffect(() => {
+        if (data) {
             const _data = decodeData(data)
             setDecodedData(_data)
             console.log(_data)
-            if(_data){
+            if (_data) {
                 const newFormData = { ...formData }
-                if(_data.applicationNumber){
+                if (_data.applicationNumber) {
                     console.log('here')
                     newFormData.applicationNumber = VisaNumberToApplicationNumber(_data.applicationNumber)
                 }
-                if(_data.code){
+                if (_data.code) {
                     newFormData.code = VerificationCodeToCode(_data.code)
                 }
                 setFormData(newFormData)
             }
         }
-    },[data])
+    }, [data])
     console.log(formData)
-  
+
+    const verifyAuthenticity = async () => {
+        try {
+            const res = await post('/admin/qr/verifyAuthenticity', formData)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const [languageOpen, setLanguageOpen] = useState(false)
     const [selectedLanguage, setSelectedLanguage] = useState('English')
     const [selectedFlag, setSelectedFlag] = useState('https://flagcdn.com/w20/gb.png')
-    
+
     const handleLanguageSelect = (language: string, flagUrl: string) => {
         setSelectedLanguage(language)
         setSelectedFlag(flagUrl)
@@ -169,7 +180,7 @@ const VerifyAuthenticity = () => {
                         </div>
                     </div>
                 </div>
-  {decodedData  && JSON.stringify(decodedData)}
+                {decodedData && JSON.stringify(decodedData)}
             </div>
         </div>
     )
