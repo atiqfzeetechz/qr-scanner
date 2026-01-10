@@ -6,14 +6,17 @@ import applicanNumber from '../../assets/applicationNumber.png'
 import { useParams } from 'react-router-dom'
 import { decodeData, VerificationCodeToCode, VisaNumberToApplicationNumber } from '../../helper/encodeDecode'
 import { useAxios } from '../../hooks/useAxios'
+import TemplateAsImage from '../../components/TemplateAsImage'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
+    const [resultClosed, setResultClosed] = useState(false)
     const [showTooltip, setShowTooltip] = useState('')
     const [decodedData, setDecodedData] = useState({})
     const [formData, setFormData] = useState({
         applicationNumber: '',
         code: ''
     })
+    const [resultData, setResultData] = useState({})
     const [errors, setErrors] = useState({
         msg: ""
     })
@@ -45,6 +48,9 @@ const VerifyAuthenticity = () => {
         try {
             setErrors({ msg: "" })
             const res = await post('/admin/qr/verifyAuthenticity', formData)
+            if (res.success) {
+                setResultData(res.data.data)
+            }
             console.log(res)
         } catch (error: any) {
             setErrors({
@@ -130,10 +136,10 @@ const VerifyAuthenticity = () => {
             <div className="herader3">
                 <p>Authenticity Verification</p>
             </div>
-            {errors.msg && 
-            <p className='verifyerror'>
-                {errors.msg}
-            </p>
+            {errors.msg &&
+                <p className='verifyerror'>
+                    {errors.msg}
+                </p>
             }
             <div className="header4">
                 <div className="child1" onClick={() => setClosed(!closed)}>
@@ -199,8 +205,31 @@ const VerifyAuthenticity = () => {
                         </div>
                     </div>
                 </div>
-                {decodedData && JSON.stringify(decodedData)}
+
             </div>
+            {resultData && <div className="header4">
+                <div className="child1" onClick={() => setResultClosed(!resultClosed)}>
+                    <div className='icon-container'>{
+                        resultClosed ? <ChevronDown color='white' /> : <ChevronUp color='white' />}</div>
+                    <p>Search Result</p>
+
+                </div>
+                <div className={`child2 ${resultClosed ? 'closed' : 'open'} `}>
+                    <div className='searchResult'>
+                        <p className="resulth1">Situation</p>
+                        <p className="resulth2">Válido</p>
+                    </div>
+
+                </div>
+                <div className='actual-data' style={{
+                    maxWidth:"80vw",
+                    margin:'auto',
+                    marginTop:"30px"
+                }}>
+                    <TemplateAsImage data={resultData} />
+                </div>
+            </div>}
+
         </div>
     )
 }
