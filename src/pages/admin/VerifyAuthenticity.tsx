@@ -139,9 +139,6 @@ const VerifyAuthenticity = () => {
                         <Check size={16} />
                         <p>VISA</p>
                     </div>
-                    <div className="button"  >
-                        <Check size={12.8} />
-                        <p> Verify Authenticity</p>
                     <div className="button">
                         <Check size={16} />
                         <p>VERIFY AUTHENTICITY</p>
@@ -230,28 +227,28 @@ const VerifyAuthenticity = () => {
                 </div>
 
             </div>
-            {resultData && <div className="header4">
-                <div className="child1" onClick={() => setResultClosed(!resultClosed)}>
-                    <div className='icon-container'>{
-                        resultClosed ? <ChevronDown color='white' /> : <ChevronUp color='white' />}</div>
-                    <p>Search Result</p>
-
-                </div>
-                <div className={`child2 ${resultClosed ? 'closed' : 'open'} `}>
-                    <div className='searchResult'>
-                        <p className="resulth1">Situation</p>
-                        <p className="resulth2">Válido</p>
+            {resultData && (
+                <div className="header4">
+                    <div className="child1" onClick={() => setResultClosed(!resultClosed)}>
+                        <div className='icon-container'>{
+                            resultClosed ? <ChevronDown color='white' /> : <ChevronUp color='white' />}</div>
+                        <p>Search Result</p>
                     </div>
-
+                    <div className={`child2 ${resultClosed ? 'closed' : 'open'}`}>
+                        <div className='searchResult'>
+                            <p className="resulth1">Situation</p>
+                            <p className="resulth2">Válido</p>
+                        </div>
+                    </div>
+                    <div className='actual-data' style={{
+                        maxWidth: "80vw",
+                        margin: 'auto',
+                        marginTop: "30px"
+                    }}>
+                        <TemplateAsImage data={resultData} />
+                    </div>
                 </div>
-                <div className='actual-data' style={{
-                    maxWidth:"80vw",
-                    margin:'auto',
-                    marginTop:"30px"
-                }}>
-                    <TemplateAsImage data={resultData} />
-                </div>
-            </div>}
+            )}
 
         </div>
     )
