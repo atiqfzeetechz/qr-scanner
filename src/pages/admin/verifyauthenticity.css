@@ -42,17 +42,6 @@
 }
 
 .accessibility-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid #0066D0;
-    background: white;
-    color: #0066D0;
-    font-size: 10px;
-    font-weight: 400;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   width: 32px;
   height: 32px;
   border: 1px solid #0066d0;
@@ -102,15 +91,6 @@
 }
 
 .language-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #0066D0;
-    border-top: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
   position: absolute;
   top: 100%;
   left: 0;
@@ -200,12 +180,15 @@
 
 .verifycontainer > .header4 > .child1 > .icon-container {
   background: #0051b0;
+  
 }
 
 .verifycontainer > .header4 > .child1 > p {
-  font-size: 16px;
+  font-size: 18px;
   width: 100%;
   border-bottom: 1px solid #0051b0;
+  color: rgb(0, 81, 176);
+  font-weight: 400;
 }
 
 .verifycontainer > .header4 > .child2 {
@@ -261,11 +244,38 @@
   > .questioncontainer {
   height: 22.375px;
   width: 22.375px;
-  border: 1px solid blue;
+  border: 1px solid #0066D0;
   display: grid;
   place-items: center;
   cursor: pointer;
   position: relative;
+  transition: background-color 0.2s;
+}
+
+.verifycontainer
+  > .header4
+  > .child2
+  > .inputcontainer
+  > .singleinput
+  > .lable
+  > .questioncontainer:hover {
+  background-color: #0066D0;
+}
+
+.verifycontainer
+  > .header4
+  > .child2
+  > .inputcontainer
+  > .singleinput
+  > .lable
+  > .questioncontainer:hover .help-icon {
+  filter: brightness(0) invert(1);
+}
+
+.help-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 .verifycontainer
@@ -334,7 +344,7 @@
   > .lable
   > .questioncontainer
   > p {
-  color: blue;
+  color: #0066D0;
 }
 
 .verifycontainer
@@ -347,6 +357,19 @@
   border: 1px solid #666666;
   width: 361px;
   height: 34px;
+  padding-left: 10px;
+  outline: none;
+  color: #666666;
+}
+
+.verifycontainer
+  > .header4
+  > .child2
+  > .inputcontainer
+  > .singleinput
+  > .input:focus {
+  border: 1px solid #0093FA;
+  box-shadow: 0 0 5px rgba(0, 147, 250, 0.3);
 }
 
 .verifycontainer > .header4 > .child2 > .buttoncontainer {
@@ -372,6 +395,24 @@
   line-height: 20.8px;
   color: white;
   border: 1px solid #0066d0;
+}
+
+.verifycontainer
+  > .header4
+  > .child2
+  > .buttoncontainer
+  > .actionsbuttons
+  > .button:hover {
+  background-color: #1975D5;
+}
+
+.verifycontainer
+  > .header4
+  > .child2
+  > .buttoncontainer
+  > .actionsbuttons
+  > .button:hover {
+  background-color: #1975D5 !important;
 }
 
 .verifycontainer
@@ -608,7 +649,6 @@
     text-align: center;
   }
 }
-<<<<<<< HEAD
 
 .verifycontainer>.header4>.child2>.buttoncontainer>.actionsbuttons>.button {
 
@@ -651,7 +691,9 @@
 
     padding-bottom: 12px;
 }
-.actual-data{
-
+.searchResult .resulth1{
+    color: #0086D6;
+    text-transform: uppercase;
+    font-size: 11.2px;
 }
 

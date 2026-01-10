@@ -10,6 +10,7 @@ import TemplateAsImage from '../../components/TemplateAsImage'
 import handIcon from '../../assets/hand-icon.png'
 import icon128 from '../../assets/icon128x128.jpg'
 import accessPopup from '../../assets/access_popup.jpg'
+import helpIcon from '../../assets/icon-help-navy.2eb8ef7fe4f329d39db5.png'
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [resultClosed, setResultClosed] = useState(false)
@@ -173,7 +174,7 @@ const VerifyAuthenticity = () => {
                 <div className="child1" onClick={() => setClosed(!closed)}>
                     <div className='icon-container'>  {
                         closed ? <ChevronDown color='white' /> : <ChevronUp color='white' />}</div>
-                    <p>Recovery Data</p>
+                    <p>RECOVERY DATA</p>
 
                 </div>
                 <div className={`child2 ${closed ? 'closed' : 'open'}`}>
@@ -186,7 +187,7 @@ const VerifyAuthenticity = () => {
                                     onMouseEnter={() => setShowTooltip('application')}
                                     onMouseLeave={() => setShowTooltip('')}
                                 >
-                                    <p>?</p>
+                                    <img src={helpIcon} alt="Help" className="help-icon" />
                                     {showTooltip === 'application' && (
                                         <div className="tooltip">
 
@@ -208,7 +209,7 @@ const VerifyAuthenticity = () => {
                                     onMouseEnter={() => setShowTooltip('code')}
                                     onMouseLeave={() => setShowTooltip('')}
                                 >
-                                    <p>?</p>
+                                    <img src={helpIcon} alt="Help" className="help-icon" />
                                     {showTooltip === 'code' && (
                                         <div className="tooltip">
 
