@@ -14,6 +14,9 @@ const VerifyAuthenticity = () => {
         applicationNumber: '',
         code: ''
     })
+    const [errors, setErrors] = useState({
+        msg: ""
+    })
 
     const { fetch, post } = useAxios()
 
@@ -27,10 +30,10 @@ const VerifyAuthenticity = () => {
                 const newFormData = { ...formData }
                 if (_data.applicationNumber) {
                     console.log('here')
-                    newFormData.applicationNumber = VisaNumberToApplicationNumber(_data.applicationNumber)
+                    newFormData.applicationNumber = _data.applicationNumber
                 }
                 if (_data.code) {
-                    newFormData.code = VerificationCodeToCode(_data.code)
+                    newFormData.code = _data.code
                 }
                 setFormData(newFormData)
             }
@@ -38,10 +41,15 @@ const VerifyAuthenticity = () => {
     }, [data])
     console.log(formData)
 
-    const verifyAuthenticity = async () => {
+    const verifyAuthenticityApiCall = async () => {
         try {
+            setErrors({ msg: "" })
             const res = await post('/admin/qr/verifyAuthenticity', formData)
-        } catch (error) {
+            console.log(res)
+        } catch (error: any) {
+            setErrors({
+                msg: error.response?.data?.message || error.message || "Document not found"
+            })
             console.log(error)
         }
     }
@@ -105,7 +113,7 @@ const VerifyAuthenticity = () => {
                         <Check size={12.8} />
                         <p>Visa</p>
                     </div>
-                    <div className="button">
+                    <div className="button"  >
                         <Check size={12.8} />
                         <p> Verify Authenticity</p>
                     </div>
@@ -122,6 +130,11 @@ const VerifyAuthenticity = () => {
             <div className="herader3">
                 <p>Authenticity Verification</p>
             </div>
+            {errors.msg && 
+            <p className='verifyerror'>
+                {errors.msg}
+            </p>
+            }
             <div className="header4">
                 <div className="child1" onClick={() => setClosed(!closed)}>
                     <div className='icon-container'>  {
@@ -148,7 +161,9 @@ const VerifyAuthenticity = () => {
                                     )}
                                 </div>
                             </div>
-                            <input className='input' type="text" name='ApplicationNumber' value={formData.applicationNumber} />
+                            <input className='input' type="text" name='ApplicationNumber'
+                                onChange={(e) => setFormData({ ...formData, applicationNumber: e.target.value })}
+                                value={formData.applicationNumber} />
                         </div>
 
                         <div className="singleinput">
@@ -168,15 +183,19 @@ const VerifyAuthenticity = () => {
                                     )}
                                 </div>
                             </div>
-                            <input className='input' name='code' type="text" value={formData.code} />
+                            <input className='input' name='code' type="text"
+                                onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                                value={formData.code} />
                         </div>
                     </div>
                     <div className='buttoncontainer'>
                         <div className='actionsbuttons'>
                             <button className='button returnbutton'>RETURN</button>
-                            <button className='button' style={{
-                                background: "#0066D0"
-                            }}>VERIFY AUTHENTICITY</button>
+                            <button className='button'
+                                onClick={verifyAuthenticityApiCall}
+                                style={{
+                                    background: "#0066D0"
+                                }}>VERIFY AUTHENTICITY</button>
                         </div>
                     </div>
                 </div>
