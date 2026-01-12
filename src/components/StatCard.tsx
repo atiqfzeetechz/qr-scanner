@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+
 
 interface StatCardProps {
   title: string;
@@ -9,7 +9,7 @@ interface StatCardProps {
   gradient: string;
 }
 
-export default function StatCard({ title, value, icon, trend, gradient }: StatCardProps) {
+export default function StatCard({ title, value, icon, gradient }: StatCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">

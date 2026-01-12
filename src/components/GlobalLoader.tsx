@@ -1,6 +1,6 @@
 import { useLoaderStore } from '../store/loaderStore';
 import { theme } from '../theme';
-
+// import Loader from "react-js-loader";
 export default function GlobalLoader() {
   const { isLoading, message } = useLoaderStore();
 
@@ -9,6 +9,9 @@ export default function GlobalLoader() {
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-xl shadow-2xl p-8 flex flex-col items-center gap-4 max-w-sm mx-4">
+        {/* <Loader type="spinner-cub" bgColor={theme.colors.primary.main}
+        
+         title={"spinner-cub"} size={100} /> */}
         <div className="relative">
           <div 
             className="w-12 h-12 rounded-full border-4 border-gray-200 border-t-transparent animate-spin"
