@@ -30,11 +30,12 @@ interface VisaTemplateProps {
     processNumber?: string
     qrCode?: string | null,
     info: string
-  }
+  },
+  showrightIcons?: boolean
 }
 
 
-const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
+const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data, showrightIcons }) => {
 
   const {
     placeOfIssuing = 'PORTO PRÍNCIPE',
@@ -230,10 +231,13 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data }) => {
               </div>
             </div>
           </div>
-          <div className='imagescontainersright'>
-            <img src={Image1} alt=""  className='imgesrightside'/>
-            <img src={Image2} alt=""  className='imgesrightside'/>
-          </div>
+          {
+            showrightIcons &&
+            <div className='imagescontainersright'>
+              <img src={Image1} alt="" className='imgesrightside' />
+              <img src={Image2} alt="" className='imgesrightside' />
+            </div>
+          }
         </main>
 
         {/* Instructions Section */}

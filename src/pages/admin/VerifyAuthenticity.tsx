@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './verifyauthenticity.css'
-import { Check, ChevronDown, ChevronUp, ClipboardList, Search, Menu } from 'lucide-react'
+import { ChevronDown, ChevronUp, Menu } from 'lucide-react'
 import codeImage from '../../assets/code.png'
 import applicanNumber from '../../assets/applicationNumber.png'
 import { useParams } from 'react-router-dom'
@@ -12,6 +12,10 @@ import icon128 from '../../assets/icon128x128.jpg'
 import accessPopup from '../../assets/access_popup.jpg'
 import helpIcon from '../../assets/icon-help-navy.2eb8ef7fe4f329d39db5.png'
 import Form from '../../components/Captcha/HCaptcha'
+
+import { FaCheck, FaSearch } from "react-icons/fa";
+import { TiClipboard } from "react-icons/ti";
+
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [resultClosed, setResultClosed] = useState(false)
@@ -30,6 +34,10 @@ const VerifyAuthenticity = () => {
         msg: ""
     })
 
+
+    const captchaRef = useRef<any>(null);
+
+
     const { post } = useAxios()
 
     const { data } = useParams()
@@ -47,13 +55,28 @@ const VerifyAuthenticity = () => {
                 if (_data.code) {
                     newFormData.code = _data.code
                 }
+                if (_data.applicationNumber && _data.code) {
+                    setShowCaptcha(true)
+                }
                 setFormData(newFormData)
             }
         }
     }, [data])
     console.log(formData)
+    const clearButton = () => {
+        setFormData({
+            applicationNumber: '',
+            code: ''
+        })
+        setResultClosed(true)
+        setResultData(null)
+        setErrors({ msg: "" })
+        setShowCaptcha(false)
+    }
 
     const showCaptcha = () => {
+        console.log('called')
+       captchaRef.current.execute();
         setShowCaptcha(true)
     }
 
@@ -157,19 +180,19 @@ const VerifyAuthenticity = () => {
                 </div>
                 <div className={`buttons ${mobileMenuOpen ? 'mobile-open' : ''}`}>
                     <div className="button">
-                        <Check size={16} />
+                        <FaCheck />
                         <p>VISA</p>
                     </div>
                     <div className="button">
-                        <Check size={16} />
+                        <FaCheck />
                         <p>VERIFY AUTHENTICITY</p>
                     </div>
                     <div className="button">
-                        <Search size={16} />
+                        <FaSearch />
                         <p>CHECK STATUS</p>
                     </div>
                     <div className="button">
-                        <ClipboardList size={16} />
+                        <TiClipboard size={'1.3em'} />
                         <p>UPDATE VISA REQUEST FORM</p>
                     </div>
                 </div>
@@ -237,12 +260,14 @@ const VerifyAuthenticity = () => {
                     </div>
                     {showcaptcha && <div className='captchacontainer'>
                         <Form
+                    
                             onSucces={onSuccess}
+                            captchaRef={captchaRef}
                         />
                     </div>}
                     <div className='buttoncontainer'>
                         <div className='actionsbuttons'>
-                            <button className='button returnbutton'>RETURN</button>
+                            <button className='button returnbutton' onClick={clearButton}>RETURN</button>
                             <button className='button'
                                 onClick={showCaptcha}
                                 style={{
@@ -258,12 +283,12 @@ const VerifyAuthenticity = () => {
                     <div className="child1" onClick={() => setResultClosed(!resultClosed)}>
                         <div className='icon-container'>{
                             resultClosed ? <ChevronDown color='white' /> : <ChevronUp color='white' />}</div>
-                        <p>Search Result</p>
+                        <p>SEARCH RESULTS</p>
                     </div>
                     <div className={`child2 ${resultClosed ? 'closed' : 'open'}`}>
                         <div className='searchResult'>
                             <p className="resulth1">Situation</p>
-                            <p className="resulth2">Válido</p>
+                            <p className="resulth2" style={{ color: "grey" }}>Válido</p>
                         </div>
                     </div>
                     <div className='actual-data' style={{
@@ -271,7 +296,7 @@ const VerifyAuthenticity = () => {
                         margin: 'auto',
                         marginTop: "30px"
                     }}>
-                        <TemplateAsImage data={resultData} />
+                        <TemplateAsImage data={resultData} showrightIcons={false} />
                     </div>
                 </div>
             )}

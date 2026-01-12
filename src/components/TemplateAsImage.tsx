@@ -6,10 +6,11 @@ import { useAxios } from '../hooks/useAxios'
 
 interface TemplateAsImageProps {
   data: any
-  showSaveButton?: boolean
+  showSaveButton?: boolean,
+  showrightIcons?: boolean
 }
 
-const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton = false }) => {
+const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton = false, showrightIcons = true }) => {
   const templateRef = useRef<HTMLDivElement>(null)
   const [imageUrl, setImageUrl] = useState<string>('')
   const [loading, setLoading] = useState(true)
@@ -26,7 +27,7 @@ const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton 
           width: 768,
           height: 1024
         })
-        
+
         const imageDataUrl = canvas.toDataURL('image/png')
         setImageUrl(imageDataUrl)
         setLoading(false)
@@ -76,7 +77,7 @@ const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton 
           remarks: "Initial visa template"
         }
       }
-      
+
       try {
         const res = await post('/admin/template/create', templateData)
         if (res.success) {
@@ -120,24 +121,24 @@ const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton 
         </div>
       )}
       {/* Hidden template for image generation */}
-      <div 
-        ref={templateRef} 
-        style={{ 
-          position: 'absolute', 
-          left: '-9999px', 
+      <div
+        ref={templateRef}
+        style={{
+          position: 'absolute',
+          left: '-9999px',
           top: '-9999px',
           width: '768px',
           backgroundColor: 'white'
         }}
       >
-        <VisaTemplateNew data={data} />
+        <VisaTemplateNew data={data} showrightIcons={showrightIcons} />
       </div>
 
       {/* Display generated image */}
       <div style={{ width: '100%', textAlign: 'center' }}>
         {loading ? (
-          <div style={{ 
-            padding: '50px', 
+          <div style={{
+            padding: '50px',
             color: '#666',
             display: 'flex',
             alignItems: 'center',
@@ -145,33 +146,33 @@ const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton 
             minHeight: '400px'
           }}>
             <div>
-              <div style={{ 
-                width: '40px', 
-                height: '40px', 
+              <div style={{
+                width: '40px',
+                height: '40px',
                 border: '4px solid #f3f3f3',
                 borderTop: '4px solid #0066CC',
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite',
                 margin: '0 auto 20px'
               }}></div>
-              Generating template image...
+              Loading...
             </div>
           </div>
         ) : imageUrl ? (
-          <img 
-            src={imageUrl} 
-            alt="Visa Template" 
-            style={{ 
+          <img
+            src={imageUrl}
+            alt="Visa Template"
+            style={{
               // maxWidth: '100%', 
               // height: 'auto',
               // border: '1px solid #ddd',
               // borderRadius: '8px',
               // boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-            }} 
+            }}
           />
         ) : (
-          <div style={{ 
-            padding: '50px', 
+          <div style={{
+            padding: '50px',
             color: '#dc3545',
             minHeight: '400px',
             display: 'flex',
@@ -182,7 +183,7 @@ const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton 
           </div>
         )}
       </div>
-      
+
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }

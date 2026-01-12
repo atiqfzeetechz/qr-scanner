@@ -16,23 +16,7 @@ export default function StatCard({ title, value, icon, trend, gradient }: StatCa
         <div className="flex-1">
           <p className="text-gray-600 text-sm font-medium mb-2">{title}</p>
           <p className="text-3xl font-bold text-gray-900">{value}</p>
-          {trend !== undefined && (
-            <div className="flex items-center gap-1 mt-2">
-              {trend >= 0 ? (
-                <TrendingUp size={16} className="text-green-500" />
-              ) : (
-                <TrendingDown size={16} className="text-red-500" />
-              )}
-              <span
-                className={`text-sm font-medium ${
-                  trend >= 0 ? 'text-green-500' : 'text-red-500'
-                }`}
-              >
-                {Math.abs(trend)}%
-              </span>
-              <span className="text-gray-500 text-sm">vs last month</span>
-            </div>
-          )}
+         
         </div>
         <div
           className="w-12 h-12 rounded-lg flex items-center justify-center text-white"

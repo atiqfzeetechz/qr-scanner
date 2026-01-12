@@ -117,23 +117,7 @@ export default function Dashboard() {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Template Usage</h3>
-            <div className="space-y-4">
-              {data.charts.templateUsage.length > 0 ? (
-                data.charts.templateUsage.map((template, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <span className="text-gray-600">{template.templateName}</span>
-                    <span className="font-bold text-gray-900">{template.count}</span>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-4">
-                  <p className="text-gray-500">No template usage data</p>
-                </div>
-              )}
-            </div>
-          </div>
+       
 
           <div
             className="rounded-xl shadow-sm p-6 text-white"
