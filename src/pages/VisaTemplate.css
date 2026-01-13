@@ -140,11 +140,12 @@
   width: 100%;
   display: grid;
   place-items: center;
+  margin-top: 15px;
 }
 
 .photo-frame {
   width: 100%;
-  aspect-ratio: 1/1.30;
+  aspect-ratio: 1/1.12;
   object-fit: cover;
 }
 
