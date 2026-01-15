@@ -184,7 +184,7 @@ const VisaTemplateNew: React.FC<VisaTemplateProps> = ({ data, showrightIcons }) 
                       <p className="infosmallabel">{documentNumber}</p>
                     </div>
                     <div className="child2 mt-2" style={{ marginRight: '25px' }}>
-                      <p className="infosmallheader">EXO / SEX</p>
+                      <p className="infosmallheader">SEXO / SEX</p>
                       <p className="infosmallabel" >{sex}</p>
                     </div>
                     <div className="child3 mt-2">
