@@ -93,7 +93,7 @@ const TemplateAsImage: React.FC<TemplateAsImageProps> = ({ data, showSaveButton 
     setLoading(true)
     const timer = setTimeout(() => {
       generateImage()
-    }, 1500)
+    }, 100)
 
     return () => clearTimeout(timer)
   }, [JSON.stringify(data)])
