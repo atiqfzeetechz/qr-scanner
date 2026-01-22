@@ -24,6 +24,8 @@ const VerifyAuthenticity = () => {
   const [decodedData, setDecodedData] = useState({});
   const fullUrl = window.location.href;
   const [showcaptcha, setShowCaptcha] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [DarkMode, setDarkMode] = useState(false);
 
   const [formData, setFormData] = useState({
     applicationNumber: "",
@@ -149,8 +151,8 @@ const VerifyAuthenticity = () => {
           <span className="banner-text">Legislação</span>
 
           <span className="banner-divider"></span>
-          
-        <div className="right-content">
+
+          <div className="right-content">
             <span className="banner-text">Canais</span>
             <img
               className="blue-logo"
@@ -161,7 +163,12 @@ const VerifyAuthenticity = () => {
         </div>
       </div>
 
-      <div className="verifycontainer">
+      <div
+        className={`verifycontainer ${isZoomed ? "zoomed" : ""}`}
+        style={{
+          background: DarkMode ? "#000000" : "#fff",
+        }}
+      >
         {/* Fixed Icons */}
         <div className="fixed-icons">
           <div className="fixed-icon hand-icon">
@@ -289,9 +296,30 @@ const VerifyAuthenticity = () => {
               )}
             </div>
             <div className="accessibility-controls">
-              <button className="accessibility-btn">A+</button>
-              <button className="accessibility-btn">A-</button>
-              <button className="accessibility-btn">C</button>
+              <button
+                className="accessibility-btn"
+                onClick={() => {
+                  if (!isZoomed) setIsZoomed(true);
+                }}
+                disabled={isZoomed}
+              >
+                A+
+              </button>
+
+              <button
+                className="accessibility-btn"
+                onClick={() => setIsZoomed(false)}
+                disabled={!isZoomed}
+              >
+                A-
+              </button>
+
+              <button
+                className="accessibility-btn"
+                onClick={() => setDarkMode(!DarkMode)}
+              >
+                C
+              </button>
             </div>
           </div>
         </div>
@@ -460,6 +488,7 @@ const VerifyAuthenticity = () => {
           </div>
         )}
       </div>
+    
     </>
   );
 };

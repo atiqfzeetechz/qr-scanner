@@ -26,9 +26,7 @@
   display: flex;
   align-items: center;
   text-transform: uppercase;
-  
 }
-
 
 /* Flag */
 .banner-content img {
@@ -41,11 +39,10 @@
 .banner-divider {
   position: relative;
   width: 1px;
-  height: 22px;           /* official ke closer */
+  height: 22px; /* official ke closer */
   background-color: #c6c6c6;
-  margin: 0 20px;        
+  margin: 0 20px;
 }
-
 
 /* Text styling */
 .txt-Brasil,
@@ -68,7 +65,6 @@
   opacity: 0.75;
   cursor: pointer;
 }
-
 
 .verifycontainer {
 }
@@ -93,6 +89,7 @@
   margin-left: 10px;
   color: #0051b0;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .verifycontainer > .header > .rightchild {
@@ -522,14 +519,19 @@
 
 /* Fixed Icons */
 .fixed-icons {
+  background: transparent;
   position: fixed;
-  right: 5px;
-  top: 50%;
+  right: 25px;
+  top: 57%;
   transform: translateY(-50%);
   z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+.fixed-icon.hand-icon {
+  border-radius: 10px;
 }
 
 .fixed-icon {
@@ -760,7 +762,10 @@
     text-align: center;
   }
 }
-
+.verifycontainer{
+  height: 100%;
+  min-height: calc(107vh - 100px);
+}
 .verifycontainer
   > .header4
   > .child2
@@ -834,4 +839,63 @@
   bottom: 20%;
   right: 5%;
   max-height: 100px;
+}
+
+/* Zoom functionality - increase text sizes */
+.verifycontainer.zoomed .header {
+  padding: 20px 5% 20px 10% !important;
+  gap: 50% !important;
+}
+
+.verifycontainer.zoomed .header .leftchild {
+  flex: 1 !important;
+  min-width: 300px !important;
+}
+
+.verifycontainer.zoomed .header .leftchild img {
+  width: 65px !important;
+  height: 65px !important;
+}
+
+.verifycontainer.zoomed .header .leftchild h3 {
+  font-size: 20px !important;
+  white-space: nowrap !important;
+  margin-left: 15px !important;
+}
+
+.verifycontainer.zoomed .herader2 .buttons .button {
+  font-size: 16px !important;
+}
+
+.verifycontainer.zoomed .herader3 p {
+  font-size: 30px !important;
+  line-height: 33px !important;
+}
+
+.verifycontainer.zoomed .header4 .child1 p {
+  font-size: 22px !important;
+}
+
+.verifycontainer.zoomed .header4 .child2 .inputcontainer .singleinput .lable {
+  font-size: 20px !important;
+  line-height: 22px !important;
+}
+
+.verifycontainer.zoomed .header4 .child2 .buttoncontainer .actionsbuttons .button {
+  font-size: 18px !important;
+  line-height: 26px !important;
+  padding: 8px 12px !important;
+}
+
+.verifycontainer.zoomed .searchResult {
+  font-size: 14px !important;
+}
+
+.verifycontainer.zoomed .searchResult .resulth1 {
+  font-size: 14px !important;
+}
+
+.verifycontainer.zoomed .verifyerror {
+  font-size: 15px !important;
+  line-height: 22px !important;
 }
