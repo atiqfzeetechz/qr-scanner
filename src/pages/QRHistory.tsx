@@ -18,6 +18,7 @@ export default function QRHistory() {
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [showQRModal, setShowQRModal] = useState(false);
   const [selectedQRItem, setSelectedQRItem] = useState<any>(null);
+  
 
   useEffect(() => {
     (async () => {
@@ -203,6 +204,13 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
   const [qrUrl, setQrUrl] = useState("")
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  useEffect(() => {
     if (item.data) {
       console.log(item)
       try {
@@ -241,8 +249,8 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
       backgroundColor: "rgba(0, 0, 0, 0.5)"
     }}>
       <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Template Preview</h3>
+        <div className="sticky top-0 bg-white  p-4 flex items-center justify-between">
+          {/* <h3 className="text-lg font-semibold">Template Preview</h3> */}
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-xl"

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './verifyauthenticity.css'
-import { Check, ChevronDown, ChevronUp, ClipboardList, Search, Menu } from 'lucide-react'
+import { ChevronDown, ChevronUp, Menu } from 'lucide-react'
 import codeImage from '../../assets/code.png'
 import applicanNumber from '../../assets/applicationNumber.png'
 import { useParams } from 'react-router-dom'
@@ -12,6 +12,12 @@ import icon128 from '../../assets/icon128x128.jpg'
 import accessPopup from '../../assets/access_popup.jpg'
 import helpIcon from '../../assets/icon-help-navy.2eb8ef7fe4f329d39db5.png'
 import Form from '../../components/Captcha/HCaptcha'
+import { FaCaretDown } from "react-icons/fa";
+
+
+import { FaCheck, FaSearch } from "react-icons/fa";
+import { TiClipboard } from "react-icons/ti";
+
 const VerifyAuthenticity = () => {
     const [closed, setClosed] = useState(false)
     const [resultClosed, setResultClosed] = useState(false)
@@ -30,6 +36,10 @@ const VerifyAuthenticity = () => {
         msg: ""
     })
 
+
+    const captchaRef = useRef<any>(null);
+
+
     const { post } = useAxios()
 
     const { data } = useParams()
@@ -47,13 +57,28 @@ const VerifyAuthenticity = () => {
                 if (_data.code) {
                     newFormData.code = _data.code
                 }
+                if (_data.applicationNumber && _data.code) {
+                    // setShowCaptcha(true)
+                }
                 setFormData(newFormData)
             }
         }
     }, [data])
     console.log(formData)
+    const clearButton = () => {
+        setFormData({
+            applicationNumber: '',
+            code: ''
+        })
+        setResultClosed(true)
+        setResultData(null)
+        setErrors({ msg: "" })
+        setShowCaptcha(false)
+    }
 
     const showCaptcha = () => {
+        console.log('called')
+        captchaRef.current.execute();
         setShowCaptcha(true)
     }
 
@@ -83,7 +108,7 @@ const VerifyAuthenticity = () => {
 
     const [languageOpen, setLanguageOpen] = useState(false)
     const [selectedLanguage, setSelectedLanguage] = useState('English')
-    const [selectedFlag, setSelectedFlag] = useState('https://flagcdn.com/w20/gb.png')
+    const [selectedFlag, setSelectedFlag] = useState('https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-england-a.png')
 
     console.log(languageOpen, selectedLanguage, selectedFlag)
 
@@ -114,31 +139,33 @@ const VerifyAuthenticity = () => {
                     <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/brasao-republica.jpg" alt="" />
                     <h3> Ministry of Foreign Affairs</h3>
                 </div>
-                {/* <div className="rightchild">
+                <div className="rightchild">
                     <div className="language-selector" onClick={() => setLanguageOpen(!languageOpen)}>
                         <img src={selectedFlag} alt={selectedLanguage} className="flag-icon" />
                         <span>{selectedLanguage}</span>
-                        <ChevronDown size={16} className={`dropdown-arrow ${languageOpen ? 'open' : ''}`} />
+                       
+                      <FaCaretDown size={16} className={`dropdown-arrow ${languageOpen ? 'open' : ''}`} />
                         {languageOpen && (
                             <div className="language-dropdown">
-                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('English', 'https://flagcdn.com/w20/gb.png'); }}>
-                                    <img src="https://flagcdn.com/w20/gb.png" alt="English" className="flag-icon" />
-                                    <span>English</span>
-                                </div>
-                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Português (Brasil)', 'https://flagcdn.com/w20/br.png'); }}>
-                                    <img src="https://flagcdn.com/w20/br.png" alt="Portuguese" className="flag-icon" />
+                              
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Português (Brasil)', 'https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-brasil-a.png'); }}>
+                                    <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-brasil-a.png" alt="Portuguese" className="flag-icon" />
                                     <span>Português (Brasil)</span>
                                 </div>
-                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Français', 'https://flagcdn.com/w20/fr.png'); }}>
-                                    <img src="https://flagcdn.com/w20/fr.png" alt="French" className="flag-icon" />
+                                  <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('English', 'https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-england-a.png'); }}>
+                                    <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-england-a.png" alt="English" className="flag-icon" />
+                                    <span>English</span>
+                                </div>
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Français', 'https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-france-a.png'); }}>
+                                    <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-france-a.png" alt="French" className="flag-icon" />
                                     <span>Français</span>
                                 </div>
-                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Deutsch', 'https://flagcdn.com/w20/de.png'); }}>
-                                    <img src="https://flagcdn.com/w20/de.png" alt="German" className="flag-icon" />
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Deutsch', 'https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-deutsch-a.png'); }}>
+                                    <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-deutsch-a.png" alt="German" className="flag-icon" />
                                     <span>Deutsch</span>
                                 </div>
-                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Español', 'https://flagcdn.com/w20/es.png'); }}>
-                                    <img src="https://flagcdn.com/w20/es.png" alt="Spanish" className="flag-icon" />
+                                <div className="language-option" onClick={(e) => { e.stopPropagation(); handleLanguageSelect('Español', 'https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-spain-a.png'); }}>
+                                    <img src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-spain-a.png" alt="Spanish" className="flag-icon" />
                                     <span>Español</span>
                                 </div>
                             </div>
@@ -149,7 +176,7 @@ const VerifyAuthenticity = () => {
                         <button className="accessibility-btn">A-</button>
                         <button className="accessibility-btn">C</button>
                     </div>
-                </div> */}
+                </div>
             </div>
             <div className="herader2">
                 <div className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -157,19 +184,19 @@ const VerifyAuthenticity = () => {
                 </div>
                 <div className={`buttons ${mobileMenuOpen ? 'mobile-open' : ''}`}>
                     <div className="button">
-                        <Check size={16} />
+                        <FaCheck />
                         <p>VISA</p>
                     </div>
                     <div className="button">
-                        <Check size={16} />
+                        <FaCheck />
                         <p>VERIFY AUTHENTICITY</p>
                     </div>
                     <div className="button">
-                        <Search size={16} />
+                        <FaSearch />
                         <p>CHECK STATUS</p>
                     </div>
                     <div className="button">
-                        <ClipboardList size={16} />
+                        <TiClipboard size={'1.3em'} />
                         <p>UPDATE VISA REQUEST FORM</p>
                     </div>
                 </div>
@@ -237,12 +264,14 @@ const VerifyAuthenticity = () => {
                     </div>
                     {showcaptcha && <div className='captchacontainer'>
                         <Form
+
                             onSucces={onSuccess}
+                            captchaRef={captchaRef}
                         />
                     </div>}
                     <div className='buttoncontainer'>
                         <div className='actionsbuttons'>
-                            <button className='button returnbutton'>RETURN</button>
+                            <button className='button returnbutton' onClick={clearButton}>RETURN</button>
                             <button className='button'
                                 onClick={showCaptcha}
                                 style={{
@@ -258,12 +287,12 @@ const VerifyAuthenticity = () => {
                     <div className="child1" onClick={() => setResultClosed(!resultClosed)}>
                         <div className='icon-container'>{
                             resultClosed ? <ChevronDown color='white' /> : <ChevronUp color='white' />}</div>
-                        <p>Search Result</p>
+                        <p>SEARCH RESULTS</p>
                     </div>
                     <div className={`child2 ${resultClosed ? 'closed' : 'open'}`}>
                         <div className='searchResult'>
                             <p className="resulth1">Situation</p>
-                            <p className="resulth2">Válido</p>
+                            <p className="resulth2" style={{ color: "grey" }}>Válido</p>
                         </div>
                     </div>
                     <div className='actual-data' style={{
@@ -271,7 +300,7 @@ const VerifyAuthenticity = () => {
                         margin: 'auto',
                         marginTop: "30px"
                     }}>
-                        <TemplateAsImage data={resultData} />
+                        <TemplateAsImage data={resultData} showrightIcons={false} />
                     </div>
                 </div>
             )}
