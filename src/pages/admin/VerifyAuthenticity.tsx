@@ -13,6 +13,7 @@ import accessPopup from "../../assets/access_popup.jpg";
 import helpIcon from "../../assets/icon-help-navy.2eb8ef7fe4f329d39db5.png";
 import Form from "../../components/Captcha/HCaptcha";
 import { FaCaretDown } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 import { FaCheck, FaSearch } from "react-icons/fa";
 import { TiClipboard } from "react-icons/ti";
@@ -20,6 +21,7 @@ import { API_BASE_URL } from "../../utils/config";
 import axios from "axios";
 
 const VerifyAuthenticity = () => {
+  const { t, i18n } = useTranslation();
   const [closed, setClosed] = useState(false);
   const [resultClosed, setResultClosed] = useState(false);
   const [showTooltip, setShowTooltip] = useState("");
@@ -157,10 +159,11 @@ const VerifyAuthenticity = () => {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleLanguageSelect = (language: string, flagUrl: string) => {
+  const handleLanguageSelect = (language: string, flagUrl: string, langCode: string) => {
     setSelectedLanguage(language);
     setSelectedFlag(flagUrl);
     setLanguageOpen(false);
+    i18n.changeLanguage(langCode);
   };
 
   return (
@@ -227,7 +230,7 @@ const VerifyAuthenticity = () => {
               src="https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/brasao-republica.jpg"
               alt=""
             />
-            <h3> Ministry of Foreign Affairs</h3>
+            <h3>{t("ministry")}</h3>
           </div>
           <div className="rightchild">
             <div
@@ -254,6 +257,7 @@ const VerifyAuthenticity = () => {
                       handleLanguageSelect(
                         "Português (Brasil)",
                         "https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-brasil-a.png",
+                        "pt"
                       );
                     }}
                   >
@@ -271,6 +275,7 @@ const VerifyAuthenticity = () => {
                       handleLanguageSelect(
                         "English",
                         "https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-england-a.png",
+                        "en"
                       );
                     }}
                   >
@@ -288,6 +293,7 @@ const VerifyAuthenticity = () => {
                       handleLanguageSelect(
                         "Français",
                         "https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-france-a.png",
+                        "fr"
                       );
                     }}
                   >
@@ -305,6 +311,7 @@ const VerifyAuthenticity = () => {
                       handleLanguageSelect(
                         "Deutsch",
                         "https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-deutsch-a.png",
+                        "de"
                       );
                     }}
                   >
@@ -322,6 +329,7 @@ const VerifyAuthenticity = () => {
                       handleLanguageSelect(
                         "Español",
                         "https://visa-haiti.serpro.gov.br/sci/pages/web/ui/assets/images/lang/flag-spain-a.png",
+                        "es"
                       );
                     }}
                   >
@@ -373,24 +381,24 @@ const VerifyAuthenticity = () => {
           <div className={`buttons ${mobileMenuOpen ? "mobile-open" : ""}`}>
             <div className="button">
               <FaCheck />
-              <p>VISA</p>
+              <p>{t("visa")}</p>
             </div>
             <div className="button">
               <FaCheck />
-              <p>VERIFY AUTHENTICITY</p>
+              <p>{t("verify")}</p>
             </div>
             <div className="button">
               <FaSearch />
-              <p>CHECK STATUS</p>
+              <p>{t("checkStatus")}</p>
             </div>
             <div className="button">
               <TiClipboard size={"1.3em"} />
-              <p>UPDATE VISA REQUEST FORM</p>
+              <p>{t("updateVisa")}</p>
             </div>
           </div>
         </div>
         <div className="herader3">
-          <p>Authenticity Verification</p>
+          <p>{t("authenticity")}</p>
         </div>
         {errors.msg && <p className="verifyerror">{errors.msg}</p>}
         <div className="header4">
@@ -403,13 +411,13 @@ const VerifyAuthenticity = () => {
                 <ChevronUp color="white" />
               )}
             </div>
-            <p>RECOVERY DATA</p>
+            <p>{t("recoveryData")}</p>
           </div>
           <div className={` headerchild2 child2 ${closed ? "closed" : "open"}`}>
             <div className="inputcontainer">
               <div className="singleinput">
                 <div className="lable">
-                  <label htmlFor="ApplicationNumber">Application Number </label>
+                  <label htmlFor="ApplicationNumber">{t("applicationNumber")} </label>
                   <p className="astrict">* </p>
                   <div
                     className="questioncontainer"
@@ -443,7 +451,7 @@ const VerifyAuthenticity = () => {
 
               <div className="singleinput">
                 <div className="lable">
-                  <label htmlFor="Code">Code </label>
+                  <label htmlFor="Code">{t("code")} </label>
                   <p className="astrict">* </p>
                   <div
                     className="questioncontainer"
@@ -477,7 +485,7 @@ const VerifyAuthenticity = () => {
             <div className="buttoncontainer">
               <div className="actionsbuttons">
                 <button className="button returnbutton" onClick={clearButton}>
-                  RETURN
+                  {t("return")}
                 </button>
                 <button
                   className="button"
@@ -486,7 +494,7 @@ const VerifyAuthenticity = () => {
                     background: "#0066D0",
                   }}
                 >
-                  VERIFY AUTHENTICITY
+                  {t("verify")}
                 </button>
               </div>
             </div>
