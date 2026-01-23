@@ -57,7 +57,7 @@ const VerifyAuthenticity = () => {
           newFormData.code = _data.code;
         }
         if (_data.applicationNumber && _data.code) {
-          // setShowCaptcha(true)
+          setShowCaptcha(true)
         }
         setFormData(newFormData);
       }
