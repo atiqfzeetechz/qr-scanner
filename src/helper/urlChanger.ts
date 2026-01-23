@@ -1,4 +1,4 @@
-import { IMAGE_BASE_URL } from "../utils/config"
+import { APPURL, IMAGE_BASE_URL } from "../utils/config"
 
 export const imageurl = (img: string) => {
   if (!img) return ''; // handle empty string
@@ -12,4 +12,9 @@ export const imageurl = (img: string) => {
 
   // Otherwise, prepend base URL
   return `${IMAGE_BASE_URL}${img}`;
+}
+
+
+export const createQrUrl = (token:string)=>{
+return `${APPURL}?key=${token}`
 }

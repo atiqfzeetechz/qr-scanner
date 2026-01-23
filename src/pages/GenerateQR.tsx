@@ -6,10 +6,11 @@ import { QRPreview } from "../components/QRPreview";
 import { showToast } from "../utils/sweetAlert";
 import TemplateList from "../components/TemplateList";
 import { theme } from "../theme";
-import { encodeData } from "../helper/encodeDecode";
+// import { encodeData } from "../helper/encodeDecode";
+// import { APPURL } from "../utils/config";
+
 import { useAxios } from "../hooks/useAxios";
-import { imageurl } from "../helper/urlChanger";
-import { APPURL } from "../utils/config";
+import { createQrUrl, imageurl } from "../helper/urlChanger";
 
 export default function GenerateQR() {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
@@ -128,16 +129,16 @@ export default function GenerateQR() {
     })
 
     if (res.success) {
-      const optiondata = {
-        _id: res.qr._id,
-        tempalateId: res.qr.data.templateId,
-        status: res.qr.status,
-        code: res.qr?.data?.verificationCode,
-        applicationNumber: res.qr?.data?.visaNumber,
-      }
-      const url = encodeData(optiondata)
-      const fullurl = `${APPURL}/${url}`
-      generate(fullurl)
+      // const optiondata = {
+      //   _id: res.qr._id,
+      //   tempalateId: res.qr.data.templateId,
+      //   status: res.qr.status,
+      //   code: res.qr?.data?.verificationCode,
+      //   applicationNumber: res.qr?.data?.visaNumber,
+      // }
+
+      const fullUrl = createQrUrl(res?.qr?.token)
+      generate(fullUrl)
       showToast("success", "QR Code generated successfully!");
     }
   };

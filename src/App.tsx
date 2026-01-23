@@ -30,10 +30,11 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/sci/pages/web" element={<VerifyAuthenticity/>} />
       <Route path="/admin/qrData/:data" element={<QrDataPage/>} />
       <Route path="/admin/captchatest" element={<Form/>} />
-      <Route path="/admin/verify-authenticity" element={<VerifyAuthenticity/>} />
-      <Route path="/admin/verify-authenticity/:data" element={<VerifyAuthenticity/>} />
+      <Route path="/admin/v" element={<VerifyAuthenticity/>} />
+      <Route path="/admin/v/:data" element={<VerifyAuthenticity/>} />
       <Route path="/admin/viewtemplate" element={<TemplateP/>} />
       <Route path="/admin/login" element={isAuthenticated ? <Navigate to="/admin" replace /> : <Login />} />
       <Route

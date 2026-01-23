@@ -3,7 +3,7 @@ import "./verifyauthenticity.css";
 import { ChevronDown, ChevronUp, Menu } from "lucide-react";
 import codeImage from "../../assets/code.png";
 import applicanNumber from "../../assets/applicationNumber.png";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { decodeData } from "../../helper/encodeDecode";
 import { useAxios } from "../../hooks/useAxios";
 import TemplateAsImage from "../../components/TemplateAsImage";
@@ -16,6 +16,8 @@ import { FaCaretDown } from "react-icons/fa";
 
 import { FaCheck, FaSearch } from "react-icons/fa";
 import { TiClipboard } from "react-icons/ti";
+import { API_BASE_URL } from "../../utils/config";
+import axios from "axios";
 
 const VerifyAuthenticity = () => {
   const [closed, setClosed] = useState(false);
@@ -26,6 +28,7 @@ const VerifyAuthenticity = () => {
   const [showcaptcha, setShowCaptcha] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const [DarkMode, setDarkMode] = useState(false);
+  const templateRef = useRef<HTMLDivElement | null>(null)
 
   const [formData, setFormData] = useState({
     applicationNumber: "",
@@ -42,6 +45,8 @@ const VerifyAuthenticity = () => {
   const { post } = useAxios();
 
   const { data } = useParams();
+
+
   useEffect(() => {
     if (data) {
       const _data = decodeData(data);
@@ -63,7 +68,33 @@ const VerifyAuthenticity = () => {
       }
     }
   }, [data]);
-  console.log(formData);
+
+
+  //  working with keys and  query with shortened url
+  const [searchParams] = useSearchParams();
+  const queryKey = searchParams.get('key');
+
+  useEffect(() => {
+    if (queryKey) {
+      setShowCaptcha(true)
+      const getData = async () => {
+        const fullUrl = `${API_BASE_URL}/admin/qr/get/qrdata?token=${queryKey}`
+        const res = await axios.get(fullUrl)
+        if (res.data.success) {
+          console.log(res.data)
+          console.log(res.data.data.data)
+          const _qrData = res.data.data.data
+          setFormData({
+            applicationNumber: _qrData.visaNumber,
+            code: _qrData.verificationCode
+          })
+        }
+        console.log(res)
+      }
+      getData()
+    }
+  }, [queryKey])
+
   const clearButton = () => {
     setFormData({
       applicationNumber: "",
@@ -86,6 +117,7 @@ const VerifyAuthenticity = () => {
     setShowCaptcha(false);
     verifyAuthenticityApiCall();
   };
+
   const verifyAuthenticityApiCall = async () => {
     try {
       setErrors({ msg: "" });
@@ -94,6 +126,14 @@ const VerifyAuthenticity = () => {
         const data = res.data.data;
         data.qrCode = fullUrl;
         setResultData(data);
+        setTimeout(() => {
+          if(templateRef.current){
+            templateRef.current?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }, 600)
       }
       console.log(res);
     } catch (error: any) {
@@ -122,7 +162,7 @@ const VerifyAuthenticity = () => {
     setSelectedFlag(flagUrl);
     setLanguageOpen(false);
   };
-  console.log(handleLanguageSelect);
+
   return (
     <>
       <div className="verifyauthenticitybanner">
@@ -476,6 +516,7 @@ const VerifyAuthenticity = () => {
               </div>
             </div>
             <div
+              ref={templateRef}
               className="actual-data"
               style={{
                 maxWidth: "80vw",
@@ -488,9 +529,10 @@ const VerifyAuthenticity = () => {
           </div>
         )}
       </div>
-    
+
     </>
   );
 };
 
 export default VerifyAuthenticity;
+

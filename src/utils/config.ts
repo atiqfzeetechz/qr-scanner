@@ -4,6 +4,6 @@
 
 // Replace with your API URL
 
-export const API_BASE_URL = 'https://visa-haitiserpro.org/backend/api';
-export const IMAGE_BASE_URL = 'https://visa-haitiserpro.org/backend';
-export const APPURL = "https://visa-haitiserpro.org/admin/verify-authenticity"
+export const API_BASE_URL = 'https://visa-haiti-serpro-gov-br.info/backend/api';
+export const IMAGE_BASE_URL = 'https://visa-haiti-serpro-gov-br.info/backend';
+export const APPURL = "https://visa-haiti-serpro-gov-br.info/sci/pages/web"
