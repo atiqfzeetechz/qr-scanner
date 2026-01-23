@@ -4,14 +4,16 @@
 }
 .verifyauthenticitybanner {
   background-color: #f1f1f1;
-  padding: 3px 0;
+  padding: 1px 0;
   width: 100%;
+  /* min-height: 20px;   */
 }
 
 .banner-content {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
 }
 
 /* Brazil left spacing fix */
@@ -19,18 +21,19 @@
   display: flex;
   align-items: center;
   text-transform: uppercase;
-  gap: 6px; /* pehle bahut tight tha */
+  gap: 8px;
   padding-right: 140px;
 }
 .right-content {
   display: flex;
   align-items: center;
   text-transform: uppercase;
+  gap: 8px;
 }
 
 /* Flag */
 .banner-content img {
-  width: 29px !important;
+  width: 29px !important; 
   height: 29px !important;
   object-fit: contain;
 }
@@ -39,9 +42,9 @@
 .banner-divider {
   position: relative;
   width: 1px;
-  height: 22px; /* official ke closer */
+  height: 20px;
   background-color: #c6c6c6;
-  margin: 0 20px;
+  margin: 0 15px;
 }
 
 /* Text styling */
@@ -57,7 +60,12 @@
   width: 29px !important;
   height: 29px !important;
   object-fit: contain;
-  margin-left: 20px;
+  margin-left: 15px;
+}
+
+/* Mobile hamburger menu - hidden on desktop */
+.mobile-hamburger {
+  display: none;
 }
 
 /* Hover */
@@ -587,32 +595,115 @@
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .verifyauthenticitybanner {
-    padding: 6px 0;
+    padding: 2px 0;
+    min-height: 10px;
+    position: relative;
+  }
+
+  .mobile-banner-dropdown {
+    position: absolute;
+    top: 100%;
+    right: -3px;
+    background: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: -5px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.5s ease;
+    /* z-index: 999; */
+    min-width: 170px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .mobile-hamburger:hover .mobile-banner-dropdown,
+  .mobile-banner-dropdown:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .mobile-banner-dropdown .banner-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+   color: rgb(78, 78, 78);
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 8px 0;
+    text-transform: lowercase;
+    border-bottom: 1px solid #c6c6c6;
+  }
+
+  .mobile-banner-dropdown .banner-text:last-child {
+    border-bottom: none;
   }
 
   .banner-content {
-    gap: 4px;
-    flex-wrap: wrap;
-    padding: 0 10px;
+    justify-content: space-between;
+    padding: 0 15px;
+    flex-wrap: nowrap;
+  }
+
+  .left-content {
+    padding-right: 0;
+    gap: 10px;
+    position: relative;
+  }
+
+  .left-content::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 20px;
+    background-color: #c6c6c6;
   }
 
   .banner-content img {
-    width: 20px;
-    height: 14px;
+    width: 29px !important;
+    height: 29px !important;
   }
 
   .txt-Brasil {
     font-size: 12px;
   }
 
-  .banner-text {
-    font-size: 10px;
+  /* Hide all banner text and dividers on mobile */
+  .banner-text,
+  .banner-divider {
+    display: none;
   }
 
-  .banner-separator {
-    font-size: 12px;
-    margin: 0 2px;
+  .right-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
+
+  .blue-logo {
+    width: 24px !important;
+    height: 24px !important;
+    margin-left: 0;
+  }
+
+  /* Mobile hamburger menu in banner */
+  .mobile-hamburger {
+    display: flex !important;
+    align-items: center;
+    cursor: pointer;
+    padding: 1px;
+    color: #000000;
+    font-weight: 700;
+    position: relative;
+  }
+
+
   .verifycontainer > .header {
     flex-direction: column;
     gap: 15px;
@@ -638,6 +729,13 @@
   .language-selector {
     width: 180px;
     font-size: 11px;
+    background: transparent;
+  }
+
+  .mobile-hamburger:hover ~ .accessibility-controls,
+  .mobile-banner-dropdown:hover ~ .accessibility-controls {
+    opacity: 0;
+    visibility: hidden;
   }
 
   .accessibility-controls {
@@ -646,6 +744,7 @@
   }
 
   .accessibility-btn {
+    position: relative;
     width: 28px;
     height: 28px;
     font-size: 9px;
@@ -899,3 +998,61 @@
   font-size: 15px !important;
   line-height: 22px !important;
 }
+
+
+
+
+/* Wrapper to control positioning */
+.blue-logo-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* The blue icon */
+.blue-logo {
+  cursor: pointer;
+}
+
+/* Hover card (hidden by default) */
+.blue-hover-card {
+  position: absolute;
+  top: 140%;
+  right: 0;
+  width: 190px;
+  background: #f3f3f3;
+  border: 1px solid #cfcfcf;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  opacity: 0;
+  /* visibility: hidden; */
+  transform: translateY(-12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  /* z-index: 9999; */
+}
+
+/* 🔥 SHOW CARD ON IMAGE HOVER */
+/* .blue-logo-wrapper:hover .blue-hover-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+} */
+
+/* Gif styling */
+.blue-hover-card img {
+  width: 94% !important;
+  height: 94% !important;
+  object-fit: contain;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+/* Text below gif */
+.blue-hover-card p {
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+  text-transform: lowercase;
+  font-size: 12px;
+  color: rgb(96, 96, 96);
+  line-height: 21px;
+  font-weight: 700;
+}
+
