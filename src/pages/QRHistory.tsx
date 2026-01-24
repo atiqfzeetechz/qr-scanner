@@ -8,7 +8,7 @@ import { encodeData } from '../helper/encodeDecode';
 import { APPURL } from '../utils/config';
 import VisaTemplate from '../components/VisaTemplate';
 import { showToast, showConfirm } from '../utils/sweetAlert';
-import { imageurl } from '../helper/urlChanger';
+import { createQrUrl, imageurl } from '../helper/urlChanger';
 import TemplateAsImage from '../components/TemplateAsImage';
 
 export default function QRHistory() {
@@ -223,19 +223,9 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
         }
         console.log(parsedData)
         parsedData = { ...parsedData, profileImage: item.data.userImage }
-        console.log(parsedData)
-        const optiondata = {
-          _id: item?._id,
-          tempalateId: item?.data.templateId,
-          status: item?.status,
-          code: item?.data?.verificationCode,
-          applicationNumber: item?.data?.visaNumber,
-        }
-
-        const url = encodeData(optiondata)
-        const fullurl = `${APPURL}/${url}`
-        parsedData.qrCode = fullurl
-        setQrUrl(fullurl)
+         const _url = createQrUrl(item?.token)
+        parsedData.qrCode = _url
+        setQrUrl(_url)
         setVisaData(parsedData.data || parsedData);
       } catch (error) {
         console.error('Error parsing data:', error);
