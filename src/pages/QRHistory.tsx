@@ -224,6 +224,7 @@ function TemplateViewModal({ item, onClose }: { item: any, onClose: () => void }
         console.log(parsedData)
         parsedData = { ...parsedData, profileImage: item.data.userImage }
          const _url = createQrUrl(item?.token)
+         console.log(_url)
         parsedData.qrCode = _url
         setQrUrl(_url)
         setVisaData(parsedData.data || parsedData);
