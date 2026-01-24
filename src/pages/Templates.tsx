@@ -179,7 +179,7 @@ const TemplateBuilder = () => {
                     style={{
                       width: "60px",
                       height: "60px",
-                      border: selectedLogo?.id === logo.id ? "2px solid #0066CC" : "1px solid #ddd",
+                      border: selectedLogo?._id === logo?._id ? "2px solid #0066CC" : "1px solid #ddd",
                       borderRadius: "4px",
                       cursor: "pointer",
                       overflow: "hidden",

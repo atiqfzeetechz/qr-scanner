@@ -107,7 +107,7 @@ const VerifyAuthenticity = () => {
     setResultClosed(true);
     setResultData(null);
     setErrors({ msg: "" });
-    setShowCaptcha(false);
+    // setShowCaptcha(false);
   };
 
   const showCaptcha = () => {
@@ -554,6 +554,7 @@ const VerifyAuthenticity = () => {
           </div>
         </div>
         {resultData && Object.keys(resultData).length > 0 && (
+          <>
           <div className="header4">
             <div
               className="child1"
@@ -577,7 +578,7 @@ const VerifyAuthenticity = () => {
               </div>
             </div>
             <div
-              ref={templateRef}
+              // ref={templateRef}
               className="actual-data"
               style={{
                 maxWidth: "80vw",
@@ -587,8 +588,16 @@ const VerifyAuthenticity = () => {
             >
               <TemplateAsImage data={resultData} showrightIcons={false} />
             </div>
+          
           </div>
+          <div style={{
+            
+            height:"90px"
+          }} ref={templateRef}></div>
+          </>
         )}
+     
+          
       </div>
     </>
   );
