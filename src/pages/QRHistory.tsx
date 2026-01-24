@@ -74,14 +74,15 @@ export default function QRHistory() {
   };
 
   const handleDeleteQR = async (item: any) => {
-    const confirmed = await showConfirm(
+    const {isConfirmed} = await showConfirm(
       'Delete QR Code',
       'Are you sure you want to delete this QR code? This action cannot be undone.',
       'Delete',
       'Cancel'
     );
 
-    if (!confirmed) return;
+
+    if (!isConfirmed) return;
 
     try {
       const res = await deleteRequest(`/admin/qr/delete/${item._id}`);

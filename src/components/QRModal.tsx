@@ -4,7 +4,7 @@ import { useQRCodeView } from '../hooks/useQRCodeView';
 import { QRPreview } from './QRPreview';
 import { theme } from '../theme';
 
-import { APPURL } from '../utils/config';
+// import { APPURL } from '../utils/config';
 import { createQrUrl } from '../helper/urlChanger';
 
 
@@ -42,18 +42,15 @@ export const QRModal = ({ isOpen, onClose, item }: Props) => {
       //   applicationNumber: item?.data?.visaNumber,
       // }
 
-      const applicationNumber = item?.data?.visaNumber
+      // const applicationNumber = item?.data?.visaNumber
    
   
       const _url = createQrUrl(item.token)
 
-      const fullurl = `${APPURL}/${applicationNumber}`
-   
-      console.log(fullurl)
       setTimeout(() => {
 
         console.log(_url)
-        display(fullurl)
+        display(_url)
 
       }, 100);
     }

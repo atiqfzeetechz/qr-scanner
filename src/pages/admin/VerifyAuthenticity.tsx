@@ -32,7 +32,7 @@ const VerifyAuthenticity = () => {
   const [DarkMode, setDarkMode] = useState(false);
   const templateRef = useRef<HTMLDivElement | null>(null);
   const zoomerRef = useRef<HTMLDivElement | null>(null);
-  const [zoomcontrol, setZoomControl] = useState(true);
+
   const dancerRef = useRef<HTMLDivElement | null>(null);
 
   const [formData, setFormData] = useState({
@@ -160,7 +160,7 @@ const VerifyAuthenticity = () => {
   console.log(languageOpen, selectedLanguage, selectedFlag);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [bannerMenuOpen, setBannerMenuOpen] = useState(false);
+
 
   const handleLanguageSelect = (
     language: string,
