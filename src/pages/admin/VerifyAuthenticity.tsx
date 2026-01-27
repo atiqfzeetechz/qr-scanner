@@ -531,7 +531,7 @@ const VerifyAuthenticity = () => {
               <div className="singleinput">
                 <div className="lable">
                   <label htmlFor="Code">{t("code")} </label>
-                  <p className="astrict">* </p>
+                  {/* <p className="astrict">* </p> */}
                   <div
                     className="questioncontainer"
                     onMouseEnter={() => setShowTooltip("code")}
