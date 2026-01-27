@@ -39,7 +39,12 @@ const VerifyAuthenticity = () => {
     applicationNumber: "",
     code: "",
   });
-  console.log(decodedData);
+  console.log(decodedData)
+
+  const languageWrapperRef = useRef<HTMLDivElement | null>(null);
+
+ 
+
   const [resultData, setResultData] = useState(null);
   const [errors, setErrors] = useState({
     msg: "",
@@ -173,6 +178,24 @@ const VerifyAuthenticity = () => {
     i18n.changeLanguage(langCode);
   };
 
+  useEffect(() => {
+  const handleClickOutside = (event:any) => {
+    if (
+      languageWrapperRef.current &&
+      !languageWrapperRef.current.contains(event.target)
+    ) {
+      setLanguageOpen(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
+
   return (
     <>
       <div className="verifyauthenticitybanner">
@@ -281,6 +304,7 @@ const VerifyAuthenticity = () => {
               onClick={() => setLanguageOpen(!languageOpen)}
               style={{
                 backgroundColor: "transparent",
+         
               }}
             >
               <img
@@ -295,7 +319,9 @@ const VerifyAuthenticity = () => {
                 className={`dropdown-arrow ${languageOpen ? "open" : ""}`}
               />
               {languageOpen && (
-                <div className="language-dropdown">
+                <div className="language-dropdown"
+                 ref={languageWrapperRef}
+                >
                   <div
                     className="language-option"
                     onClick={(e) => {
